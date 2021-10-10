@@ -3,15 +3,25 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/page_cocktailInfo"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_add_box_24"
+        android:title="칵테일" />
+    <item
         android:id="@+id/page_myRecipe"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_add_box_24"
-        android:title="test" />
+        android:title="My레시피" />
 
     <item
         android:id="@+id/page_community"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_add_box_24"
-        android:title="test2" />
+        android:title="커뮤니티" />
+    <item
+        android:id="@+id/page_profile"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_person_24"
+        android:title="프로필" />
 
 </menu>
