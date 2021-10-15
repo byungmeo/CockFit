@@ -6,4 +6,48 @@
     android:layout_height="match_parent"
     tools:context=".LoginActivity">
 
+
+    <EditText
+        android:id="@+id/IDmem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="아이디를 입력하세요"
+        app:layout_constraintTop_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent" />
+
+    <EditText
+        android:id="@+id/FWmem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:hint="비밀번호를 입력하세요"
+        app:layout_constraintTop_toBottomOf="@+id/IDmem"
+        app:layout_constraintBottom_toTopOf="@+id/Joinmem"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        ></EditText>
+
+
+    <Button
+        android:id="@+id/Joinmem"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="회원가입"
+        app:layout_constraintTop_toBottomOf="@+id/FWmem"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="@+id/Login"
+        tools:layout_editor_absoluteY="381dp" />
+
+    <Button
+        android:id="@+id/Login"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="로그인"
+        app:layout_constraintTop_toBottomOf="@+id/FWmem"
+        app:layout_constraintLeft_toLeftOf="@id/Joinmem"
+        app:layout_constraintRight_toRightOf="parent"
+        tools:layout_editor_absoluteY="381dp" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
