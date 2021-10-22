@@ -22,9 +22,11 @@
         android:id="@+id/button9"
         android:layout_width="98dp"
         android:layout_height="44dp"
+        android:layout_marginStart="150dp"
+        android:layout_marginTop="346dp"
         android:onClick="clickTest"
         android:text="Button"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="346dp" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
