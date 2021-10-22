@@ -7,7 +7,7 @@
     tools:context=".ListActivity">
 
     <ImageView
-        android:id="@+id/listBackButton"
+        android:id="@+id/list_button_backButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="15dp"
@@ -20,11 +20,35 @@
 
     <Button
         android:id="@+id/button9"
-        android:layout_width="98dp"
-        android:layout_height="44dp"
+        android:layout_width="189dp"
+        android:layout_height="48dp"
+        android:layout_marginBottom="15dp"
         android:onClick="clickTest"
-        android:text="Button"
-        tools:layout_editor_absoluteX="150dp"
-        tools:layout_editor_absoluteY="346dp" />
+        android:text="Go To Recipe"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/list_textView_screenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="칵테일 목록"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/list_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/list_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/list_button_backButton" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/list_recycler"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/button9"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/list_button_backButton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
