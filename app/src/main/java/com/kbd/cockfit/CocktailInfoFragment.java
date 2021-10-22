@@ -32,6 +32,7 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
             case R.id.cock_listButton: {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ListActivity.class);
+                intent.putExtra("keyword", "every");
                 context.startActivity(intent);
                 break;
             }

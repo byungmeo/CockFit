@@ -13,10 +13,6 @@
         <activity
             android:name=".MyPostActivity"
             android:exported="true" />
-        <activity
-            android:name=".FavoriteActivity"
-
-            android:exported="true" />
 
         <meta-data
             android:name="com.google.android.actions"
