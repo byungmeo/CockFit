@@ -1,6 +1,7 @@
 package com.kbd.cockfit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -8,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.util.ArrayList;
@@ -45,6 +47,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
         }
         recipeViewHolder.base.setText(baseText);
         recipeViewHolder.tags.setText(tagsText);
+
+        recipeViewHolder.card.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(context, RecipeActivity.class);
+                context.startActivity(intent);
+            }
+        });
     }
 
     @Override
@@ -53,12 +63,14 @@ public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder>
     }
 
     public class RecipeViewHolder extends RecyclerView.ViewHolder {
+        private CardView card;
         private TextView name;
         private TextView base;
         private TextView tags;
 
         public RecipeViewHolder(@NonNull View itemView) {
             super(itemView);
+            card = itemView.findViewById(R.id.recipeitem_cardView);
             name = itemView.findViewById(R.id.recipeitem_name);
             base = itemView.findViewById(R.id.recipeitem_base);
             tags = itemView.findViewById(R.id.recipeitem_tags);
