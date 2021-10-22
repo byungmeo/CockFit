@@ -6,8 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".CocktailInfoFragment">
 
+
     <TextView
-        android:id="@+id/textView8"
+        android:id="@+id/textView2"
         android:layout_width="413dp"
         android:layout_height="60dp"
         android:text="네비게이션바 영역"
@@ -17,36 +18,62 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button2" />
+        app:layout_constraintTop_toBottomOf="@+id/cock_equipButton" />
 
-    <Button
-        android:id="@+id/button7"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="60dp"
-        android:text="Button"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/button8"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        app:layout_constraintEnd_toEndOf="parent"
+    <ImageButton
+        android:id="@+id/cock_ingrdButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="152dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:src="@drawable/ic_cocktail_ingredient"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/purple_500" />
 
-    <TextView
-        android:id="@+id/textView9"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="CocktailInfo Fragment"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintBottom_toTopOf="@+id/button7"
+    <ImageButton
+        android:id="@+id/cock_listButton"
+        android:layout_width="150dp"
+        android:layout_height="150dp"
+        android:layout_marginTop="152dp"
+        android:layout_marginEnd="35dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:src="@drawable/ic_cocktail_list"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/purple_500" />
+
+    <ImageButton
+        android:id="@+id/cock_equipButton"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="35dp"
+        android:layout_marginTop="382dp"
+        android:layout_marginBottom="139dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:padding="2dp"
+        android:src="@drawable/ic_cocktail_equipment"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button8" />
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/purple_500" />
+
+    <ImageButton
+        android:id="@+id/cock_receipButton"
+        android:layout_width="150dp"
+        android:layout_height="0dp"
+        android:layout_marginEnd="35dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:src="@drawable/ic_cocktail_basetip"
+        app:layout_constraintBottom_toBottomOf="@+id/cock_equipButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/cock_equipButton"
+        app:tint="@color/purple_500" />
+
+
 </androidx.constraintlayout.widget.ConstraintLayout>
