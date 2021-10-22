@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_margin="15dp"
+    android:id="@+id/register_layout_const"
+    android:gravity="center">
+    
+    <ImageButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/register_imageButton_back"
+        android:padding="5dp"
+        android:src="@drawable/ic_baseline_arrow_back_24"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></ImageButton>
+
+
+    <TextView
+        android:id="@+id/register_textView_id"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.260"
+        android:layout_marginLeft="15dp"
+        android:text="아이디"
+        android:textSize="15dp"
+        ></TextView>
+
+    <Button
+        android:id="@+id/register_button_id"
+        android:layout_width="70dp"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.290"
+        android:layout_marginRight="10dp"
+        android:text="중복확인">
+
+    </Button>
+
+    <EditText
+        android:id="@+id/register_editText_id"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.300"
+        android:layout_marginLeft="15dp"
+        android:hint="아이디를 입력하세요."></EditText>
+
+    <TextView
+        android:id="@+id/register_textView_pw"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintVertical_bias="0.360"
+        android:text="비밀번호"
+        android:textSize="15dp"
+        ></TextView>
+
+    <EditText
+        android:id="@+id/register_editText_pw"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.400"
+        android:layout_marginLeft="15dp"
+        android:hint="비밀번호를 입력하세요."></EditText>
+
+    <TextView
+        android:id="@+id/register_textView_pw2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.460"
+        android:layout_marginLeft="15dp"
+        android:text="비밀번호 확인"
+        android:textSize="15dp"
+        ></TextView>
+
+    <EditText
+        android:id="@+id/register_editText_pw2"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintVertical_bias="0.500"
+        android:hint="비밀번호를 한번 더 입력하세요."></EditText>
+
+    <TextView
+        android:id="@+id/register_textView_nic"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintVertical_bias="0.560"
+        android:layout_marginLeft="15dp"
+        android:text="닉네임"
+        android:textSize="15dp"
+        ></TextView>
+
+    <EditText
+        android:id="@+id/register_editText_nic"
+        android:layout_width="280dp"
+        android:layout_height="40dp"
+        android:padding="5dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_marginLeft="15dp"
+        app:layout_constraintVertical_bias="0.600"
+        android:hint="닉네임을 입력하세요."></EditText>
+
+    <Button
+        android:id="@+id/register_button_regist"
+        android:layout_width="350dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_bias="0.700"
+        android:text="회원가입"></Button>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
