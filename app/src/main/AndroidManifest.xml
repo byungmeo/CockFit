@@ -9,6 +9,13 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CockFit">
+        <activity
+            android:name=".MyPostActivity"
+            android:exported="true" />
+        <activity
+            android:name=".FavoriteActivity"
+            android:exported="true" />
+
         <meta-data
             android:name="com.google.android.actions"
             android:resource="@xml/actions" />
