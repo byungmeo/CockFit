@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MakeRecipeActivity">
+
+    <ImageView
+        android:id="@+id/make_button_backButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:onClick="clickBackButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/make_textView_screenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="12dp"
+        android:text="나만의 칵테일 제조"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/make_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/make_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/make_button_backButton"
+        app:layout_constraintVertical_bias="0.0" />
+
+
+    <Button
+        android:id="@+id/button12"
+        android:layout_width="108dp"
+        android:layout_height="68dp"
+        android:layout_marginEnd="76dp"
+        android:layout_marginBottom="48dp"
+        android:text="저장"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <Button
+        android:id="@+id/button11"
+        android:layout_width="108dp"
+        android:layout_height="68dp"
+        android:layout_marginStart="76dp"
+        android:layout_marginBottom="48dp"
+        android:text="초기화"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <ScrollView
+        android:id="@+id/scrollView3"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="150dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="150dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="49dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="이름"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal"
+                    tools:layout_editor_absoluteX="-22dp"
+                    tools:layout_editor_absoluteY="184dp" />
+
+                <EditText
+                    android:id="@+id/make_editText_name"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:inputType="textPersonName"
+                    android:text="칵테일의 이름을 입력하세요"
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_proof"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="도수"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_proof"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:inputType="textPersonName"
+                    android:text="도수를 입력하세요"
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_base"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="기주"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_base"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:inputType="textPersonName"
+                    android:text="기주를 입력하세요"
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_ingredient"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="재료"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_ingredient"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:inputType="textPersonName"
+                    android:text="재료를 입력하세요"
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_equipment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="장비"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_equipment"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:inputType="textPersonName"
+                    android:text="장비를 입력하세요"
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_description"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="설명"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_description"
+                    android:layout_width="260dp"
+                    android:layout_height="150dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:gravity="start|top"
+                    android:inputType="textMultiLine"
+                    android:text="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
+                    android:textColor="#858181"
+                    android:textStyle="italic" />
+            </LinearLayout>
+        </LinearLayout>
+    </ScrollView>
+
+    <ImageView
+        android:id="@+id/make_imageView_addImage"
+        android:layout_width="52dp"
+        android:layout_height="40dp"
+        android:layout_marginTop="84dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
+
+    <TextView
+        android:id="@+id/make_textView_addImage"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="칵테일 이미지 추가"
+        android:textColor="#020202"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="@+id/make_imageView_addImage"
+        app:layout_constraintEnd_toStartOf="@+id/make_imageView_addImage"
+        app:layout_constraintTop_toTopOf="@+id/make_imageView_addImage" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

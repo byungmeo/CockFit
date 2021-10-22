@@ -8,6 +8,28 @@
     tools:context=".RecipeActivity">
 
     <ImageView
+        android:id="@+id/recipe_button_backButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:onClick="onBackButtonTapped"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/textView14"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="10dp"
+        android:text="#HashTag"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintEnd_toStartOf="@+id/textView15"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <ImageView
         android:id="@+id/imageView"
         android:layout_width="162dp"
         android:layout_height="237dp"
@@ -16,55 +38,68 @@
         app:layout_constraintHorizontal_bias="0.497"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.165"
+        app:layout_constraintVertical_bias="0.156"
         app:srcCompat="@drawable/cocktail" />
 
     <TextView
-        android:id="@+id/textView7"
+        android:id="@+id/recipe_textview_name"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
         android:text="병머의 의지"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintHorizontal_bias="0.503"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView"
-        app:layout_constraintVertical_bias="0.105" />
+        app:layout_constraintVertical_bias="0.031" />
 
-    <ImageButton
-        android:id="@+id/imageButton"
-        android:layout_width="55dp"
-        android:layout_height="48dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="16dp"
-        android:onClick="onBackButtonTapped"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="?attr/actionModeCloseDrawable"
-        tools:ignore="SpeakableTextPresentCheck" />
-
-    <ImageButton
-        android:id="@+id/imageButton3"
+    <TextView
+        android:id="@+id/textView7"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
-        android:layout_marginEnd="16dp"
+        android:layout_marginStart="10dp"
+        android:text="#HashTag"
+        app:layout_constraintBottom_toBottomOf="@+id/textView15"
+        app:layout_constraintStart_toEndOf="@+id/textView15"
+        app:layout_constraintTop_toTopOf="@+id/textView15" />
+
+    <TextView
+        android:id="@+id/textView15"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:text="#HashTag"
+        app:layout_constraintEnd_toEndOf="@+id/recipe_textview_name"
+        app:layout_constraintStart_toStartOf="@+id/recipe_textview_name"
+        app:layout_constraintTop_toBottomOf="@+id/recipe_textview_name" />
+
+    <ImageButton
+        android:id="@+id/recipe_button_bookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@android:drawable/btn_star_big_off"
         tools:ignore="SpeakableTextPresentCheck" />
 
     <ScrollView
-        android:layout_width="401dp"
-        android:layout_height="187dp"
+        android:id="@+id/scrollView2"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView7"
-        app:layout_constraintVertical_bias="0.195">
+        app:layout_constraintTop_toBottomOf="@+id/textView15">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -74,25 +109,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView10"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
                     android:text="도수"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/textView16"
+                    android:id="@+id/recipe_textview_proof"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
                     android:text="78%"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -103,25 +137,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView11"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
                     android:text="기주"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/textView17"
+                    android:id="@+id/recipe_textview_base"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
                     android:text="진"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -131,25 +164,24 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView12"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
                     android:text="재료"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/textView18"
+                    android:id="@+id/recipe_textview_ingredient"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
                     android:text="그레나딘 시럽, 레몬"
                     android:textColor="@color/black"
                     android:textSize="20sp"
@@ -159,52 +191,51 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:orientation="horizontal">
 
                 <TextView
                     android:id="@+id/textView13"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
                     android:text="장비"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
 
                 <TextView
-                    android:id="@+id/textView19"
+                    android:id="@+id/recipe_textview_equipment"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="40dp"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginStart="15dp"
                     android:text="쉐이커, 바스푼"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
+
             </LinearLayout>
 
             <TextView
                 android:id="@+id/textView20"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:gravity="center"
                 android:text="===상세설명==="
                 android:textColor="@color/black"
                 android:textSize="20sp"
                 android:textStyle="normal" />
 
-
             <TextView
-                android:id="@+id/textView21"
+                android:id="@+id/recipe_textview_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="20dp"
-                android:layout_marginTop="10dp"
                 android:text="1. this is prototype\n2. we gonna make cocktail\n3. how are you today?\n4. nice to meet you and you?"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
+
 
         </LinearLayout>
     </ScrollView>
