@@ -47,6 +47,9 @@
             android:name=".RecipeActivity"
             android:exported="true" />
         <activity
+            android:name=".MakeRecipeActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true" />
     </application>
