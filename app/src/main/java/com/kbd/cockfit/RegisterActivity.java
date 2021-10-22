@@ -18,24 +18,21 @@ public class RegisterActivity extends AppCompatActivity {
 
 
     ConstraintLayout con;
-    ImageButton back;
+    ImageView back;
 
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
         con=(ConstraintLayout)findViewById(R.id.register_layout_const);
-        back=(ImageButton)findViewById(R.id.register_imageButton_back);
+        back = (ImageView)findViewById(R.id.register_button_backButton);
 
         final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 
         back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent=new Intent(RegisterActivity.this, LoginActivity.class);
-                startActivity(intent);
-                finish();
+                onBackPressed();
             }
         });
 
@@ -49,4 +46,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+    }
 }
