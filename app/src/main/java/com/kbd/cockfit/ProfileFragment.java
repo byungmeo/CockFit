@@ -41,7 +41,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 break;
             }
             case R.id.profile_button_post: {
-                Intent intent = new Intent(context, MyPostActivity.class);
+                Intent intent = new Intent(context, ForumActivity.class);
+                intent.putExtra("forum", "myPost");
                 context.startActivity(intent);
                 break;
             }

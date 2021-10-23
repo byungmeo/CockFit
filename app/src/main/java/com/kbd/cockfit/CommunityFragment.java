@@ -1,5 +1,7 @@
 package com.kbd.cockfit;
 
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.fragment.app.Fragment;
@@ -8,13 +10,42 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
+import android.widget.TextView;
 
-public class CommunityFragment extends Fragment {
+public class CommunityFragment extends Fragment implements View.OnClickListener {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_community, container, false);
+        View v = inflater.inflate(R.layout.fragment_community, container, false);
+
+        TextView shareMore = v.findViewById(R.id.community_testView_shareMore);
+        TextView qaMore = v.findViewById(R.id.community_testView_qaMore);
+
+        shareMore.setOnClickListener(this);
+        qaMore.setOnClickListener(this);
+
+        return v;
     }
 
+    @Override
+    public void onClick(View v) {
+        Context context = v.getContext();
+        Intent intent = new Intent(context, ForumActivity.class);
+        switch (v.getId()) {
+            case R.id.community_testView_qaMore: {
+                //더보기 버튼
+                intent.putExtra("forum", "qa");
+                break;
+            }
+            case R.id.community_testView_shareMore: {
+                intent.putExtra("forum", "share");
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        context.startActivity(intent);
+    }
 }

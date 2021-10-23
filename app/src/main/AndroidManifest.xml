@@ -11,7 +11,7 @@
 
         android:theme="@style/Theme.CockFit">
         <activity
-            android:name=".MyPostActivity"
+            android:name=".ForumActivity"
             android:exported="true" />
 
         <meta-data

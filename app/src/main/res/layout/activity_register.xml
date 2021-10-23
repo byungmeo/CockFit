@@ -35,7 +35,7 @@
         android:id="@+id/register_textView_id"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="30dp"
+        android:layout_marginTop="60dp"
         android:padding="5dp"
         android:text="아이디"
         android:textSize="15dp"
