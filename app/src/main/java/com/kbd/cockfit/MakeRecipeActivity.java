@@ -28,9 +28,4 @@ public class MakeRecipeActivity extends AppCompatActivity {
     public void clickBackButton(View view) {
         onBackPressed();
     }
-
-    public void clickTest(View view) {
-        Intent in = new Intent(this, RecipeActivity.class);
-        startActivity(in);
-    }
 }

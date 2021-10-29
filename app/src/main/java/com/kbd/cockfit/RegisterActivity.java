@@ -16,10 +16,10 @@ import androidx.constraintlayout.widget.ConstraintSet;
 
 public class RegisterActivity extends AppCompatActivity {
 
+    private ConstraintLayout con;
+    private ImageView back;
 
-    ConstraintLayout con;
-    ImageView back;
-
+    @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
