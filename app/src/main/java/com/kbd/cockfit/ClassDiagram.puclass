@@ -3,41 +3,27 @@ title Cock'Fit Class Diagram
 
 'left fo right direction
 
-together {
-    class AppCompatActivity {
-        # void onCreate(Bundle savedInstanceState)
-    }
-
-    class Fragment {
-        + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-    }
-
-    interface OnClickListener {
-        + void onClick(View view)
-    }
-
-    interface OnItemSelectedListener {
-        + boolean onNavigationItemSelected(MenuItem menuItem)
-    }
+interface OnClickListener {
+    + void onClick(View view)
 }
 
-class SplashActivity extends AppCompatActivity {
+class SplashActivity {
     # void onCreate(Bundle savedInstanceState)
 }
 
-class LoginActivity extends AppCompatActivity {
+class LoginActivity {
     - Button register_button, login_button
     # void onCreate(Bundle savedInstanceState)
 }
 
-class RegisterActivity extends AppCompatActivity {
+class RegisterActivity {
     - ConstraintLayout con
     - ImageView back
     # void onCreate(Bundle savedInstanceState)
     + void onBackPressed()
 }
 
-class MainActivity extends AppCompatActivity {
+class MainActivity {
     - FragmentManager fragmentManager
     - MyRecipeFragment myRecipeFragment
     - CommunityFragment communityFragment
@@ -56,73 +42,61 @@ class ItemSelectedListener implements OnItemSelectedListener {
     + boolean onNavigationItemSelected(MenuItem menuItem)
 }
 
-together {
-    class CocktailInfoFragment extends Fragment {
-    }
-
-    class CocktailInfoFragment implements OnClickListener {
-        + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        + void onClick(View v)
-    }
-
-    class MyRecipeFragment extends Fragment {
-        - RecyclerView myRecipeRecyclerView
-        - private GridLayoutManager layoutManager
-        - MyRecipeAdapter adapter
-        - ArrayList<MyRecipe> myRecipeArrayList
-
-        + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        + void initMyRecipeList()
-        }
-
-        class CommunityFragment extends Fragment {
-    }
-
-    class CommunityFragment implements OnClickListener {
-        + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        + void onClick(View v)
-    }
-
-    class ProfileFragment extends Fragment {
-    }
-
-    class ProfileFragment implements OnClickListener {
-        + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
-        + void onClick(View v)
-    }
+class CocktailInfoFragment implements OnClickListener {
+    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + void onClick(View v)
 }
 
-together {
-    class MyRecipeAdapter {
-        {static} - final int TYPE_FOOTER
-        {static} - final int TYPE_ITEM
-        - ArrayList<MyRecipe> myRecipeArrayList
+class MyRecipeFragment {
+    - RecyclerView myRecipeRecyclerView
+    - private GridLayoutManager layoutManager
+    - MyRecipeAdapter adapter
+    - ArrayList<MyRecipe> myRecipeArrayList
 
-        + MyRecipeAdapter(ArrayList<MyRecipe> myRecipeArrayList)
-        + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        + void onBindViewHolder(ViewHolder holder, int position)
-        + int getItemCount()
-        + int getItemViewType(int position)
-    }
+    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + void initMyRecipeList()
+}
 
-    class RecipeAdapter {
-        - Context contest
-        - ArrayList<Recipe> recipeArrayList
-        + RecipeAdapter(Context context, ArrayList<Recipe> recipeArrayList)
-        + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        + void onBindViewHolder(ViewHolder holder, int position)
-        + int getItemCount()
+class CommunityFragment implements OnClickListener {
+    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + void onClick(View v)
+}
 
-    }
 
-    class PostAdapter {
-        - Context context
-        - ArrayList<Post> postArrayList
-        + PostAdapter(Context context, ArrayList<Post> postArrayList)
-        + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
-        + void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
-        + int getItemCount()
-    }
+class ProfileFragment implements OnClickListener {
+    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + void onClick(View v)
+}
+
+class MyRecipeAdapter {
+    {static} - final int TYPE_FOOTER
+    {static} - final int TYPE_ITEM
+    - ArrayList<MyRecipe> myRecipeArrayList
+
+    + MyRecipeAdapter(ArrayList<MyRecipe> myRecipeArrayList)
+    + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    + void onBindViewHolder(ViewHolder holder, int position)
+    + int getItemCount()
+    + int getItemViewType(int position)
+}
+
+class RecipeAdapter {
+    - Context contest
+    - ArrayList<Recipe> recipeArrayList
+    + RecipeAdapter(Context context, ArrayList<Recipe> recipeArrayList)
+    + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    + void onBindViewHolder(ViewHolder holder, int position)
+    + int getItemCount()
+
+}
+
+class PostAdapter {
+    - Context context
+    - ArrayList<Post> postArrayList
+    + PostAdapter(Context context, ArrayList<Post> postArrayList)
+    + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    + void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    + int getItemCount()
 }
 
 
@@ -153,7 +127,7 @@ MyRecipeAdapter --> FooterViewHolder
 
 
 
-class ListActivity extends AppCompatActivity {
+class ListActivity {
     - RecyclerView recipeRecycler
     - RecipeAdapter recipeAdapter
     - ArrayList<Recipe> recipeArrayList
@@ -190,7 +164,7 @@ ListActivity --> RecipeAdapter
 ListActivity --> Recipe
 RecipeAdapter --> RecipeViewHolder
 
-class ForumActivity extends AppCompatActivity {
+class ForumActivity {
     - RecyclerView postRecycler
     - PostAdapter postAdapter
     - ArrayList<Post> postArrayList
@@ -213,8 +187,6 @@ class Post {
     + String getPostDate()
 }
 
-
-
 class PostViewHolder {
     - TextView postName
     - TextView postAbstract
@@ -226,13 +198,13 @@ ForumActivity --> PostAdapter
 ForumActivity --> Post
 PostAdapter --> PostViewHolder
 
-class MakeRecipeActivity extends AppCompatActivity {
+class MakeRecipeActivity {
     # void onCreate(Bundle savedInstanceState)
     + void onBackPressed()
     + void clickBackButton(View view)
 }
 
-class RecipeActivity extends AppCompatActivity {
+class RecipeActivity {
     # void onCreate(Bundle savedInstanceState)
     + void onBackButtonTapped(View view)
 }
