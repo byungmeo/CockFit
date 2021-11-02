@@ -1,4 +1,0 @@
-@startuml
-User --> (Write Article)
-User --> (Read Article)
-@enduml
