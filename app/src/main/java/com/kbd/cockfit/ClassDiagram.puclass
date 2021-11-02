@@ -32,11 +32,11 @@ class MainActivity {
     # void onCreate(Bundle savedInstanceState)
 }
 
-MainActivity --> ItemSelectedListener
-MainActivity --> "1" MyRecipeFragment : inflate
-MainActivity --> "1" CommunityFragment : inflate
-MainActivity --> "1" CocktailInfoFragment : inflate
-MainActivity --> "1" ProfileFragment : inflate
+MainActivity "1" *-- ItemSelectedListener
+MainActivity "1" *-- MyRecipeFragment : inflate
+MainActivity "1" *-- CommunityFragment : inflate
+MainActivity "1" *-- CocktailInfoFragment : inflate
+MainActivity "1" *-- ProfileFragment : inflate
 
 class ItemSelectedListener implements OnItemSelectedListener {
     + boolean onNavigationItemSelected(MenuItem menuItem)
@@ -120,10 +120,11 @@ class MyRecipe {
     + String getName()
 }
 
-MyRecipeFragment --> MyRecipeAdapter
-MyRecipeFragment --> MyRecipe
-MyRecipeAdapter --> ItemViewHolder
-MyRecipeAdapter --> FooterViewHolder
+MyRecipeFragment "1" *-- MyRecipeAdapter
+MyRecipeFragment --> "0..*" MyRecipe
+MyRecipeAdapter ..> ItemViewHolder : <<parameter>>
+MyRecipeAdapter ..> FooterViewHolder : <<parameter>>
+MyRecipeAdapter --> "0..*" MyRecipe
 
 
 
@@ -160,9 +161,10 @@ class Recipe {
     + String[] getTage()
 }
 
-ListActivity --> RecipeAdapter
-ListActivity --> Recipe
-RecipeAdapter --> RecipeViewHolder
+ListActivity "1" *-- RecipeAdapter
+ListActivity --> "0..*" Recipe
+RecipeAdapter ..> RecipeViewHolder : <<parameter>>
+RecipeActivity ..> Recipe : <<create>>
 
 class ForumActivity {
     - RecyclerView postRecycler
@@ -194,9 +196,10 @@ class PostViewHolder {
     + PostViewHolder(View itemView)
 }
 
-ForumActivity --> PostAdapter
-ForumActivity --> Post
-PostAdapter --> PostViewHolder
+ForumActivity "1" *-- PostAdapter
+ForumActivity --> "0..*" Post
+PostAdapter ..> PostViewHolder : <<parameter>>
+PostAdapter --> "0..*" Post
 
 class MakeRecipeActivity {
     # void onCreate(Bundle savedInstanceState)
@@ -209,5 +212,4 @@ class RecipeActivity {
     + void onBackButtonTapped(View view)
 }
 
-RecipeActivity --> Recipe
 @enduml
