@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -19,7 +20,7 @@ import org.json.JSONObject;
 public class LoginActivity extends AppCompatActivity {
 
     private EditText login_editText_id, login_editText_pw;
-    private Button register_button,login_button;
+    private Button login_button_login, login_button_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,8 +30,8 @@ public class LoginActivity extends AppCompatActivity {
         EditText login_editText_id = (EditText) findViewById(R.id.login_editText_id);
         EditText login_editText_pw = (EditText) findViewById(R.id.login_editText_pw);
 
-        Button login_button=(Button)findViewById(R.id.login_button_login);
-        login_button.setOnClickListener(new View.OnClickListener(){
+        login_button_login = (Button)findViewById(R.id.login_button_login);
+        login_button_login.setOnClickListener(new View.OnClickListener(){
             public void onClick(View v){
                 String userID = login_editText_id.getText().toString();
                 String userPass = login_editText_pw.getText().toString();
@@ -38,10 +39,10 @@ public class LoginActivity extends AppCompatActivity {
                 Response.Listener<String> responseListener = new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-                        Toast.makeText( getApplicationContext(), "테스트", Toast.LENGTH_SHORT ).show();
                         try {
                             JSONObject jsonObject = new JSONObject( response );
                             boolean success = jsonObject.getBoolean( "success" );
+                            //Toast.makeText(getApplicationContext(), "test", Toast.LENGTH_SHORT).show();
 
                             if(success) {  //로그인 성공시
 
@@ -60,7 +61,8 @@ public class LoginActivity extends AppCompatActivity {
                                 startActivity( intent );
 
                             } else {  //로그인 실패시
-                                Toast.makeText( getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT ).show();
+                                Log.d("test", "로그인 실패");
+                                Toast.makeText( getApplicationContext(), "로그인 실패", Toast.LENGTH_SHORT).show();
                                 return;
                             }
 
@@ -69,21 +71,27 @@ public class LoginActivity extends AppCompatActivity {
                         }
                     }
                 };
+
                 LoginRequest loginRequest = new LoginRequest( userID, userPass, responseListener );
                 RequestQueue queue = Volley.newRequestQueue( LoginActivity.this );
                 queue.add( loginRequest );
 
             }
+
         });
 
-        Button register_button=(Button)findViewById(R.id.login_button_register);
-        register_button.setOnClickListener(new View.OnClickListener() {
+        login_button_register =(Button)findViewById(R.id.login_button_register);
+        login_button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(),RegisterActivity.class);
-                startActivity(intent);
+
+                Intent intent = new Intent( LoginActivity.this, RegisterActivity.class );
+                startActivity( intent );
+
             }
+
         });
 
     }
+
 }
