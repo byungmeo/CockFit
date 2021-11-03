@@ -24,6 +24,7 @@ public class LoginActivity extends AppCompatActivity {
     private Button button_login; //로그인 버튼
     private Button button_register; //회원가입 버튼
     private Button button_develop; //개발자용 임시 버튼
+    private Button button_firebase; //파이어베이스 테스트용 임시 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +37,7 @@ public class LoginActivity extends AppCompatActivity {
         button_login = findViewById(R.id.login_button_login);
         button_register =findViewById(R.id.login_button_register);
         button_develop = findViewById(R.id.login_button_developButton);
+        button_firebase = findViewById(R.id.login_button_firebaseTest);
 
         //로그인 버튼에 리스너를 부착합니다.
         button_login.setOnClickListener(new View.OnClickListener(){
@@ -86,7 +88,7 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity( intent );
+                startActivity(intent);
             }
         });
 
@@ -96,7 +98,15 @@ public class LoginActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity( intent );
+                startActivity(intent);
+            }
+        });
+
+        button_firebase.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(LoginActivity.this, DevelopActivity.class);
+                startActivity(intent);
             }
         });
     }
