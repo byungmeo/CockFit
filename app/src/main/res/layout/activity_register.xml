@@ -44,7 +44,7 @@
         app:layout_constraintTop_toBottomOf="@+id/register_button_backButton"></TextView>
 
     <Button
-        android:id="@+id/register_button_id"
+        android:id="@+id/register_button_checkId"
         android:layout_width="70dp"
         android:layout_height="wrap_content"
         android:layout_marginRight="16dp"
