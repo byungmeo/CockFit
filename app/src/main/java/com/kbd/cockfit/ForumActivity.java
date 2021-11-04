@@ -2,11 +2,14 @@ package com.kbd.cockfit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Icon;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -125,9 +128,11 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private Context context;
         private ArrayList<Post> postArrayList;
 
         public PostAdapter(Context context, ArrayList<Post> postArrayList) {
+            this.context = context;
             this.postArrayList = postArrayList;
         }
 
@@ -144,6 +149,14 @@ public class ForumActivity extends AppCompatActivity {
             postViewHolder.postTitle.setText(postArrayList.get(position).getPostTitle());
             postViewHolder.writer.setText(postArrayList.get(position).getWriter());
             postViewHolder.postDate.setText(postArrayList.get(position).getPostDate());
+
+            postViewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intent = new Intent(context, PostActivity.class);
+                    context.startActivity(intent);
+                }
+            });
         }
 
         @Override
@@ -152,12 +165,14 @@ public class ForumActivity extends AppCompatActivity {
         }
 
         public class PostViewHolder extends RecyclerView.ViewHolder {
+            private ConstraintLayout constraintLayout;
             private TextView postTitle;
             private TextView writer;
             private TextView postDate;
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
+                constraintLayout = itemView.findViewById(R.id.myPostItem_constraintLayout);
                 postTitle = itemView.findViewById(R.id.myPostItem_textView_postTitle);
                 writer = itemView.findViewById(R.id.myPostItem_textView_writer);
                 postDate = itemView.findViewById(R.id.myPostItem_textView_postDate);
