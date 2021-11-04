@@ -19,6 +19,7 @@ import android.widget.TextView;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -44,20 +45,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
+        final FirebaseUser user = mAuth.getCurrentUser();
 
         editText_nickname = v.findViewById(R.id.profile_textView_name);
-        mDatabase.child("user").child(mAuth.getUid()).child("name").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DataSnapshot> task) {
-                if (!task.isSuccessful()) {
-                    Log.e("firebase", "Error getting data", task.getException());
-                }
-                else {
-                    Log.d("firebase", String.valueOf(task.getResult().getValue()));
-                    editText_nickname.setText(String.valueOf(task.getResult().getValue()));
-                }
-            }
-        });
+        editText_nickname.setText(user.getDisplayName());
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myPost = v.findViewById(R.id.profile_button_post);

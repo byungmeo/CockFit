@@ -169,7 +169,6 @@ public class ListActivity extends AppCompatActivity {
         }
 
         public class RecipeViewHolder extends RecyclerView.ViewHolder {
-            private int number;
             private CardView card;
             private TextView name;
             private TextView base;
