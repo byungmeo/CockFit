@@ -6,18 +6,33 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.annotations.Nullable;
+
 import java.util.ArrayList;
+import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
     private RecyclerView postRecycler;
     private PostAdapter postAdapter;
     private ArrayList<Post> postArrayList;
+
+    private String forumType;
 
     private TextView screenName;
 
@@ -26,6 +41,9 @@ public class ForumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
+
         screenName = findViewById(R.id.forom_textView_screenName);
         setScreenName();
 
@@ -33,7 +51,8 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     public void setScreenName() {
-        switch (getIntent().getStringExtra("forum")) {
+        forumType = getIntent().getStringExtra("forum");
+        switch (forumType) {
             case "share" : {
                 screenName.setText("레시피 공유 게시판");
                 break;
@@ -56,7 +75,7 @@ public class ForumActivity extends AppCompatActivity {
         postRecycler = findViewById(R.id.forum_recycler);
         postArrayList = new ArrayList<>();
 
-        initMyPostList();
+        initPostList();
 
         postAdapter = new PostAdapter(this, postArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -64,48 +83,45 @@ public class ForumActivity extends AppCompatActivity {
         postRecycler.setAdapter(postAdapter);
     }
 
-    public void initMyPostList() {
-        postArrayList.add(new Post("테스트 게시물1", "게시글 요약문 테스트1", "00/00"));
-        postArrayList.add(new Post("테스트 게시물2", "게시글 요약문 테스트2", "00/00"));
-        postArrayList.add(new Post("테스트 게시물3", "게시글 요약문 테스트3", "00/00"));
-        postArrayList.add(new Post("테스트 게시물4", "게시글 요약문 테스트4", "00/00"));
-        postArrayList.add(new Post("테스트 게시물5", "게시글 요약문 테스트5", "00/00"));
-        postArrayList.add(new Post("테스트 게시물6", "게시글 요약문 테스트6", "00/00"));
-        postArrayList.add(new Post("테스트 게시물7", "게시글 요약문 테스트7", "00/00"));
-        postArrayList.add(new Post("테스트 게시물8", "게시글 요약문 테스트8", "00/00"));
-        postArrayList.add(new Post("테스트 게시물9", "게시글 요약문 테스트9", "00/00"));
+    public void initPostList() {
+        mDatabase.child("forum").child(forumType).addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Post post = snapshot.getValue(Post.class);
+                    postArrayList.add(post);
+                }
+            }
+
+            @Override
+            public void onChildChanged(@NonNull DataSnapshot snapshot, @androidx.annotation.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+
+            }
+
+            @Override
+            public void onChildMoved(@NonNull DataSnapshot snapshot, @androidx.annotation.Nullable String previousChildName) {
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
-    }
-
-    public void clickBackButton(View view) {
-        onBackPressed();
-    }
-
-    public class Post {
-        private String postName;
-        private String postAbstract;
-        private String postDate;
-
-        public Post(String postName, String postAbstract, String postDate) {
-            this.postName = postName;
-            this.postAbstract = postAbstract;
-            this.postDate = postDate;
-        }
-
-        public String getPostName() {
-            return postName;
-        }
-
-        public String getPostAbstract() {
-            return postAbstract;
-        }
-
-        public String getPostDate() {
-            return postDate;
+    public void clickButton(View view) {
+        if(view.getId() == R.id.forum_button_backButton) {
+            this.onBackPressed();
+        } else if(view.getId() == R.id.forum_button_write) {
+            Intent intent = new Intent(this, WritePostActivity.class);
+            intent.putExtra("forum", forumType);
+            startActivity(intent);
         }
     }
 

@@ -115,10 +115,6 @@ public class ListActivity extends AppCompatActivity {
         super.onBackPressed();
     }
 
-    public void clickBackButton(View view) {
-        onBackPressed();
-    }
-
     public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
         private Context context;
