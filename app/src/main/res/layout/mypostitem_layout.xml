@@ -2,11 +2,12 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/myPostItem_constraintLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
     <TextView
-        android:id="@+id/myPostItem_textView_postName"
+        android:id="@+id/myPostItem_textView_postTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
@@ -15,13 +16,13 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:id="@+id/myPostItem_textView_postAbstract"
+        android:id="@+id/myPostItem_textView_writer"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="요약"
+        android:text="작성자"
         android:textSize="12sp"
-        app:layout_constraintStart_toStartOf="@+id/myPostItem_textView_postName"
-        app:layout_constraintTop_toBottomOf="@+id/myPostItem_textView_postName" />
+        app:layout_constraintStart_toStartOf="@+id/myPostItem_textView_postTitle"
+        app:layout_constraintTop_toBottomOf="@+id/myPostItem_textView_postTitle" />
 
     <TextView
         android:id="@+id/myPostItem_textView_postDate"
@@ -31,6 +32,6 @@
         android:text="00/00"
         android:textSize="10sp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/myPostItem_textView_postAbstract"
-        app:layout_constraintTop_toBottomOf="@+id/myPostItem_textView_postAbstract" />
+        app:layout_constraintStart_toStartOf="@+id/myPostItem_textView_writer"
+        app:layout_constraintTop_toBottomOf="@+id/myPostItem_textView_writer" />
 </androidx.constraintlayout.widget.ConstraintLayout>

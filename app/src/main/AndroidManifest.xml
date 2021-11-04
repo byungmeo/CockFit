@@ -12,6 +12,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CockFit">
         <activity
+            android:name=".PostActivity"
+            android:exported="true" />
+        <activity
+            android:name=".WritePostActivity"
+            android:exported="true" />
+        <activity
             android:name=".DevelopActivity"
             android:exported="true" />
         <activity
@@ -37,7 +43,7 @@
         </activity>
         <activity
             android:name=".RegisterActivity"
-            android:exported="true"></activity>
+            android:exported="true" />
         <activity
             android:name=".RecipeActivity"
             android:exported="true" />
