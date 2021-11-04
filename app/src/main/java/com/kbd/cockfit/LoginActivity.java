@@ -21,6 +21,8 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
+    static String nickname;
+
     private FirebaseAuth mAuth;
 
     private EditText editText_email; //id 입력창
