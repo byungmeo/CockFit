@@ -81,15 +81,27 @@ public class RegisterActivity extends AppCompatActivity {
         if(view.getId() == this.button_register.getId()) {
             String e_mail = this.editText_email.getText().toString();
             String pwd = this.editText_pwd.getText().toString();
+            String checkPwd = this.editText_checkPwd.getText().toString();
+            String nickname = this.editText_nickname.getText().toString();
 
             String e_mailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$"; // 이메일 형식 패턴
             if(!Pattern.matches(e_mailPattern , e_mail)){
-                Toast.makeText(RegisterActivity.this , "이메일 형식을 확인해수제요" , Toast.LENGTH_LONG).show();
+                Toast.makeText(RegisterActivity.this , "이메일 형식을 확인해주세요" , Toast.LENGTH_LONG).show();
                 return;
             }
 
-            if(pwd.equals("")) {
+            if(pwd.equals("") || checkPwd.equals("")) {
                 Toast.makeText(RegisterActivity.this , "비밀번호를 입력해주세요" , Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(nickname.equals("")) {
+                Toast.makeText(RegisterActivity.this , "닉네임을 입력해주세요" , Toast.LENGTH_LONG).show();
+                return;
+            }
+
+            if(!pwd.equals(checkPwd)) {
+                Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
                 return;
             }
 
