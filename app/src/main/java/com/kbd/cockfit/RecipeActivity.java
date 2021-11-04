@@ -4,12 +4,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.ContentProvider;
+import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.Toolbar;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class RecipeActivity extends AppCompatActivity {
 
@@ -28,7 +38,7 @@ public class RecipeActivity extends AppCompatActivity {
         TextView recipe_textview_e = (TextView) findViewById(R.id.recipe_textview_equipment);
         TextView recipe_textview_d = (TextView) findViewById(R.id.recipe_textview_description);
 
-        Recipe r = r1;
+        Recipe r = getRecipe(2); //실제로는 putExtra를 통해 받아온 레시피번호를 기준으로 레시피를 받아옵니다.
 
         recipe_textview_n.setText(r.name);
         recipe_textview_p.setText(r.proof+"%");
@@ -39,6 +49,66 @@ public class RecipeActivity extends AppCompatActivity {
 
     }
 
+    public Recipe getRecipe(int recipeNumber) {
+        Recipe recipe = null;
+
+        try {
+            AssetManager assetManager = getResources().getAssets();
+            InputStream is = assetManager.open("jsons/basicRecipe.json");
+            InputStreamReader isr = new InputStreamReader(is);
+            BufferedReader reader = new BufferedReader(isr);
+
+            StringBuffer buffer = new StringBuffer();
+            String line = reader.readLine();
+            while(line != null) {
+                buffer.append(line + "\n");
+                line = reader.readLine();
+            }
+
+            String jsonData = buffer.toString();
+
+            JSONArray jsonArray = new JSONArray(jsonData);
+            String s = "";
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+
+                int number = jo.getInt("number");
+
+                if(number != recipeNumber) {
+                    continue;
+                }
+
+                String name = jo.getString("name");
+                int proof = jo.getInt("proof");
+                String base = jo.getString("base");
+                String[] ingredient = toStringArray(jo.getJSONArray("ingredient"));
+                String[] equipment = toStringArray(jo.getJSONArray("equipment"));
+                String description = jo.getString("description");
+
+                recipe = new Recipe(name, proof, base, ingredient[0], equipment[0], description);
+                break;
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
+
+        return recipe;
+    }
+
+    //다른 곳에서 쓸 수도 있으므로, static으로 우선 선언
+    public static String[] toStringArray(JSONArray array) {
+        if(array==null)
+            return null;
+
+        String[] arr=new String[array.length()];
+        for(int i=0; i<arr.length; i++) {
+            arr[i]=array.optString(i);
+        }
+        return arr;
+    }
 
     public void onBackButtonTapped(View view) {
         super.onBackPressed();

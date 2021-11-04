@@ -1,0 +1,4 @@
+[
+  {"number" : 1, "name": "테스트1", "proof": "1", "base": "럼", "ingredient": ["물", "기름", "풀"], "equipment": ["칼", "총", "활"], "description": "어쩌구저쩌구\n저쩌구저쩌구"},
+  {"number" : 2, "name": "테스트2", "proof": "2", "base": "보드카", "ingredient": ["물2", "기름2", "풀2"], "equipment": ["칼2", "총2", "활2"], "description": "어쩌구저쩌구2\n저쩌구저쩌구2"}
+]
