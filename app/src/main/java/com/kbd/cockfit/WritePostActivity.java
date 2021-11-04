@@ -20,6 +20,7 @@ public class WritePostActivity extends AppCompatActivity {
 
     private String forumType;
 
+    private EditText editText_title;
     private EditText editText_content;
 
     @Override
@@ -34,6 +35,7 @@ public class WritePostActivity extends AppCompatActivity {
 
         forumType = getIntent().getStringExtra("forum");
 
+        editText_title = findViewById(R.id.write_editText_title);
         editText_content = findViewById(R.id.write_editText_content);
     }
 
@@ -41,14 +43,18 @@ public class WritePostActivity extends AppCompatActivity {
         if(view.getId() == R.id.write_button_backButton) {
             this.onBackPressed();
         } else if(view.getId() == R.id.write_button_done) {
-            if(editText_content.getText().toString().equals("")) {
+            if(editText_title.getText().toString().equals("")) {
                 Toast.makeText(this , "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
                 return;
             }
+            
+            if(editText_content.getText().toString().equals("")) {
+                Toast.makeText(this , "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                return;
+            }
 
-            Post post = new Post("Test", "Test", "00/00");
+            Post post = new Post(editText_title.getText().toString(), nickname, "00/00");
             post.setPostContent(editText_content.getText().toString());
-            post.setWriterNickname(nickname);
             post.setPostNumber(1);
 
             mDatabase.child("forum").child(forumType).child(String.valueOf(post.getPostNumber())).push().setValue(post);

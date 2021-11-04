@@ -22,7 +22,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.annotations.Nullable;
 
 import java.util.ArrayList;
-import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -126,11 +125,9 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private Context context;
         private ArrayList<Post> postArrayList;
 
         public PostAdapter(Context context, ArrayList<Post> postArrayList) {
-            this.context = context;
             this.postArrayList = postArrayList;
         }
 
@@ -144,8 +141,8 @@ public class ForumActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
-            postViewHolder.postName.setText(postArrayList.get(position).getPostName());
-            postViewHolder.postAbstract.setText(postArrayList.get(position).getPostAbstract());
+            postViewHolder.postTitle.setText(postArrayList.get(position).getPostTitle());
+            postViewHolder.writer.setText(postArrayList.get(position).getWriter());
             postViewHolder.postDate.setText(postArrayList.get(position).getPostDate());
         }
 
@@ -155,14 +152,14 @@ public class ForumActivity extends AppCompatActivity {
         }
 
         public class PostViewHolder extends RecyclerView.ViewHolder {
-            private TextView postName;
-            private TextView postAbstract;
+            private TextView postTitle;
+            private TextView writer;
             private TextView postDate;
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
-                postName = itemView.findViewById(R.id.myPostItem_textView_postName);
-                postAbstract = itemView.findViewById(R.id.myPostItem_textView_postAbstract);
+                postTitle = itemView.findViewById(R.id.myPostItem_textView_postTitle);
+                writer = itemView.findViewById(R.id.myPostItem_textView_writer);
                 postDate = itemView.findViewById(R.id.myPostItem_textView_postDate);
             }
         }
