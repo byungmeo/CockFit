@@ -32,12 +32,12 @@
 
 
     <TextView
-        android:id="@+id/register_textView_id"
+        android:id="@+id/register_textView_email"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="60dp"
         android:padding="5dp"
-        android:text="아이디"
+        android:text="이메일"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintStart_toStartOf="@+id/register_button_backButton"
@@ -50,21 +50,22 @@
         android:layout_marginRight="16dp"
         android:padding="5dp"
         android:text="중복확인"
-        app:layout_constraintBottom_toBottomOf="@+id/register_editText_id"
+        app:layout_constraintBottom_toBottomOf="@+id/register_editText_email"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_editText_id">
+        app:layout_constraintTop_toTopOf="@+id/register_editText_email">
 
     </Button>
 
     <EditText
-        android:id="@+id/register_editText_id"
+        android:id="@+id/register_editText_email"
         android:layout_width="280dp"
         android:layout_height="40dp"
-        android:hint="아이디를 입력하세요."
+        android:hint="이메일을 입력하세요."
+        android:inputType="textEmailAddress"
         android:padding="5dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_textView_id"
-        app:layout_constraintTop_toBottomOf="@+id/register_textView_id"></EditText>
+        app:layout_constraintStart_toStartOf="@+id/register_textView_email"
+        app:layout_constraintTop_toBottomOf="@+id/register_textView_email"></EditText>
 
     <TextView
         android:id="@+id/register_textView_pw"
@@ -75,8 +76,8 @@
         android:text="비밀번호"
         android:textSize="15dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintStart_toStartOf="@+id/register_editText_id"
-        app:layout_constraintTop_toBottomOf="@+id/register_editText_id"></TextView>
+        app:layout_constraintStart_toStartOf="@+id/register_editText_email"
+        app:layout_constraintTop_toBottomOf="@+id/register_editText_email"></TextView>
 
     <EditText
         android:id="@+id/register_editText_pw"
@@ -133,10 +134,11 @@
         app:layout_constraintTop_toBottomOf="@+id/register_textView_nic"></EditText>
 
     <Button
-        android:id="@+id/register_button_regist"
+        android:id="@+id/register_button_register"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
         android:layout_marginBottom="30dp"
+        android:onClick="clickButton"
         android:text="회원가입"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
