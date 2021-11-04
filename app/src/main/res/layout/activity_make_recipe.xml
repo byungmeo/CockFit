@@ -13,7 +13,7 @@
         android:layout_height="35dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="15dp"
-        android:onClick="clickBackButton"
+        android:onClick="clickButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_arrow_back_24"
@@ -94,9 +94,9 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:inputType="textPersonName"
-                    android:text="칵테일의 이름을 입력하세요"
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="칵테일의 이름을 입력하세요."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
 
             </LinearLayout>
 
@@ -122,9 +122,9 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:inputType="textPersonName"
-                    android:text="도수를 입력하세요"
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="도수를 입력하세요."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -149,9 +149,9 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:inputType="textPersonName"
-                    android:text="기주를 입력하세요"
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="기주를 입력하세요."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -176,9 +176,9 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:inputType="textPersonName"
-                    android:text="재료를 입력하세요"
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="재료를 입력하세요."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -203,9 +203,9 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:inputType="textPersonName"
-                    android:text="장비를 입력하세요"
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="장비를 입력하세요."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
             </LinearLayout>
 
             <LinearLayout
@@ -231,9 +231,9 @@
                     android:ems="12"
                     android:gravity="start|top"
                     android:inputType="textMultiLine"
-                    android:text="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
-                    android:textColor="#858181"
-                    android:textStyle="italic" />
+                    android:hint="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
             </LinearLayout>
         </LinearLayout>
     </ScrollView>
