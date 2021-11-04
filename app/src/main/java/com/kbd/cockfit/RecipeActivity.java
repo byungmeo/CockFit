@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
 
@@ -38,7 +39,13 @@ public class RecipeActivity extends AppCompatActivity {
         textView_equipment = findViewById(R.id.recipe_textview_equipment);
         textView_description = findViewById(R.id.recipe_textview_description);
 
-        Recipe r = getRecipe(2); //실제로는 putExtra를 통해 받아온 레시피번호를 기준으로 레시피를 받아옵니다.
+        int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
+        if(recipeNumber == 0) {
+            Log.d("error", "extra를 못받음");
+            return;
+        }
+
+        Recipe r = getRecipe(recipeNumber);
 
         textView_name.setText(r.name);
         textView_proof.setText(r.proof+"%");
@@ -46,6 +53,7 @@ public class RecipeActivity extends AppCompatActivity {
         textView_ingredient.setText(r.ingredient);
         textView_equipment.setText(r.equipment);
         textView_description.setText(r.description);
+
 
     }
 
@@ -73,7 +81,7 @@ public class RecipeActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipe = new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags);
+                recipe = new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags);
                 break;
             }
         } catch (JSONException e) {

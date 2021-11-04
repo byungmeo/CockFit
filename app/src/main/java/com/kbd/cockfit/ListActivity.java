@@ -79,7 +79,7 @@ public class ListActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipeArrayList.add(new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags));
+                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -103,7 +103,7 @@ public class ListActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipeArrayList.add(new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags));
+                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -157,6 +157,7 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, RecipeActivity.class);
+                    intent.putExtra("recipe_number", recipeArrayList.get(holder.getAdapterPosition()).number);
                     context.startActivity(intent);
                 }
             });
@@ -168,6 +169,7 @@ public class ListActivity extends AppCompatActivity {
         }
 
         public class RecipeViewHolder extends RecyclerView.ViewHolder {
+            private int number;
             private CardView card;
             private TextView name;
             private TextView base;
