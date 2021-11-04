@@ -15,6 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
 
 public class ListActivity extends AppCompatActivity {
@@ -59,27 +63,51 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void initRecipeList() {
-        recipeArrayList.add(new Recipe("병머의 의지", "진", new String[]{"#맛있음", "#예쁨"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("이건 테스트", "럼", new String[]{"#테스트", "#성공"}));
+        try {
+            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
+            JSONArray jsonArray = new JSONArray(jsonData);
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+
+                int number = jo.getInt("number");
+                String name = jo.getString("name");
+                int proof = jo.getInt("proof");
+                String base = jo.getString("base");
+                String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
+                String description = jo.getString("description");
+                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+
+                recipeArrayList.add(new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     public void initFavoriteList() {
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
-        recipeArrayList.add(new Recipe("즐겨찾기테스트", "테스트", new String[]{"#테스트", "#성공"}));
+        try {
+            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
+            JSONArray jsonArray = new JSONArray(jsonData);
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+
+                int number = jo.getInt("number");
+                String name = jo.getString("name");
+                int proof = jo.getInt("proof");
+                String base = jo.getString("base");
+                String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
+                String description = jo.getString("description");
+                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+
+                recipeArrayList.add(new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags));
+            }
+        } catch (JSONException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -115,11 +143,11 @@ public class ListActivity extends AppCompatActivity {
             recipeViewHolder.base.setText("베이스 : ");
             recipeViewHolder.tags.setText("태그 : ");
 
-            recipeViewHolder.name.setText(recipeArrayList.get(position).getName().toString());
+            recipeViewHolder.name.setText(recipeArrayList.get(position).name);
             String baseText = recipeViewHolder.base.getText().toString();
             String tagsText = recipeViewHolder.tags.getText().toString();
-            baseText += (recipeArrayList.get(position).getBase().toString());
-            for(String tag : recipeArrayList.get(position).getTags()) {
+            baseText += (recipeArrayList.get(position).base);
+            for(String tag : recipeArrayList.get(position).tags) {
                 tagsText += tag + " ";
             }
             recipeViewHolder.base.setText(baseText);
@@ -152,30 +180,6 @@ public class ListActivity extends AppCompatActivity {
                 base = itemView.findViewById(R.id.recipeitem_base);
                 tags = itemView.findViewById(R.id.recipeitem_tags);
             }
-        }
-    }
-
-    public class Recipe {
-        private String name;
-        private String base;
-        private String[] tags;
-
-        public Recipe(String name, String base, String[] tags) {
-            this.name = name;
-            this.base = base;
-            this.tags = tags;
-        }
-
-        public String getName() {
-            return this.name;
-        }
-
-        public String getBase() {
-            return this.base;
-        }
-
-        public String[] getTags() {
-            return  this.tags;
         }
     }
 }

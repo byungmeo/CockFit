@@ -71,8 +71,9 @@ public class RecipeActivity extends AppCompatActivity {
                 String[] ingredient = jsonArrayToArray(jo.getJSONArray("ingredient"));
                 String[] equipment = jsonArrayToArray(jo.getJSONArray("equipment"));
                 String description = jo.getString("description");
+                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipe = new Recipe(name, proof, base, ingredient[0], equipment[0], description);
+                recipe = new Recipe(name, proof, base, ingredient[0], equipment[0], description, tags);
                 break;
             }
         } catch (JSONException e) {
