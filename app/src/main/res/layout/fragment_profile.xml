@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ProfileFragment" >
+    tools:context=".ProfileFragment">
 
     <TextView
         android:id="@+id/textView5"
@@ -94,5 +94,20 @@
         android:textSize="14sp"
         app:layout_constraintStart_toStartOf="@+id/profile_textView_name"
         app:layout_constraintTop_toBottomOf="@+id/profile_textView_name" />
+
+    <ImageButton
+        android:id="@+id/profile_imageButton_validate"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="5dp"
+        android:background="@null"
+        android:src="@drawable/ic_baseline_create_24"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_textView_name"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/profile_textView_name"
+        app:layout_constraintTop_toTopOf="@+id/profile_textView_name" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
