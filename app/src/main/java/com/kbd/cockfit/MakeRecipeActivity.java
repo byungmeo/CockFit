@@ -1,9 +1,11 @@
 package com.kbd.cockfit;
 import androidx.appcompat.app.AppCompatActivity;
+
 import android.os.Bundle;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
+import android.widget.Toast;
+
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -12,67 +14,24 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MakeRecipeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
     private String uid;
-    private String name;
-    private String proof;
-    private String base;
-    private String ingredient;
-    private String equipment;
-    private String description;
-    private Button storeButton;
-
-    public class myRecipe {
-
-        private String name = ""; //칵테일 이름
-        private String proof = ""; //칵테일 도수
-        private String base = ""; //칵테일 기주
-        private String ingredient = ""; //칵테일 재료
-        private String equipment = ""; //칵테일 장비
-        private String description = ""; //칵테일 제조에 대한 상세설명
-
-        public myRecipe(String name, String proof, String base, String ingredient, String equipment, String description )
-        {
-            this.name = name;
-            this.proof = proof;
-            this.base = base;
-            this.ingredient = ingredient;
-            this.equipment = equipment;
-            this.description = description;
-        }
-
-        public String getName(){
-            return name;
-        }
-        public String getProof(){
-            return proof;
-        }
-        public String getBase(){
-            return base;
-        }
-        public String getIngredient(){
-            return ingredient;
-        }
-        public String getEquipment(){
-            return equipment;
-        }
-        public String getDescription(){
-            return description;
-        }
-    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        storeButton = ((Button) findViewById(R.id.button12));
     }
 
     public void onStart(){
@@ -87,36 +46,30 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
             }
         });
-        storeButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
-                proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
-                base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
-                ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString();
-                equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString();
-                description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
-                if( name.equals("")){
-                    return;
-                }
+    }
 
-                if( description.equals("")){
-                    return;
-                }
+    public void clickButton(View view) {
+        if(view.getId() == R.id.make_button_backButton) {
+            this.onBackPressed();
+        } else if(view.getId() == R.id.make_button_store) {
+            String name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
+            String proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
+            String base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
+            String ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString();
+            String equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString();
+            String description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
 
-                myRecipe recipe = new myRecipe(name,proof,base,ingredient,equipment,description);
-                mDatabase.child("user").child(uid).child("MyRecipe").child(name).setValue(recipe);
+            if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("")) {
+                Toast.makeText(this , "모든 항목을 입력해주세요.",Toast.LENGTH_SHORT).show();
+                return;
             }
-        });
-    }
 
-    @Override
-        public void onBackPressed () {
-            super.onBackPressed();
-        }
+            Recipe recipe = new Recipe(name,proof,base,ingredient,equipment,description);
 
-        public void clickBackButton (View view){
-            onBackPressed();
+            mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe);
+
+            this.onBackPressed();
         }
     }
+}
 

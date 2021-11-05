@@ -33,23 +33,14 @@
 
 
     <Button
-        android:id="@+id/button12"
+        android:id="@+id/make_button_store"
         android:layout_width="108dp"
         android:layout_height="68dp"
-        android:layout_marginEnd="76dp"
-        android:layout_marginBottom="48dp"
+        android:layout_marginBottom="15dp"
+        android:onClick="clickButton"
         android:text="저장"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
-
-    <Button
-        android:id="@+id/button11"
-        android:layout_width="108dp"
-        android:layout_height="68dp"
-        android:layout_marginStart="76dp"
-        android:layout_marginBottom="48dp"
-        android:text="초기화"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
     <ScrollView
@@ -59,8 +50,8 @@
         android:layout_marginStart="15dp"
         android:layout_marginTop="150dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="150dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/make_button_store"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -93,8 +84,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="15dp"
                     android:ems="12"
-                    android:inputType="textPersonName"
                     android:hint="칵테일의 이름을 입력하세요."
+                    android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
 
@@ -121,8 +112,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="15dp"
                     android:ems="12"
-                    android:inputType="textPersonName"
                     android:hint="도수를 입력하세요."
+                    android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -148,8 +139,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="15dp"
                     android:ems="12"
-                    android:inputType="textPersonName"
                     android:hint="기주를 입력하세요."
+                    android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -175,8 +166,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="15dp"
                     android:ems="12"
-                    android:inputType="textPersonName"
                     android:hint="재료를 입력하세요."
+                    android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -202,8 +193,8 @@
                     android:layout_height="50dp"
                     android:layout_marginStart="15dp"
                     android:ems="12"
-                    android:inputType="textPersonName"
                     android:hint="장비를 입력하세요."
+                    android:inputType="textPersonName"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>
@@ -230,8 +221,8 @@
                     android:layout_marginStart="15dp"
                     android:ems="12"
                     android:gravity="start|top"
-                    android:inputType="textMultiLine"
                     android:hint="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
+                    android:inputType="textMultiLine"
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>

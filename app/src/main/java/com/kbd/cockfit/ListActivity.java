@@ -72,7 +72,7 @@ public class ListActivity extends AppCompatActivity {
 
                 int number = jo.getInt("number");
                 String name = jo.getString("name");
-                int proof = jo.getInt("proof");
+                String proof = jo.getString("proof");
                 String base = jo.getString("base");
                 String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
                 String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
@@ -96,7 +96,7 @@ public class ListActivity extends AppCompatActivity {
 
                 int number = jo.getInt("number");
                 String name = jo.getString("name");
-                int proof = jo.getInt("proof");
+                String proof = jo.getString("proof");
                 String base = jo.getString("base");
                 String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
                 String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
@@ -139,11 +139,11 @@ public class ListActivity extends AppCompatActivity {
             recipeViewHolder.base.setText("베이스 : ");
             recipeViewHolder.tags.setText("태그 : ");
 
-            recipeViewHolder.name.setText(recipeArrayList.get(position).name);
+            recipeViewHolder.name.setText(recipeArrayList.get(position).getName());
             String baseText = recipeViewHolder.base.getText().toString();
             String tagsText = recipeViewHolder.tags.getText().toString();
-            baseText += (recipeArrayList.get(position).base);
-            for(String tag : recipeArrayList.get(position).tags) {
+            baseText += (recipeArrayList.get(position).getBase());
+            for(String tag : recipeArrayList.get(position).getTags()) {
                 tagsText += tag + " ";
             }
             recipeViewHolder.base.setText(baseText);
@@ -153,7 +153,7 @@ public class ListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     Intent intent = new Intent(context, RecipeActivity.class);
-                    intent.putExtra("recipe_number", recipeArrayList.get(holder.getAdapterPosition()).number);
+                    intent.putExtra("recipe_number", recipeArrayList.get(holder.getAdapterPosition()).getNumber());
                     context.startActivity(intent);
                 }
             });

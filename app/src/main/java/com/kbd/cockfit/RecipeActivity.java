@@ -48,14 +48,14 @@ public class RecipeActivity extends AppCompatActivity {
             return;
         }
 
-        Recipe r = getRecipe(recipeNumber);
+        Recipe recipe = getRecipe(recipeNumber);
 
-        textView_name.setText(r.name);
-        textView_proof.setText(r.proof+"%");
-        textView_base.setText(r.base);
-        textView_ingredient.setText(r.ingredient);
-        textView_equipment.setText(r.equipment);
-        textView_description.setText(r.description);
+        textView_name.setText(recipe.getName());
+        textView_proof.setText(recipe.getProof()+"%");
+        textView_base.setText(recipe.getBase());
+        textView_ingredient.setText(recipe.getIngredient());
+        textView_equipment.setText(recipe.getEquipment());
+        textView_description.setText(recipe.getDescription());
 
 
     }
@@ -77,7 +77,7 @@ public class RecipeActivity extends AppCompatActivity {
                 }
 
                 String name = jo.getString("name");
-                int proof = jo.getInt("proof");
+                String proof = jo.getString("proof");
                 String base = jo.getString("base");
                 String[] ingredient = jsonArrayToArray(jo.getJSONArray("ingredient"));
                 String[] equipment = jsonArrayToArray(jo.getJSONArray("equipment"));

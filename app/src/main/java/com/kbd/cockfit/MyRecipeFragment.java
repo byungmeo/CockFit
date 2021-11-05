@@ -10,18 +10,40 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.telecom.Call;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.database.annotations.Nullable;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 public class MyRecipeFragment extends Fragment {
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+
     private RecyclerView myRecipeRecyclerView;
     private GridLayoutManager layoutManager;
     private MyRecipeAdapter adapter;
-    private ArrayList<MyRecipe> myRecipeArrayList;
+    private ArrayList<Recipe> myRecipeArrayList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -29,39 +51,56 @@ public class MyRecipeFragment extends Fragment {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
 
-        myRecipeArrayList = new ArrayList<>();
-        initMyRecipeList();
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance().getReference();
 
         layoutManager = new GridLayoutManager(v.getContext(), 2);
 
         myRecipeRecyclerView = (RecyclerView) v.findViewById(R.id.myRecipe_recyclerView);
         myRecipeRecyclerView.setHasFixedSize(true);
-
         myRecipeRecyclerView.setLayoutManager(layoutManager);
 
-        // specify an adapter (see also next example)
+        myRecipeArrayList = new ArrayList<>();
         adapter = new MyRecipeAdapter(myRecipeArrayList);
         myRecipeRecyclerView.setAdapter(adapter);
+
+        initMyRecipeList();
 
         return v;
     }
 
     public void initMyRecipeList() {
-        myRecipeArrayList.add(new MyRecipe("나만의레시피1"));
-        myRecipeArrayList.add(new MyRecipe("나만의레시피2"));
-        myRecipeArrayList.add(new MyRecipe("나만의레시피3"));
-        myRecipeArrayList.add(new MyRecipe("나만의레시피4"));
-        myRecipeArrayList.add(new MyRecipe("나만의레시피5"));
+        FirebaseUser user = mAuth.getCurrentUser();
+        String uid = user.getUid();
+
+        mDatabase.child("user").child(uid).child("MyRecipe").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                myRecipeArrayList.clear();
+                
+                for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
+                    myRecipeArrayList.add(recipeSnapshot.getValue(Recipe.class));
+                }
+
+                adapter = new MyRecipeAdapter(myRecipeArrayList);
+                myRecipeRecyclerView.setAdapter(adapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("MyRecipeLoad", "loadPost:onCancelled", error.toException());
+            }
+        });
     }
 
     private class MyRecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private static final int TYPE_FOOTER = 1;
         private static final int TYPE_ITEM = 2;
 
-        private ArrayList<MyRecipe> myRecipeArrayList;
+        private ArrayList<Recipe> myRecipeArrayList;
 
 
-        public MyRecipeAdapter(ArrayList<MyRecipe> myRecipeArrayList) {
+        public MyRecipeAdapter(ArrayList<Recipe> myRecipeArrayList) {
             this.myRecipeArrayList = myRecipeArrayList;
         }
 
@@ -141,18 +180,6 @@ public class MyRecipeFragment extends Fragment {
                 return TYPE_FOOTER;
             }
             return TYPE_ITEM;
-        }
-    }
-
-    private class MyRecipe {
-        private String name;
-
-        public MyRecipe(String name) {
-            this.name = name;
-        }
-
-        public String getName() {
-            return name;
         }
     }
 }
