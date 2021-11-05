@@ -57,11 +57,9 @@ public class WritePostActivity extends AppCompatActivity {
             post.setPostContent(editText_content.getText().toString());
             post.setPostNumber(1);
 
-            mDatabase.child("forum").child(forumType).child(String.valueOf(post.getPostNumber())).push().setValue(post);
+            mDatabase.child("forum").child(forumType).push().setValue(post);
 
-            Intent intent = new Intent(this, ForumActivity.class);
-            intent.putExtra("forum", forumType);
-            startActivity(intent);
+            this.onBackPressed();
         }
     }
 }

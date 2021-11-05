@@ -1,6 +1,7 @@
 package com.kbd.cockfit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.constraintlayout.widget.ConstraintLayout;
@@ -22,7 +23,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.annotations.Nullable;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 
@@ -31,6 +32,7 @@ public class ForumActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
 
     private RecyclerView postRecycler;
+    private LinearLayoutManager layoutManager;
     private PostAdapter postAdapter;
     private ArrayList<Post> postArrayList;
 
@@ -49,7 +51,17 @@ public class ForumActivity extends AppCompatActivity {
         screenName = findViewById(R.id.forom_textView_screenName);
         setScreenName();
 
-        initMyPostRecycler();
+        layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+
+        postRecycler = findViewById(R.id.forum_recycler);
+        postRecycler.setHasFixedSize(true);
+        postRecycler.setLayoutManager(layoutManager);
+
+        postArrayList = new ArrayList<>();
+        postAdapter = new PostAdapter(postArrayList);
+        postRecycler.setAdapter(postAdapter);
+
+        initPostList();
     }
 
     public void setScreenName() {
@@ -73,41 +85,18 @@ public class ForumActivity extends AppCompatActivity {
         }
     }
 
-    public void initMyPostRecycler() {
-        postRecycler = findViewById(R.id.forum_recycler);
-        postArrayList = new ArrayList<>();
-
-        initPostList();
-
-        postAdapter = new PostAdapter(this, postArrayList);
-        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
-        postRecycler.setLayoutManager(linearLayoutManager);
-        postRecycler.setAdapter(postAdapter);
-    }
-
     public void initPostList() {
-        mDatabase.child("forum").child(forumType).addChildEventListener(new ChildEventListener() {
+        mDatabase.child("forum").child(forumType).addValueEventListener(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot dataSnapshot, @Nullable String s) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Post post = snapshot.getValue(Post.class);
-                    postArrayList.add(post);
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postArrayList.clear();
+
+                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
+                    postArrayList.add(postSnapshot.getValue(Post.class));
                 }
-            }
 
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @androidx.annotation.Nullable String previousChildName) {
-
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @androidx.annotation.Nullable String previousChildName) {
-
+                postAdapter = new PostAdapter(postArrayList);
+                postRecycler.setAdapter(postAdapter);
             }
 
             @Override
@@ -128,11 +117,9 @@ public class ForumActivity extends AppCompatActivity {
     }
 
     public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-        private Context context;
         private ArrayList<Post> postArrayList;
 
-        public PostAdapter(Context context, ArrayList<Post> postArrayList) {
-            this.context = context;
+        public PostAdapter(ArrayList<Post> postArrayList) {
             this.postArrayList = postArrayList;
         }
 
@@ -153,8 +140,8 @@ public class ForumActivity extends AppCompatActivity {
             postViewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    Intent intent = new Intent(context, PostActivity.class);
-                    context.startActivity(intent);
+                    Intent intent = new Intent(v.getContext(), PostActivity.class);
+                    startActivity(intent);
                 }
             });
         }
