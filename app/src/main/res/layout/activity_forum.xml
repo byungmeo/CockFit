@@ -14,6 +14,7 @@
         android:layout_marginStart="15dp"
         android:text="내 게시글 목록"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        android:textSize="20sp"
         app:layout_constraintBottom_toBottomOf="@+id/forum_button_backButton"
         app:layout_constraintStart_toEndOf="@+id/forum_button_backButton"
         app:layout_constraintTop_toTopOf="@+id/forum_button_backButton" />

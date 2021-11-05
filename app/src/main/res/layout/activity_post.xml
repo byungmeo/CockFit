@@ -17,4 +17,40 @@
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_baseline_arrow_back_24"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/post_textView_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="글 제목"
+        android:textColor="@color/black"
+        android:textSize="20sp"
+        app:layout_constraintBottom_toBottomOf="@+id/post_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/post_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/post_button_backButton" />
+
+    <TextView
+        android:id="@+id/post_textView_writer"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:text="작성자"
+        app:layout_constraintStart_toStartOf="@+id/post_button_backButton"
+        app:layout_constraintTop_toBottomOf="@+id/post_button_backButton" />
+
+    <TextView
+        android:id="@+id/post_textView_content"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="15dp"
+        android:layout_marginBottom="15dp"
+        android:background="@drawable/border"
+        android:text="본문내용"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/post_textView_writer" />
 </androidx.constraintlayout.widget.ConstraintLayout>
