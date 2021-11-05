@@ -18,9 +18,6 @@
             android:name=".WritePostActivity"
             android:exported="true" />
         <activity
-            android:name=".DevelopActivity"
-            android:exported="true" />
-        <activity
             android:name=".ForumActivity"
             android:exported="true" />
 
