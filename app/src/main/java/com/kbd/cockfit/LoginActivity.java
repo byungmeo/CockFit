@@ -21,16 +21,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
-    static String nickname;
-
     private FirebaseAuth mAuth;
 
     private EditText editText_email; //id 입력창
     private EditText editText_pwd; //pw 입력창
     private Button button_login; //로그인 버튼
     private Button button_register; //회원가입 버튼
-    private Button button_develop; //개발자용 임시 버튼
-    private Button button_firebase; //파이어베이스 테스트용 임시 버튼
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,32 +40,12 @@ public class LoginActivity extends AppCompatActivity {
         editText_pwd = findViewById(R.id.login_editText_pw);
         button_login = findViewById(R.id.login_button_login);
         button_register =findViewById(R.id.login_button_register);
-        button_develop = findViewById(R.id.login_button_developButton);
-        button_firebase = findViewById(R.id.login_button_firebaseTest);
 
         //회원가입 버튼에 리스너를 부착합니다.
         button_register.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        //개발자용 임시 버튼에 리스너를 부착합니다.
-        //로그인 로직을 건너뜁니다.
-        button_develop.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                startActivity(intent);
-            }
-        });
-
-        button_firebase.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, DevelopActivity.class);
                 startActivity(intent);
             }
         });
