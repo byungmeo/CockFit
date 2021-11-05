@@ -90,6 +90,12 @@ public class MakeRecipeActivity extends AppCompatActivity {
         storeButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
+                proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
+                base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
+                ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString();
+                equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString();
+                description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
                 if( name.equals("")){
                     return;
                 }
@@ -97,12 +103,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 if( description.equals("")){
                     return;
                 }
-                name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
-                proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
-                base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
-                ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString();
-                equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString();
-                description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
+
                 myRecipe recipe = new myRecipe(name,proof,base,ingredient,equipment,description);
                 mDatabase.child("user").child(uid).child("MyRecipe").child(name).setValue(recipe);
             }
