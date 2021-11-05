@@ -14,25 +14,25 @@ import com.google.firebase.database.ValueEventListener;
 
 public class MakeRecipeActivity extends AppCompatActivity {
 
-    FirebaseAuth mAuth;
-    DatabaseReference mDatabase;
-    String uid;
-    String name;
-    String proof;
-    String base;
-    String ingredient;
-    String equipment;
-    String description;
-    Button storeButton;
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private String uid;
+    private String name;
+    private String proof;
+    private String base;
+    private String ingredient;
+    private String equipment;
+    private String description;
+    private Button storeButton;
 
     public class myRecipe {
 
-        public String name = ""; //칵테일 이름
-        public String proof = ""; //칵테일 도수
-        public String base = ""; //칵테일 기주
-        public String ingredient = ""; //칵테일 재료
-        public String equipment = ""; //칵테일 장비
-        public String description = ""; //칵테일 제조에 대한 상세설명
+        private String name = ""; //칵테일 이름
+        private String proof = ""; //칵테일 도수
+        private String base = ""; //칵테일 기주
+        private String ingredient = ""; //칵테일 재료
+        private String equipment = ""; //칵테일 장비
+        private String description = ""; //칵테일 제조에 대한 상세설명
 
         public myRecipe(String name, String proof, String base, String ingredient, String equipment, String description )
         {
