@@ -38,6 +38,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView editText_nickname;
 
     private ImageButton imageButton_validate;
+    private ImageButton imageButton_logout;
 
     private Button button_myFavorite;
     private Button button_myPost;
@@ -57,12 +58,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         editText_nickname.setText(user.getDisplayName());
 
         imageButton_validate = v.findViewById(R.id.profile_imageButton_validate);
+        imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myPost = v.findViewById(R.id.profile_button_post);
         button_myComment = v.findViewById(R.id.profile_button_comment);
 
         imageButton_validate.setOnClickListener(this);
+        imageButton_logout.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
         button_myPost.setOnClickListener(this);
         button_myComment.setOnClickListener(this);
@@ -140,6 +143,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             }
             case R.id.profile_button_comment: {
                 //작성한 댓글
+            }
+            case R.id.profile_imageButton_logout: {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(context, LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                context.startActivity(intent);
+                break;
             }
         }
     }
