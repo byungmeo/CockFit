@@ -2,7 +2,6 @@ package com.kbd.cockfit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -54,8 +53,8 @@ public class WritePostActivity extends AppCompatActivity {
             }
 
             Post post = new Post(editText_title.getText().toString(), nickname, "00/00");
-            post.setPostContent(editText_content.getText().toString());
-            post.setPostNumber(1);
+            post.setContent(editText_content.getText().toString());
+            post.setNumber(1);
 
             mDatabase.child("forum").child(forumType).push().setValue(post);
 
