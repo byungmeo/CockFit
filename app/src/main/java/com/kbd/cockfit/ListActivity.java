@@ -218,18 +218,23 @@ public class ListActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             RecipeViewHolder recipeViewHolder = (RecipeViewHolder) holder;
 
+            recipeViewHolder.name.setText(recipeArrayList.get(position).getName());
             recipeViewHolder.base.setText("베이스 : ");
             recipeViewHolder.tags.setText("태그 : ");
+            recipeViewHolder.proof.setText("도수 : ");
 
-            recipeViewHolder.name.setText(recipeArrayList.get(position).getName());
             String baseText = recipeViewHolder.base.getText().toString();
             String tagsText = recipeViewHolder.tags.getText().toString();
             baseText += (recipeArrayList.get(position).getBase());
             for(String tag : recipeArrayList.get(position).getTags()) {
                 tagsText += tag + " ";
             }
+            String proofText = recipeViewHolder.proof.getText().toString();
+            proofText += (recipeArrayList.get(position).getProof());
+
             recipeViewHolder.base.setText(baseText);
             recipeViewHolder.tags.setText(tagsText);
+            recipeViewHolder.proof.setText(proofText);
 
             recipeViewHolder.card.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -251,6 +256,7 @@ public class ListActivity extends AppCompatActivity {
             private TextView name;
             private TextView base;
             private TextView tags;
+            private TextView proof;
 
             public RecipeViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -258,6 +264,7 @@ public class ListActivity extends AppCompatActivity {
                 name = itemView.findViewById(R.id.recipeitem_name);
                 base = itemView.findViewById(R.id.recipeitem_base);
                 tags = itemView.findViewById(R.id.recipeitem_tags);
+                proof = itemView.findViewById(R.id.recipeitem_proof);
             }
         }
     }
