@@ -70,6 +70,10 @@ public class ForumActivity extends AppCompatActivity {
                 screenName.setText("질문 게시판");
                 break;
             }
+            case "general" : {
+                screenName.setText("자유 게시판");
+                break;
+            }
             case "myPost" : {
                 screenName.setText("내 게시글 목록");
                 break;
