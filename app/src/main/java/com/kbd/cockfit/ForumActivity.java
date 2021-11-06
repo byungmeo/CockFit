@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public class ForumActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -94,6 +95,7 @@ public class ForumActivity extends AppCompatActivity {
                     postArrayList.add(postSnapshot.getValue(Post.class));
                 }
 
+                Collections.reverse(postArrayList);
                 postAdapter = new PostAdapter(postArrayList);
                 postRecycler.setAdapter(postAdapter);
             }
