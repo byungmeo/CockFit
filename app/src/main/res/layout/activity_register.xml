@@ -43,19 +43,6 @@
         app:layout_constraintStart_toStartOf="@+id/register_button_backButton"
         app:layout_constraintTop_toBottomOf="@+id/register_button_backButton"></TextView>
 
-    <Button
-        android:id="@+id/register_button_checkId"
-        android:layout_width="70dp"
-        android:layout_height="wrap_content"
-        android:layout_marginRight="16dp"
-        android:padding="5dp"
-        android:text="중복확인"
-        app:layout_constraintBottom_toBottomOf="@+id/register_editText_email"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/register_editText_email">
-
-    </Button>
-
     <EditText
         android:id="@+id/register_editText_email"
         android:layout_width="280dp"
@@ -137,7 +124,7 @@
         android:id="@+id/register_button_register"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="30dp"
+        android:layout_marginBottom="50dp"
         android:onClick="clickButton"
         android:text="회원가입"
         app:layout_constraintBottom_toBottomOf="parent"
