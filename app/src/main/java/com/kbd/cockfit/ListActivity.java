@@ -83,7 +83,7 @@ public class ListActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags));
+                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
             }
         } catch (JSONException e) {
             e.printStackTrace();
@@ -107,7 +107,7 @@ public class ListActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags));
+                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
             }
         } catch (JSONException e) {
             e.printStackTrace();
