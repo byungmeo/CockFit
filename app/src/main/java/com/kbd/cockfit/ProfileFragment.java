@@ -24,11 +24,8 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
@@ -41,8 +38,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private ImageButton imageButton_logout;
 
     private Button button_myFavorite;
-    private Button button_myPost;
-    private Button button_myComment;
+    private Button button_myCommunityActivity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -61,14 +57,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
-        button_myPost = v.findViewById(R.id.profile_button_post);
-        button_myComment = v.findViewById(R.id.profile_button_comment);
+        button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
         imageButton_validate.setOnClickListener(this);
         imageButton_logout.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
-        button_myPost.setOnClickListener(this);
-        button_myComment.setOnClickListener(this);
+        button_myCommunityActivity.setOnClickListener(this);
 
         return v;
     }
@@ -135,14 +129,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 context.startActivity(intent);
                 break;
             }
-            case R.id.profile_button_post: {
+            case R.id.profile_button_communityActivity: {
                 Intent intent = new Intent(context, ForumActivity.class);
                 intent.putExtra("forum", "myPost");
                 context.startActivity(intent);
                 break;
-            }
-            case R.id.profile_button_comment: {
-                //작성한 댓글
             }
             case R.id.profile_imageButton_logout: {
                 FirebaseAuth.getInstance().signOut();

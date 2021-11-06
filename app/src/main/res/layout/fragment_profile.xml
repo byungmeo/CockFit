@@ -44,32 +44,18 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_imageView_photo" />
 
     <Button
-        android:id="@+id/profile_button_post"
+        android:id="@+id/profile_button_communityActivity"
         android:layout_width="350dp"
         android:layout_height="55dp"
         android:layout_marginStart="15dp"
         android:layout_marginTop="35dp"
         android:layout_marginEnd="15dp"
-        android:text="내가 작성한 게시글"
+        android:text="커뮤니티 활동 내역"
         android:textSize="28sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.557"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/profile_button_recipe" />
-
-    <Button
-        android:id="@+id/profile_button_comment"
-        android:layout_width="350dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="35dp"
-        android:layout_marginEnd="15dp"
-        android:text="내가 작성한 댓글"
-        android:textSize="28sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.55"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button_post" />
 
     <TextView
         android:id="@+id/profile_textView_name"
