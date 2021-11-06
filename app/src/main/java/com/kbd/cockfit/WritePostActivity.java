@@ -54,7 +54,6 @@ public class WritePostActivity extends AppCompatActivity {
 
             Post post = new Post(editText_title.getText().toString(), nickname, "00/00");
             post.setContent(editText_content.getText().toString());
-            post.setNumber(1);
 
             mDatabase.child("forum").child(forumType).push().setValue(post);
 
