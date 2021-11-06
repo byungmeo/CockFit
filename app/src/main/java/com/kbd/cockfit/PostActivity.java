@@ -50,9 +50,11 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 post = snapshot.getValue(Post.class);
-                textView_title.setText(post.getTitle());
-                textView_writer.setText(post.getWriter());
-                textView_content.setText(post.getContent());
+                if(post != null) {
+                    textView_title.setText(post.getTitle());
+                    textView_writer.setText(post.getWriter());
+                    textView_content.setText(post.getContent());
+                }
             }
 
             @Override
@@ -77,7 +79,8 @@ public class PostActivity extends AppCompatActivity {
                             intent.putExtra("forum", forumType);
                             startActivity(intent);
                         } else if(item.getItemId() == R.id.postMenu_delete) {
-                            Toast.makeText(PostActivity.this, "글 삭제", Toast.LENGTH_SHORT).show();
+                            mDatabase.child("forum").child(forumType).child(postId).setValue(null);
+                            onBackPressed();
                         }
 
                         return false;
