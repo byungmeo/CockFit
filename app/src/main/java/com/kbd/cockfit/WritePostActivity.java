@@ -12,6 +12,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 public class WritePostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
@@ -52,7 +55,9 @@ public class WritePostActivity extends AppCompatActivity {
                 return;
             }
 
-            Post post = new Post(editText_title.getText().toString(), nickname, "00/00");
+            Date date = new Date(System.currentTimeMillis());
+            SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+            Post post = new Post(editText_title.getText().toString(), nickname, sdf.format(date));
             post.setContent(editText_content.getText().toString());
 
             mDatabase.child("forum").child(forumType).push().setValue(post);
