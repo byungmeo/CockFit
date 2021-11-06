@@ -1,0 +1,26 @@
+@startuml
+
+class SplashActivity {
+    # void onCreate(Bundle savedInstanceState)
+}
+
+class LoginActivity {
+    - Button register_button, login_button
+    # void onCreate(Bundle savedInstanceState)
+}
+
+class RegisterActivity {
+    - ConstraintLayout con
+    - ImageView back
+    # void onCreate(Bundle savedInstanceState)
+    + void onBackPressed()
+}
+
+class MakeRecipeActivity {
+    # void onCreate(Bundle savedInstanceState)
+    + void onBackPressed()
+    + void clickBackButton(View view)
+}
+
+
+@enduml
