@@ -116,8 +116,7 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        onBackPressed(); //로그인 화면으로 돌아갑니다.
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
                         Log.d("test", task.getException().getMessage());
