@@ -51,33 +51,51 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long i = 4;
-                if(snapshot.getChildrenCount() < 4) {
-                    i = snapshot.getChildrenCount();
+                long postNum = snapshot.getChildrenCount();
+
+                if(postNum == 0) {
+                    return;
+                }
+
+                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
+                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
+                if(postNum < 4) {
+                    for(long index = 4; index > postNum; index--) {
+                        String _titleViewTag = "textView_share" + String.valueOf(index);
+                        String _dateViewTag = _titleViewTag + "_date";
+
+                        TextView title = getView().findViewWithTag(_titleViewTag);
+                        TextView date = getView().findViewWithTag(_dateViewTag);
+
+                        title.setText("");
+                        date.setText("");
+                    }
+                    i = postNum;
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    if(i > 0) {
-                        String titleViewTag = "textView_share" + String.valueOf(i);
-                        String dateViewTag = titleViewTag + "_date";
-                        String constraintTag = "constraintLayout_share" + String.valueOf(i);
+                    String titleViewTag = "textView_share" + String.valueOf(i);
+                    String dateViewTag = titleViewTag + "_date";
+                    String constraintTag = "constraintLayout_share" + String.valueOf(i);
 
-                        TextView title = getView().findViewWithTag(titleViewTag);
-                        TextView date = getView().findViewWithTag(dateViewTag);
-                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = getView().findViewWithTag(titleViewTag);
+                    TextView date = getView().findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
-                        Post post = postSnapshot.getValue(Post.class);
-                        title.setText(post.getTitle());
-                        date.setText(post.getDate());
+                    Post post = postSnapshot.getValue(Post.class);
+                    title.setText(post.getTitle());
+                    date.setText(post.getDate());
 
-                        constraintLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(v.getContext(), PostActivity.class);
-                                intent.putExtra("post", post);
-                                startActivity(intent);
-                            }
-                        });
-                    }
+                    constraintLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), PostActivity.class);
+                            intent.putExtra("post", post);
+                            intent.putExtra("postId", postSnapshot.getKey());
+                            intent.putExtra("forum", "share");
+                            startActivity(intent);
+                        }
+                    });
                     i--;
                 }
             }
@@ -89,33 +107,51 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long i = 4;
-                if(snapshot.getChildrenCount() < 4) {
-                    i = snapshot.getChildrenCount();
+                long postNum = snapshot.getChildrenCount();
+
+                if(postNum == 0) {
+                    return;
+                }
+
+                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
+                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
+                if(postNum < 4) {
+                    for(long index = 4; index > postNum; index--) {
+                        String _titleViewTag = "textView_qa" + String.valueOf(index);
+                        String _dateViewTag = _titleViewTag + "_date";
+
+                        TextView title = getView().findViewWithTag(_titleViewTag);
+                        TextView date = getView().findViewWithTag(_dateViewTag);
+
+                        title.setText("");
+                        date.setText("");
+                    }
+                    i = postNum;
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    if(i > 0) {
-                        String titleViewTag = "textView_qa" + String.valueOf(i);
-                        String dateViewTag = titleViewTag + "_date";
-                        String constraintTag = "constraintLayout_qa" + String.valueOf(i);
+                    String titleViewTag = "textView_qa" + String.valueOf(i);
+                    String dateViewTag = titleViewTag + "_date";
+                    String constraintTag = "constraintLayout_qa" + String.valueOf(i);
 
-                        TextView title = getView().findViewWithTag(titleViewTag);
-                        TextView date = getView().findViewWithTag(dateViewTag);
-                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = getView().findViewWithTag(titleViewTag);
+                    TextView date = getView().findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
-                        Post post = postSnapshot.getValue(Post.class);
-                        title.setText(post.getTitle());
-                        date.setText(post.getDate());
+                    Post post = postSnapshot.getValue(Post.class);
+                    title.setText(post.getTitle());
+                    date.setText(post.getDate());
 
-                        constraintLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(v.getContext(), PostActivity.class);
-                                intent.putExtra("post", post);
-                                startActivity(intent);
-                            }
-                        });
-                    }
+                    constraintLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), PostActivity.class);
+                            intent.putExtra("post", post);
+                            intent.putExtra("postId", postSnapshot.getKey());
+                            intent.putExtra("forum", "qa");
+                            startActivity(intent);
+                        }
+                    });
                     i--;
                 }
             }
@@ -128,33 +164,51 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long i = 4;
-                if(snapshot.getChildrenCount() < 4) {
-                    i = snapshot.getChildrenCount();
+                long postNum = snapshot.getChildrenCount();
+
+                if(postNum == 0) {
+                    return;
+                }
+
+                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
+                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
+                if (postNum < 4) {
+                    for (long index = 4; index > postNum; index--) {
+                        String _titleViewTag = "textView_general" + String.valueOf(index);
+                        String _dateViewTag = _titleViewTag + "_date";
+
+                        TextView title = getView().findViewWithTag(_titleViewTag);
+                        TextView date = getView().findViewWithTag(_dateViewTag);
+
+                        title.setText("");
+                        date.setText("");
+                    }
+                    i = postNum;
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    if(i > 0) {
-                        String titleViewTag = "textView_general" + String.valueOf(i);
-                        String dateViewTag = titleViewTag + "_date";
-                        String constraintTag = "constraintLayout_general" + String.valueOf(i);
+                    String titleViewTag = "textView_general" + String.valueOf(i);
+                    String dateViewTag = titleViewTag + "_date";
+                    String constraintTag = "constraintLayout_general" + String.valueOf(i);
 
-                        TextView title = getView().findViewWithTag(titleViewTag);
-                        TextView date = getView().findViewWithTag(dateViewTag);
-                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = getView().findViewWithTag(titleViewTag);
+                    TextView date = getView().findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
-                        Post post = postSnapshot.getValue(Post.class);
-                        title.setText(post.getTitle());
-                        date.setText(post.getDate());
+                    Post post = postSnapshot.getValue(Post.class);
+                    title.setText(post.getTitle());
+                    date.setText(post.getDate());
 
-                        constraintLayout.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                Intent intent = new Intent(v.getContext(), PostActivity.class);
-                                intent.putExtra("post", post);
-                                startActivity(intent);
-                            }
-                        });
-                    }
+                    constraintLayout.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Intent intent = new Intent(v.getContext(), PostActivity.class);
+                            intent.putExtra("post", post);
+                            intent.putExtra("postId", postSnapshot.getKey());
+                            intent.putExtra("forum", "general");
+                            startActivity(intent);
+                        }
+                    });
                     i--;
                 }
             }

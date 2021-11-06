@@ -21,7 +21,6 @@ import java.util.Map;
 public class WritePostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String writer;
 
     private EditText editText_title;
     private EditText editText_content;
@@ -38,8 +37,6 @@ public class WritePostActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = mAuth.getCurrentUser();
-        writer = user.getDisplayName();
 
         editText_title = findViewById(R.id.write_editText_title);
         editText_content = findViewById(R.id.write_editText_content);
@@ -79,9 +76,10 @@ public class WritePostActivity extends AppCompatActivity {
                 childUpdates.put(editPostId, editPost);
                 mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
             } else {
+                FirebaseUser user = mAuth.getCurrentUser();
                 Date date = new Date(System.currentTimeMillis());
                 SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-                Post post = new Post(editText_title.getText().toString(), writer, sdf.format(date));
+                Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), sdf.format(date));
                 post.setContent(editText_content.getText().toString());
 
                 mDatabase.child("forum").child(forumType).push().setValue(post);
