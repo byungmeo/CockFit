@@ -74,7 +74,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/community_textView_share">
+                        app:layout_constraintTop_toBottomOf="@+id/community_textView_share"
+                        android:tag="constraintLayout_share1">
 
                         <TextView
                             android:id="@+id/textView_share1"
@@ -108,7 +109,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share1">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share1"
+                        android:tag="constraintLayout_share2">
 
                         <TextView
                             android:id="@+id/textView_share2"
@@ -142,7 +144,8 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share2">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share2"
+                        android:tag="constraintLayout_share3">
 
                         <TextView
                             android:id="@+id/textView_share3"
@@ -174,7 +177,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share3">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_share3"
+                        android:tag="constraintLayout_share4">
 
                         <TextView
                             android:id="@+id/textView_share4"
@@ -255,7 +259,8 @@
                         android:layout_marginTop="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/community_textView_qa">
+                        app:layout_constraintTop_toBottomOf="@+id/community_textView_qa"
+                        android:tag="constraintLayout_qa1">
 
                         <TextView
                             android:id="@+id/textView_qa1"
@@ -288,7 +293,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa1">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa1"
+                        android:tag="constraintLayout_qa2">
 
                         <TextView
                             android:id="@+id/textView_qa2"
@@ -321,7 +327,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa2">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa2"
+                        android:tag="constraintLayout_qa3">
 
                         <TextView
                             android:id="@+id/textView_qa3"
@@ -354,7 +361,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa3">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_qa3"
+                        android:tag="constraintLayout_qa4">
 
                         <TextView
                             android:id="@+id/textView_qa4"
@@ -436,7 +444,8 @@
                         android:layout_marginTop="5dp"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/community_textView_general">
+                        app:layout_constraintTop_toBottomOf="@+id/community_textView_general"
+                        android:tag="constraintLayout_general1">
 
                         <TextView
                             android:id="@+id/textView_general1"
@@ -468,7 +477,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general1">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general1"
+                        android:tag="constraintLayout_general2">
 
                         <TextView
                             android:id="@+id/textView_general2"
@@ -500,7 +510,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general2">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general2"
+                        android:tag="constraintLayout_general3">
 
                         <TextView
                             android:id="@+id/textView_general3"
@@ -532,7 +543,8 @@
                         android:layout_height="wrap_content"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general3">
+                        app:layout_constraintTop_toBottomOf="@+id/constraintLayout_general3"
+                        android:tag="constraintLayout_general4">
 
                         <TextView
                             android:id="@+id/textView_general4"

@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
@@ -58,12 +59,24 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     if(i > 0) {
                         String titleViewTag = "textView_share" + String.valueOf(i);
                         String dateViewTag = titleViewTag + "_date";
+                        String constraintTag = "constraintLayout_share" + String.valueOf(i);
+
                         TextView title = getView().findViewWithTag(titleViewTag);
                         TextView date = getView().findViewWithTag(dateViewTag);
+                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
                         Post post = postSnapshot.getValue(Post.class);
                         title.setText(post.getTitle());
                         date.setText(post.getDate());
+
+                        constraintLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), PostActivity.class);
+                                intent.putExtra("post", post);
+                                startActivity(intent);
+                            }
+                        });
                     }
                     i--;
                 }
@@ -84,12 +97,24 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     if(i > 0) {
                         String titleViewTag = "textView_qa" + String.valueOf(i);
                         String dateViewTag = titleViewTag + "_date";
+                        String constraintTag = "constraintLayout_qa" + String.valueOf(i);
+
                         TextView title = getView().findViewWithTag(titleViewTag);
                         TextView date = getView().findViewWithTag(dateViewTag);
+                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
                         Post post = postSnapshot.getValue(Post.class);
                         title.setText(post.getTitle());
                         date.setText(post.getDate());
+
+                        constraintLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), PostActivity.class);
+                                intent.putExtra("post", post);
+                                startActivity(intent);
+                            }
+                        });
                     }
                     i--;
                 }
@@ -111,12 +136,24 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     if(i > 0) {
                         String titleViewTag = "textView_general" + String.valueOf(i);
                         String dateViewTag = titleViewTag + "_date";
+                        String constraintTag = "constraintLayout_general" + String.valueOf(i);
+
                         TextView title = getView().findViewWithTag(titleViewTag);
                         TextView date = getView().findViewWithTag(dateViewTag);
+                        ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
 
                         Post post = postSnapshot.getValue(Post.class);
                         title.setText(post.getTitle());
                         date.setText(post.getDate());
+
+                        constraintLayout.setOnClickListener(new View.OnClickListener() {
+                            @Override
+                            public void onClick(View v) {
+                                Intent intent = new Intent(v.getContext(), PostActivity.class);
+                                intent.putExtra("post", post);
+                                startActivity(intent);
+                            }
+                        });
                     }
                     i--;
                 }
