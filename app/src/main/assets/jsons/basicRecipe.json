@@ -69,8 +69,5 @@
 
   {"number": 18,  "name": "깔루아밀크", "proof":  "8", "base": "리큐르", "ingredient": ["깔루아", "우유"], "equipment": ["올드패션드 잔", "바스푼"],
     "description": "1. 올드패션드 잔에 얼음을 넣는다\n2. 깔루아와 우유를 1:2 비율로 넣어준다\n3. 바스푼으로 잘 섞어준다",
-    "tags" :  ["테스트1", "테스트2"]},
-
-  {"number": 19,  "name": "", "proof":  "", "base": "", "ingredient": [], "equipment": [], "description": "",
     "tags" :  ["테스트1", "테스트2"]}
 ]
