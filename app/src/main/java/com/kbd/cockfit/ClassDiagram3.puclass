@@ -1,0 +1,103 @@
+@startuml
+
+ListActivity "1" *-- RecipeAdapter
+ListActivity --> "0..*" Recipe
+RecipeAdapter ..> RecipeViewHolder : <<parameter>>
+RecipeActivity ..> Recipe : <<create>>
+
+
+
+class ListActivity {
+    - RecyclerView recipeRecycler
+    - RecipeAdapter recipeAdapter
+    - ArrayList<Recipe> recipeArrayList
+    - TextView screenName
+    # void onCreate(Bundle savedInstanceState)
+    + void initRecipeRecycler()
+    + void initRecipeList()
+    + void initFavoriteList()
+    + void onBackPressed()
+    + void clickBackButton(View view)
+}
+
+class RecipeViewHolder {
+    - CardView card
+    - TextView name
+    - TextView base
+    - TextView tags
+    + RecipeViewHolder(View itemView)
+}
+
+class Recipe {
+    - String name
+    - String base
+    - String[] tags
+    + Recipe(String name, String base, String[] tags)
+    + String getName()
+    + String getBase()
+    + String[] getTage()
+}
+
+class RecipeAdapter {
+    - Context contest
+    - ArrayList<Recipe> recipeArrayList
+    + RecipeAdapter(Context context, ArrayList<Recipe> recipeArrayList)
+    + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    + void onBindViewHolder(ViewHolder holder, int position)
+    + int getItemCount()
+
+}
+
+class RecipeActivity {
+    # void onCreate(Bundle savedInstanceState)
+    + void onBackButtonTapped(View view)
+}
+
+ForumActivity "1" *-- PostAdapter
+ForumActivity --> "0..*" Post
+PostAdapter ..> PostViewHolder : <<parameter>>
+PostAdapter --> "0..*" Post
+
+
+class ForumActivity {
+    - RecyclerView postRecycler
+    - PostAdapter postAdapter
+    - ArrayList<Post> postArrayList
+    - TextView screenName
+    # void onCreate(Bundle savedInstanceState)
+    + void setScreenName()
+    + void initMyPostRecycler()
+    + void initMyPostList()
+    + void onBackPressed()
+    + void clickBackButton(View view)
+}
+
+class Post {
+    - String postName
+    - String postAbstract
+    - String postDate
+    + Post(String postName, String postAbstract, String postDate)
+    + String getPostName()
+    + String getPostAbstract()
+    + String getPostDate()
+}
+
+class PostViewHolder {
+    - TextView postName
+    - TextView postAbstract
+    - TextView postDate
+    + PostViewHolder(View itemView)
+}
+
+class PostAdapter {
+    - Context context
+    - ArrayList<Post> postArrayList
+    + PostAdapter(Context context, ArrayList<Post> postArrayList)
+    + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
+    + void onBindViewHolder(RecyclerView.ViewHolder holder, int position)
+    + int getItemCount()
+}
+
+
+
+@enduml
