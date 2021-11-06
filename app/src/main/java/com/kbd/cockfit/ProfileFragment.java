@@ -24,18 +24,15 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
 
     private TextView editText_nickname;
 
-    private ImageButton imageButton_validate;
-    private ImageButton imageButton_logout;
+    private ImageButton button_changeName;
+    private ImageButton button_logout;
 
     private Button button_myFavorite;
     private Button button_myCommunityActivity;
@@ -46,21 +43,20 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         final FirebaseUser user = mAuth.getCurrentUser();
 
         editText_nickname = v.findViewById(R.id.profile_textView_name);
         editText_nickname.setText(user.getDisplayName());
 
-        imageButton_validate = v.findViewById(R.id.profile_imageButton_validate);
-        imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
+        button_changeName = v.findViewById(R.id.profile_imageButton_changeName);
+        button_logout = v.findViewById(R.id.profile_imageButton_logout);
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
-        imageButton_validate.setOnClickListener(this);
-        imageButton_logout.setOnClickListener(this);
+        button_changeName.setOnClickListener(this);
+        button_logout.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
         button_myCommunityActivity.setOnClickListener(this);
 
@@ -71,7 +67,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         Context context = v.getContext();
         switch (v.getId()) {
-            case R.id.profile_imageButton_validate: {
+            case R.id.profile_imageButton_changeName: {
                 final EditText editText_changeNic = new EditText(context);
 
                 FrameLayout container = new FrameLayout(context);

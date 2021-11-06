@@ -27,7 +27,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     private RecyclerView postRecycler;
@@ -45,7 +44,6 @@ public class ForumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
-        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         screenName = findViewById(R.id.forom_textView_screenName);

@@ -10,6 +10,18 @@ public class Post implements Parcelable {
     private String date;
     private String content;
 
+    public static final Creator<Post> CREATOR = new Creator<Post>() {
+        @Override
+        public Post createFromParcel(Parcel in) {
+            return new Post(in);
+        }
+
+        @Override
+        public Post[] newArray(int size) {
+            return new Post[size];
+        }
+    };
+
     public Post() {
 
     }
@@ -38,17 +50,7 @@ public class Post implements Parcelable {
         content = in.readString();
     }
 
-    public static final Creator<Post> CREATOR = new Creator<Post>() {
-        @Override
-        public Post createFromParcel(Parcel in) {
-            return new Post(in);
-        }
 
-        @Override
-        public Post[] newArray(int size) {
-            return new Post[size];
-        }
-    };
 
     public String getTitle() {
         return title;

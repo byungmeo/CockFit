@@ -60,26 +60,39 @@ PostAdapter --> "0..*" Post
 
 
 class ForumActivity {
+    - DatabaseReference mDatabase
     - RecyclerView postRecycler
+    - LinearLayoutManager layoutManager
     - PostAdapter postAdapter
     - ArrayList<Post> postArrayList
+    - HashMap<Post, String> postIdMap
+    - String forumType
     - TextView screenName
+
     # void onCreate(Bundle savedInstanceState)
     + void setScreenName()
-    + void initMyPostRecycler()
-    + void initMyPostList()
-    + void onBackPressed()
-    + void clickBackButton(View view)
+    + void initPostList()
+    + void clickButton(View view)
 }
 
-class Post {
-    - String postName
-    - String postAbstract
-    - String postDate
-    + Post(String postName, String postAbstract, String postDate)
-    + String getPostName()
-    + String getPostAbstract()
-    + String getPostDate()
+interface Parcelable {
+    + int describeContents()
+    + void writeToParcel(Parcel dest, int flags)
+}
+
+class Post implements Parcelable {
+    - String title
+    - String writer
+    - String uid
+    - String date
+    - String content
+    + static final Creator<Post> CREATOR
+
+    + Post()
+    + Post(String title, String writer, String uid, String date)
+    + Post(String title, String writer, String uid, String date, String content)
+    # Post(Parcel in)
+    + Getter, Setter()
 }
 
 class PostViewHolder {
@@ -98,6 +111,40 @@ class PostAdapter {
     + int getItemCount()
 }
 
+class PostActivity {
+    - FirebaseAuth mAuth
+    - DatabaseReference mDatabase
+    - Post post
+    - String postId
+    - String forumType
+    - TextView textView_title
+    - TextView textView_writer
+    - TextView textView_content
+    - ImageButton button_more
+    - Boolean isMyPost
+
+    # void onCreate(Bundle savedInstanceState)
+    + void clickButton(View view)
+}
+
+PostActivity "1" *-- Post
+
+class WritePostActivity {
+    - FirebaseAuth mAuth
+    - DatabaseReference mDatabase
+    - EditText editText_title
+    - EditText editText_content
+    - Boolean isEdit
+    - Post editPost
+    - String editPostId
+    - String forumType
+
+    # void onCreate(Bundle savedInstanceState)
+    + void initEditPost()
+    + void clickButton(View view)
+}
+
+WritePostActivity "0..1" *-- Post
 
 
 @enduml

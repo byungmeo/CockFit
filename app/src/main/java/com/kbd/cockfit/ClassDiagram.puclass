@@ -1,4 +1,4 @@
- @startuml
+@startuml
 title Cock'Fit Class Diagram
 
 'left fo right direction
@@ -6,7 +6,6 @@ title Cock'Fit Class Diagram
 interface OnClickListener {
     + void onClick(View view)
 }
-
 
 
 class MainActivity {
@@ -18,39 +17,42 @@ class MainActivity {
     # void onCreate(Bundle savedInstanceState)
 }
 
-MainActivity "1" *-- ItemSelectedListener
 MainActivity "1" *-- MyRecipeFragment : inflate
 MainActivity "1" *-- CommunityFragment : inflate
 MainActivity "1" *-- CocktailInfoFragment : inflate
 MainActivity "1" *-- ProfileFragment : inflate
 
-class ItemSelectedListener implements OnItemSelectedListener {
-    + boolean onNavigationItemSelected(MenuItem menuItem)
-}
 
 class CocktailInfoFragment implements OnClickListener {
-    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + View onCreateView(...)
     + void onClick(View v)
 }
 
 class MyRecipeFragment {
+    - FirebaseAuth mAuth
+    - DatabaseReference mDatabase
     - RecyclerView myRecipeRecyclerView
-    - private GridLayoutManager layoutManager
+    - GridLayoutManager layoutManager
     - MyRecipeAdapter adapter
     - ArrayList<MyRecipe> myRecipeArrayList
-
-    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    + View onCreateView(...)
     + void initMyRecipeList()
 }
 
 class CommunityFragment implements OnClickListener {
-    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    - DatabaseReference mDatabase
+    + View onCreateView(...)
+    + void initRecentPost()
     + void onClick(View v)
 }
 
 
 class ProfileFragment implements OnClickListener {
-    + View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
+    - FirebaseAuth mAuth
+    - TextView editText_nickname
+    - Button button_changeName, button_logout
+    - Button button_myFavorite, button_myCommunityActivity
+    + View onCreateView(...)
     + void onClick(View v)
 }
 
@@ -89,8 +91,5 @@ MyRecipeFragment --> "0..*" MyRecipe
 MyRecipeAdapter ..> ItemViewHolder : <<parameter>>
 MyRecipeAdapter ..> FooterViewHolder : <<parameter>>
 MyRecipeAdapter --> "0..*" MyRecipe
-
-
-
 
 @enduml

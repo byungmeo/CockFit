@@ -1,19 +1,23 @@
 @startuml
-
-class SplashActivity {
-    # void onCreate(Bundle savedInstanceState)
-}
-
 class LoginActivity {
-    - Button register_button, login_button
+    - FirebaseAuth mAuth
+    - FirebaseUser user
+    - EditText editText_email, editText_pwd
+    - Button button_login, button_register
     # void onCreate(Bundle savedInstanceState)
+    + void clickButton(View view)
 }
 
 class RegisterActivity {
+    - FirebaseAuth mAuth
     - ConstraintLayout con
-    - ImageView back
+    - ImageView button_back
+    - EditText editText_email, editText_pwd
+    - EditText editText_checkPwd, editText_nickname
+    - Button button_register
     # void onCreate(Bundle savedInstanceState)
-    + void onBackPressed()
+    + void clickButton(View view)
+    + void HideKeyboard(View view)
 }
 
 class MakeRecipeActivity {

@@ -20,16 +20,13 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private ConstraintLayout con;
-    private ImageView back;
+    private ImageView button_back;
 
     private EditText editText_email, editText_pwd, editText_checkPwd, editText_nickname;
     private Button button_register;
@@ -39,14 +36,13 @@ public class RegisterActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         con = findViewById(R.id.register_layout_const);
-        back = findViewById(R.id.register_button_backButton);
+        button_back = findViewById(R.id.register_button_backButton);
 
         final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 
-        back.setOnClickListener(new View.OnClickListener() {
+        button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -66,11 +62,6 @@ public class RegisterActivity extends AppCompatActivity {
         editText_nickname = findViewById(R.id.register_editText_nic);
 
         button_register = findViewById(R.id.register_button_register);
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     public void clickButton(View view) {
