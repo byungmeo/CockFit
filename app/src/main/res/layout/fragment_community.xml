@@ -82,20 +82,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물1"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_share1"/>
 
                         <TextView
                             android:id="@+id/textView_share1_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share1"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_share1" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_share1"
+                            android:tag="textView_share1_date"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -114,20 +116,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물2"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_share2"/>
 
                         <TextView
                             android:id="@+id/textView_share2_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share2"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_share2" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_share2"
+                            android:tag="textView_share2_date"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -146,20 +150,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물3"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_share3"/>
 
                         <TextView
                             android:id="@+id/textView_share3_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share3"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_share3" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_share3"
+                            android:tag="textView_share3_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -176,20 +182,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물4"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_share4"/>
 
                         <TextView
                             android:id="@+id/textView_share4_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share4"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_share4" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_share4"
+                            android:tag="textView_share4_date"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -255,20 +263,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물1"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_qa1"/>
 
                         <TextView
                             android:id="@+id/textView_qa1_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa1"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_qa1" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_qa1"
+                            android:tag="textView_qa1_date"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -286,20 +296,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물2"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_qa2"/>
 
                         <TextView
                             android:id="@+id/textView_qa2_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa2"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_qa2" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_qa2"
+                            android:tag="textView_qa2_date"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -317,20 +329,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물3"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_qa3"/>
 
                         <TextView
                             android:id="@+id/textView_qa3_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa3"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_qa3" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_qa3"
+                            android:tag="textView_qa3"/>
 
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
@@ -348,20 +362,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물4"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_qa4"/>
 
                         <TextView
                             android:id="@+id/textView_qa4_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa4"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_qa4" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_qa4"
+                            android:tag="textView_qa4_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
@@ -428,20 +444,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물1"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_general1"/>
 
                         <TextView
                             android:id="@+id/textView_general1_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general1"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_general1" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_general1"
+                            android:tag="textView_general1_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -458,20 +476,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물2"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_general2"/>
 
                         <TextView
                             android:id="@+id/textView_general2_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general2"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_general2" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_general2"
+                            android:tag="textView_general2_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -488,20 +508,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물3"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_general3"/>
 
                         <TextView
                             android:id="@+id/textView_general3_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general3"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_general3" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_general3"
+                            android:tag="textView_general3_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                     <androidx.constraintlayout.widget.ConstraintLayout
@@ -518,20 +540,22 @@
                             android:layout_height="wrap_content"
                             android:layout_marginStart="10dp"
                             android:layout_marginTop="5dp"
-                            android:text="샘플게시물4"
+                            android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:tag="textView_general4"/>
 
                         <TextView
                             android:id="@+id/textView_general4_date"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginBottom="5dp"
-                            android:text="00/00"
+                            android:text=" "
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general4"
-                            app:layout_constraintTop_toBottomOf="@+id/textView_general4" />
+                            app:layout_constraintTop_toBottomOf="@+id/textView_general4"
+                            android:tag="textView_general4_date"/>
                     </androidx.constraintlayout.widget.ConstraintLayout>
 
                 </androidx.constraintlayout.widget.ConstraintLayout>
