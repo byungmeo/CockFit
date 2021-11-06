@@ -1,0 +1,21 @@
+[
+  [
+    {"number" : 1, "name" : "아이스 볼", "name_eng" : "Ice Ball"},
+    {"number" : 2, "name" : "각얼음", "name_eng" : "Cubed Ice"},
+    {"number" : 3, "name" : "부순 얼음", "name_eng" : "Crushed Ice"},
+    {"number" : 4, "name" : "간 얼음", "name_eng" : "Shaved Ice"}
+  ],
+
+  [
+    {"number" : 1, "name" : "심플 시럽"},
+    {"number" : 2, "name" : "그레나딘 시럽"}
+  ],
+
+  [
+    {"number" : 1, "name" : "레몬"},
+    {"number" : 2, "name" : "라임"},
+    {"number" : 3, "name" : "올리브"},
+    {"number" : 4, "name" : "체리"},
+    {"number" : 5, "name" : "시나몬"}
+  ]
+]
