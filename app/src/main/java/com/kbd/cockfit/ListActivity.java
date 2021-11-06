@@ -155,14 +155,30 @@ public class ListActivity extends AppCompatActivity {
                                 }
                             }
                         });
-                    } else if(item.getItemId() == R.id.sortMenu_name_desc) {
-                        //이름순
+                    } else if(item.getItemId() == R.id.sortMenu_name_asc) {
+                        //이름순 a-z
                         Collections.sort(recipeArrayList, new Comparator<Recipe>() {
                             @Override
                             public int compare(Recipe o1, Recipe o2) {
                                 String name1 = o1.getName();
                                 String name2 = o2.getName();
                                 if(name1.compareTo(name2) > 0) {
+                                    return 1;
+                                } else if(name1.compareTo(name2) == 0) {
+                                    return 0;
+                                } else {
+                                    return -1;
+                                }
+                            }
+                        });
+                    } else if(item.getItemId() == R.id.sortMenu_name_desc) {
+                        //이름순 a-z
+                        Collections.sort(recipeArrayList, new Comparator<Recipe>() {
+                            @Override
+                            public int compare(Recipe o1, Recipe o2) {
+                                String name1 = o1.getName();
+                                String name2 = o2.getName();
+                                if(name1.compareTo(name2) < 0) {
                                     return 1;
                                 } else if(name1.compareTo(name2) == 0) {
                                     return 0;

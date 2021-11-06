@@ -9,5 +9,8 @@
         android:title="낮은 도수 순" />
     <item
         android:id="@+id/sortMenu_name_desc"
-        android:title="이름순" />
+        android:title="이름순 z-a" />
+    <item
+        android:id="@+id/sortMenu_name_asc"
+        android:title="이름순 a-z" />
 </menu>
