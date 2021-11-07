@@ -90,12 +90,4 @@
         app:layout_constraintTop_toBottomOf="@+id/profile_textView_name"
         app:tint="@color/purple_500" />
 
-    <ImageButton
-        android:id="@+id/profile_imagebutton_changeimage"
-        android:layout_width="38dp"
-        android:layout_height="33dp"
-        android:src="@android:drawable/stat_notify_sync"
-        tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="17dp" />
-
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -73,7 +73,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private ImageButton imageButton_changeName;
     private ImageButton imageButton_logout;
-    private ImageButton imageButton_changeImage;
 
     private Button button_myFavorite;
     private Button button_myCommunityActivity;
@@ -85,12 +84,14 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
+
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
         uid = user.getUid();
         storageRef = FirebaseStorage.getInstance().getReference();
         profileRef = storageRef.child("users/"+uid+"profile.jpg");
+
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
             public void onSuccess(Uri uri) {
@@ -105,16 +106,15 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         imageButton_changeName = v.findViewById(R.id.profile_imageButton_changeName);
         imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
-        imageButton_changeImage = v.findViewById(R.id.profile_imagebutton_changeimage);
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
         imageButton_changeName.setOnClickListener(this);
         imageButton_logout.setOnClickListener(this);
-        imageButton_changeImage.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
         button_myCommunityActivity.setOnClickListener(this);
+        imageview_profileImage.setOnClickListener(this);
 
         return v;
     }
@@ -229,7 +229,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 context.startActivity(intent);
                 break;
             }
-            case R.id.profile_imagebutton_changeimage: {
+            case R.id.profile_imageView_photo: {
                 //앨범으로 이동해서 Uri가져오기
                 Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
                 intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
