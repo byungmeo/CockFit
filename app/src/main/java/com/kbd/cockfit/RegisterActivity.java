@@ -11,7 +11,6 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
@@ -21,36 +20,29 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private ConstraintLayout con;
-    private ImageView back;
+    private ImageView button_back;
 
     private EditText editText_email, editText_pwd, editText_checkPwd, editText_nickname;
-    private Button button_checkId, button_register;
+    private Button button_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         con = findViewById(R.id.register_layout_const);
-        back = findViewById(R.id.register_button_backButton);
+        button_back = findViewById(R.id.register_button_backButton);
 
         final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 
-        back.setOnClickListener(new View.OnClickListener() {
+        button_back.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onBackPressed();
@@ -69,14 +61,7 @@ public class RegisterActivity extends AppCompatActivity {
         editText_checkPwd = findViewById(R.id.register_editText_pw2);
         editText_nickname = findViewById(R.id.register_editText_nic);
 
-        button_checkId = findViewById(R.id.register_button_checkId);
         button_register = findViewById(R.id.register_button_register);
-
-    }
-
-    @Override
-    public void onBackPressed() {
-        super.onBackPressed();
     }
 
     public void clickButton(View view) {
@@ -131,10 +116,10 @@ public class RegisterActivity extends AppCompatActivity {
                                     }
                                 });
 
-                        Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
-                        startActivity(intent);
+                        onBackPressed(); //로그인 화면으로 돌아갑니다.
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
+                        Log.d("test", task.getException().getMessage());
                         HideKeyboard(view);
                     }
                 }

@@ -39,6 +39,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -55,7 +56,6 @@ import java.io.InputStream;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
-    private DatabaseReference mDatabase;
     private FirebaseAuth mAuth;
     private FirebaseStorage storage;
     private StorageReference storageRef;
@@ -71,13 +71,12 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private ImageView imageview_profileImage;
 
-    private ImageButton imageButton_validate;
+    private ImageButton imageButton_changeName;
     private ImageButton imageButton_logout;
     private ImageButton imageButton_changeImage;
 
     private Button button_myFavorite;
-    private Button button_myPost;
-    private Button button_myComment;
+    private Button button_myCommunityActivity;
 
 
     @Override
@@ -86,7 +85,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
 
-        mDatabase = FirebaseDatabase.getInstance().getReference();
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         storage = FirebaseStorage.getInstance();
@@ -105,24 +103,23 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         imageview_profileImage = v.findViewById(R.id.profile_imageView_photo);
 
-        imageButton_validate = v.findViewById(R.id.profile_imageButton_validate);
+        imageButton_changeName = v.findViewById(R.id.profile_imageButton_changeName);
         imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
         imageButton_changeImage = v.findViewById(R.id.profile_imagebutton_changeimage);
 
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
-        button_myPost = v.findViewById(R.id.profile_button_post);
-        button_myComment = v.findViewById(R.id.profile_button_comment);
+        button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
-        imageButton_validate.setOnClickListener(this);
+        imageButton_changeName.setOnClickListener(this);
         imageButton_logout.setOnClickListener(this);
         imageButton_changeImage.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
-        button_myPost.setOnClickListener(this);
-        button_myComment.setOnClickListener(this);
+        button_myCommunityActivity.setOnClickListener(this);
 
         return v;
     }
 
+    //이미지 firebase store에 올리기
     private void uploadImageToFirebase(Uri file){
         StorageReference fileRef = storageRef.child("users/"+uid+"profile.jpg");
         fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
@@ -161,7 +158,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     public void onClick(View v) {
         Context context = v.getContext();
         switch (v.getId()) {
-            case R.id.profile_imageButton_validate: {
+            case R.id.profile_imageButton_changeName: {
                 final EditText editText_changeNic = new EditText(context);
 
                 FrameLayout container = new FrameLayout(context);
@@ -219,14 +216,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 context.startActivity(intent);
                 break;
             }
-            case R.id.profile_button_post: {
+            case R.id.profile_button_communityActivity: {
                 Intent intent = new Intent(context, ForumActivity.class);
                 intent.putExtra("forum", "myPost");
                 context.startActivity(intent);
                 break;
-            }
-            case R.id.profile_button_comment: {
-                //작성한 댓글
             }
             case R.id.profile_imageButton_logout: {
                 FirebaseAuth.getInstance().signOut();

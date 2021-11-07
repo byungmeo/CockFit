@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,15 +22,18 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     private RecyclerView postRecycler;
     private LinearLayoutManager layoutManager;
     private PostAdapter postAdapter;
     private ArrayList<Post> postArrayList;
+    private HashMap<Post, String> postIdMap;
 
     private String forumType;
 
@@ -40,7 +44,6 @@ public class ForumActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
 
-        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         screenName = findViewById(R.id.forom_textView_screenName);
@@ -52,6 +55,7 @@ public class ForumActivity extends AppCompatActivity {
         postRecycler.setHasFixedSize(true);
         postRecycler.setLayoutManager(layoutManager);
 
+        postIdMap = new HashMap<>();
         postArrayList = new ArrayList<>();
         postAdapter = new PostAdapter(postArrayList);
         postRecycler.setAdapter(postAdapter);
@@ -91,9 +95,12 @@ public class ForumActivity extends AppCompatActivity {
                 postArrayList.clear();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    postArrayList.add(postSnapshot.getValue(Post.class));
+                    Post post = postSnapshot.getValue(Post.class);
+                    postArrayList.add(post);
+                    postIdMap.put(post, postSnapshot.getKey());
                 }
 
+                Collections.reverse(postArrayList);
                 postAdapter = new PostAdapter(postArrayList);
                 postRecycler.setAdapter(postAdapter);
             }
@@ -139,8 +146,10 @@ public class ForumActivity extends AppCompatActivity {
             postViewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Post post = postArrayList.get(holder.getAdapterPosition());
                     Intent intent = new Intent(v.getContext(), PostActivity.class);
-                    intent.putExtra("post", postArrayList.get(holder.getAdapterPosition()));
+                    intent.putExtra("postId", postIdMap.get(post));
+                    intent.putExtra("forum", forumType);
                     startActivity(intent);
                 }
             });

@@ -19,16 +19,6 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_24"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <TextView
-        android:id="@+id/textView14"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="10dp"
-        android:text="#HashTag"
-        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-        app:layout_constraintEnd_toStartOf="@+id/textView15"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
-
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="162dp"
@@ -46,7 +36,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="병머의 의지"
+        android:text="레시피명"
         android:textColor="@color/black"
         android:textSize="24sp"
         android:textStyle="bold"
@@ -58,21 +48,10 @@
         app:layout_constraintVertical_bias="0.031" />
 
     <TextView
-        android:id="@+id/textView7"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="10dp"
-        android:text="#HashTag"
-        app:layout_constraintBottom_toBottomOf="@+id/textView15"
-        app:layout_constraintStart_toEndOf="@+id/textView15"
-        app:layout_constraintTop_toTopOf="@+id/textView15" />
-
-    <TextView
-        android:id="@+id/textView15"
+        android:id="@+id/recipe_textView_tags"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
-        android:text="#HashTag"
         app:layout_constraintEnd_toEndOf="@+id/recipe_textview_name"
         app:layout_constraintStart_toStartOf="@+id/recipe_textview_name"
         app:layout_constraintTop_toBottomOf="@+id/recipe_textview_name" />
@@ -99,7 +78,7 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView15">
+        app:layout_constraintTop_toBottomOf="@+id/recipe_textView_tags">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -127,7 +106,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="78%"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -155,7 +133,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="진"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -182,7 +159,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="그레나딘 시럽, 레몬"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -209,7 +185,6 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="쉐이커, 바스푼"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
@@ -232,7 +207,6 @@
                 android:id="@+id/recipe_textview_description"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="1. this is prototype\n2. we gonna make cocktail\n3. how are you today?\n4. nice to meet you and you?"
                 android:textColor="@color/black"
                 android:textSize="16sp" />
 

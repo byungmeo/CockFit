@@ -2,6 +2,7 @@ package com.kbd.cockfit;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.EditText;
@@ -12,15 +13,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
+
 public class WritePostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String nickname;
-
-    private String forumType;
 
     private EditText editText_title;
     private EditText editText_content;
+
+    private Boolean isEdit;
+    private Post editPost;
+    private String editPostId;
+    private String forumType;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -29,13 +37,22 @@ public class WritePostActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance().getReference();
-        FirebaseUser user = mAuth.getCurrentUser();
-        nickname = user.getDisplayName();
-
-        forumType = getIntent().getStringExtra("forum");
 
         editText_title = findViewById(R.id.write_editText_title);
         editText_content = findViewById(R.id.write_editText_content);
+
+        Intent intent = getIntent();
+        if(isEdit = intent.getBooleanExtra("isEdit", false)) {
+            editPost = intent.getParcelableExtra("post");
+            editPostId = intent.getStringExtra("postId");
+            initEditPost();
+        }
+        forumType = intent.getStringExtra("forum");
+    }
+
+    public void initEditPost() {
+        editText_title.setText(editPost.getTitle());
+        editText_content.setText(editPost.getContent());
     }
 
     public void clickButton(View view) {
@@ -52,11 +69,21 @@ public class WritePostActivity extends AppCompatActivity {
                 return;
             }
 
-            Post post = new Post(editText_title.getText().toString(), nickname, "00/00");
-            post.setContent(editText_content.getText().toString());
-            post.setNumber(1);
+            if(isEdit) {
+                editPost.setTitle(editText_title.getText().toString());
+                editPost.setContent(editText_content.getText().toString());
+                Map<String, Object> childUpdates = new HashMap<>();
+                childUpdates.put(editPostId, editPost);
+                mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
+            } else {
+                FirebaseUser user = mAuth.getCurrentUser();
+                Date date = new Date(System.currentTimeMillis());
+                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
+                Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), sdf.format(date));
+                post.setContent(editText_content.getText().toString());
 
-            mDatabase.child("forum").child(forumType).push().setValue(post);
+                mDatabase.child("forum").child(forumType).push().setValue(post);
+            }
 
             this.onBackPressed();
         }

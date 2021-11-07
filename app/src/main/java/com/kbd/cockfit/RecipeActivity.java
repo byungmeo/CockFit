@@ -17,6 +17,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
@@ -29,6 +30,7 @@ public class RecipeActivity extends AppCompatActivity {
     TextView textView_ingredient;
     TextView textView_equipment;
     TextView textView_description;
+    TextView textView_tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,23 +43,43 @@ public class RecipeActivity extends AppCompatActivity {
         textView_ingredient = findViewById(R.id.recipe_textview_ingredient);
         textView_equipment = findViewById(R.id.recipe_textview_equipment);
         textView_description = findViewById(R.id.recipe_textview_description);
+        textView_tags = findViewById(R.id.recipe_textView_tags);
+
+        Recipe recipe = null;
 
         int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
         if(recipeNumber == 0) {
-            Log.d("error", "extra를 못받음");
-            return;
+            Log.d("test", "나만의 레시피임");
+            recipe = getIntent().getParcelableExtra("recipe");
+        } else {
+            recipe = getRecipe(recipeNumber);
         }
-
-        Recipe recipe = getRecipe(recipeNumber);
 
         textView_name.setText(recipe.getName());
         textView_proof.setText(recipe.getProof()+"%");
         textView_base.setText(recipe.getBase());
-        textView_ingredient.setText(recipe.getIngredient());
-        textView_equipment.setText(recipe.getEquipment());
+
+        List<String> ingredientList = recipe.getIngredient();
+        String text_ingredient = "";
+        for (String ingredient : ingredientList) {
+            text_ingredient += ingredient + " ";
+        }
+        textView_ingredient.setText(text_ingredient);
+
+
+        String text_equipment = "";
+        for (String equipment : recipe.getEquipment()) {
+            text_equipment += equipment + " ";
+        }
+        textView_equipment.setText(text_equipment);
+
         textView_description.setText(recipe.getDescription());
 
-
+        String text_tags = "";
+        for (String tag : recipe.getTags()) {
+            text_tags += tag + " ";
+        }
+        textView_tags.setText(text_tags);
     }
 
     public Recipe getRecipe(int recipeNumber) {
@@ -84,7 +106,7 @@ public class RecipeActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipe = new Recipe(number, name, proof, base, ingredient[0], equipment[0], description, tags);
+                recipe = new Recipe(number, name, proof, base, ingredient, equipment, description, tags);
                 break;
             }
         } catch (JSONException e) {

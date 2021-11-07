@@ -21,7 +21,7 @@
         android:layout_marginVertical="10dp">
 
         <ImageView
-            android:id="@+id/imageView2"
+            android:id="@+id/recipeitem_image"
             android:layout_width="70dp"
             android:layout_height="70dp"
             app:layout_constraintStart_toStartOf="parent"
@@ -32,29 +32,37 @@
             android:id="@+id/recipeitem_name"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
-            android:text="병머의 의지"
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
-            app:layout_constraintTop_toTopOf="@+id/imageView2" />
+            android:layout_marginStart="10dp"
+            android:text="레시피명"
+            app:layout_constraintStart_toEndOf="@+id/recipeitem_image"
+            app:layout_constraintTop_toTopOf="@+id/recipeitem_image" />
 
         <TextView
             android:id="@+id/recipeitem_base"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:text="베이스 : "
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/recipeitem_image"
             app:layout_constraintTop_toBottomOf="@+id/recipeitem_name" />
 
         <TextView
             android:id="@+id/recipeitem_tags"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="5dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="5dp"
             android:text="태그 : "
-            app:layout_constraintStart_toEndOf="@+id/imageView2"
+            app:layout_constraintStart_toEndOf="@+id/recipeitem_image"
             app:layout_constraintTop_toBottomOf="@+id/recipeitem_base" />
+
+        <TextView
+            android:id="@+id/recipeitem_proof"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="도수 : "
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>

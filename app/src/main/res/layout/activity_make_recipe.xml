@@ -226,6 +226,34 @@
                     android:textColor="@color/black"
                     android:textStyle="normal" />
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/make_textView_tags"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="15dp"
+                    android:text="설명"
+                    android:textColor="@color/black"
+                    android:textSize="20sp"
+                    android:textStyle="normal" />
+
+                <EditText
+                    android:id="@+id/make_editText_tags"
+                    android:layout_width="260dp"
+                    android:layout_height="50dp"
+                    android:layout_marginStart="15dp"
+                    android:ems="12"
+                    android:gravity="top"
+                    android:hint='태그를 입력하세요. (", "구분)'
+                    android:inputType="textPersonName"
+                    android:textColor="@color/black"
+                    android:textStyle="normal" />
+            </LinearLayout>
         </LinearLayout>
     </ScrollView>
 

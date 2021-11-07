@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/sortMenu_proof_desc"
+        android:title="높은 도수 순" />
+    <item
+        android:id="@+id/sortMenu_proof_asc"
+        android:title="낮은 도수 순" />
+    <item
+        android:id="@+id/sortMenu_name_desc"
+        android:title="이름순 z-a" />
+    <item
+        android:id="@+id/sortMenu_name_asc"
+        android:title="이름순 a-z" />
+</menu>

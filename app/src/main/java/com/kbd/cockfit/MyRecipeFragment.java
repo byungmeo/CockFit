@@ -152,6 +152,10 @@ public class MyRecipeFragment extends Fragment {
                     public void onClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, RecipeActivity.class);
+                        Log.d("r_ingredient", myRecipeArrayList.get(holder.getAdapterPosition()).getIngredient().toString());
+                        Log.d("r_equipment", myRecipeArrayList.get(holder.getAdapterPosition()).getEquipment().toString());
+                        Log.d("r_tags", myRecipeArrayList.get(holder.getAdapterPosition()).getTags().toString());
+                        intent.putExtra("recipe", myRecipeArrayList.get(holder.getAdapterPosition()));
                         context.startActivity(intent);
                     }
                 });

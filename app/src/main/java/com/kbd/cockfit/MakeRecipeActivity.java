@@ -14,7 +14,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class MakeRecipeActivity extends AppCompatActivity {
@@ -55,16 +58,17 @@ public class MakeRecipeActivity extends AppCompatActivity {
             String name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
             String proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
             String base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
-            String ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString();
-            String equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString();
+            String[] ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString().split(", ");
+            String[] equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString().split(", ");
             String description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
+            String[] tags = ((EditText) findViewById(R.id.make_editText_tags)).getText().toString().split(", ");
 
-            if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("")) {
+            if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
                 Toast.makeText(this , "모든 항목을 입력해주세요.",Toast.LENGTH_SHORT).show();
                 return;
             }
 
-            Recipe recipe = new Recipe(name,proof,base,ingredient,equipment,description);
+            Recipe recipe = new Recipe(0, name,proof,base,ingredient,equipment,description,tags);
 
             mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe);
 
