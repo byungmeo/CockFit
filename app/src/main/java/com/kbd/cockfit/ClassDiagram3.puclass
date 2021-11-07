@@ -3,21 +3,17 @@
 ListActivity "1" *-- RecipeAdapter
 ListActivity --> "0..*" Recipe
 RecipeAdapter ..> RecipeViewHolder : <<parameter>>
-RecipeActivity ..> Recipe : <<create>>
-
-
+RecipeActivity "1" *-- Recipe
 
 class ListActivity {
     - RecyclerView recipeRecycler
     - RecipeAdapter recipeAdapter
     - ArrayList<Recipe> recipeArrayList
-    - TextView screenName
+    - TextView textView_screenName
     # void onCreate(Bundle savedInstanceState)
     + void initRecipeRecycler()
     + void initRecipeList()
-    + void initFavoriteList()
-    + void onBackPressed()
-    + void clickBackButton(View view)
+    + void clickButton(View view)
 }
 
 class RecipeViewHolder {
@@ -25,21 +21,30 @@ class RecipeViewHolder {
     - TextView name
     - TextView base
     - TextView tags
+    - TextView proof
     + RecipeViewHolder(View itemView)
 }
 
 class Recipe {
+    - int number
     - String name
+    - String proof
     - String base
-    - String[] tags
-    + Recipe(String name, String base, String[] tags)
-    + String getName()
-    + String getBase()
-    + String[] getTage()
+    - List<String> ingredient
+    - List<String> equipment
+    - String description
+    - List<String> tags
+    + static final Creator<Ricipe> CREATOR
+    + Recipe()
+    + Recipe(...all member constructor...)
+    # Recipe(Parcel in)
+    + Getter, Setter()
+    + int describeContents()
+    + void writeToParcel(Parcel dest, int flags)
 }
 
 class RecipeAdapter {
-    - Context contest
+    - Context context
     - ArrayList<Recipe> recipeArrayList
     + RecipeAdapter(Context context, ArrayList<Recipe> recipeArrayList)
     + ViewHolder onCreateViewHolder(ViewGroup parent, int viewType)
@@ -49,7 +54,17 @@ class RecipeAdapter {
 }
 
 class RecipeActivity {
+    - TextView textView_name
+    - TextView textView_proof
+    - TextView textView_base
+    - TextView textView_ingredient
+    - TextView textView_equipment
+    - TextView textView_description
+    - TextView textView_tags
     # void onCreate(Bundle savedInstanceState)
+    + Recipe getRecipe(int recipeNumber)
+    + static String jsonToString(Context context, String filePath)
+    + static String[] jsonArrayToArray(JSONArray array)
     + void onBackButtonTapped(View view)
 }
 

@@ -96,6 +96,6 @@
         android:layout_height="33dp"
         android:src="@android:drawable/stat_notify_sync"
         tools:layout_editor_absoluteX="142dp"
-        tools:layout_editor_absoluteY="17dp" />
+        tools:layout_editor_absoluteY="16dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

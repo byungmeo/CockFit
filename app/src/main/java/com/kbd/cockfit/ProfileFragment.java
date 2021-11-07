@@ -211,9 +211,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
             case R.id.profile_button_recipe: {
-                Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("keyword", "favorite");
-                context.startActivity(intent);
+                //즐겨찾기 기능 개발 후 작성예정
+//                Intent intent = new Intent(context, ListActivity.class);
+//                intent.putExtra("keyword", "favorite");
+//                context.startActivity(intent);
                 break;
             }
             case R.id.profile_button_communityActivity: {
