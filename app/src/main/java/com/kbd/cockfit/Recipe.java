@@ -7,14 +7,14 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Recipe implements Parcelable {
-    private int number = 0;
-    private String name = ""; //칵테일 이름
-    private String proof = "0"; //칵테일 도수
-    private String base = ""; //칵테일 기주
-    private List<String> ingredient = null; //칵테일 재료
-    private List<String> equipment = null; //칵테일 장비
-    private String description = ""; //칵테일 제조에 대한 상세설명
-    private List<String> tags = null;
+    private int number;
+    private String name; //칵테일 이름
+    private String proof; //칵테일 도수
+    private String base; //칵테일 기주
+    private List<String> ingredient;//칵테일 재료
+    private List<String> equipment;//칵테일 장비
+    private String description; //칵테일 제조에 대한 상세설명
+    private List<String> tags; //해시태그
 
     public static final Creator<Recipe> CREATOR = new Creator<Recipe>() {
         @Override

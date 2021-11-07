@@ -1,13 +1,13 @@
 package com.kbd.cockfit;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.content.Context;
 import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+
+import androidx.appcompat.app.AppCompatActivity;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -19,18 +19,14 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
 
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-
 public class RecipeActivity extends AppCompatActivity {
-
-    TextView textView_name;
-    TextView textView_proof;
-    TextView textView_base;
-    TextView textView_ingredient;
-    TextView textView_equipment;
-    TextView textView_description;
-    TextView textView_tags;
+    private TextView textView_name;
+    private TextView textView_proof;
+    private TextView textView_base;
+    private TextView textView_ingredient;
+    private TextView textView_equipment;
+    private TextView textView_description;
+    private TextView textView_tags;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

@@ -44,21 +44,8 @@ public class ListActivity extends AppCompatActivity {
         recipeArrayList = new ArrayList<>();
         String keyword = getIntent().getStringExtra("keyword");
 
-        switch (keyword) {
-            case "every" : {
-                textView_screenName.setText("모든 레시피 목록");
-                initRecipeList();
-                break;
-            }
-            case "favorite" : {
-                textView_screenName.setText("즐겨찾기한 레시피 목록");
-                initFavoriteList();
-                break;
-            }
-            default : {
-                break;
-            }
-        }
+        textView_screenName.setText("모든 레시피 목록"); //우선 즐겨찾기 레시피 목록은 제외
+        initRecipeList();
 
         recipeAdapter = new RecipeAdapter(this, recipeArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
@@ -67,30 +54,6 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void initRecipeList() {
-        try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
-            JSONArray jsonArray = new JSONArray(jsonData);
-
-            for(int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jo = jsonArray.getJSONObject(i);
-
-                int number = jo.getInt("number");
-                String name = jo.getString("name");
-                String proof = jo.getString("proof");
-                String base = jo.getString("base");
-                String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
-                String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
-                String description = jo.getString("description");
-                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
-
-                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
-            }
-        } catch (JSONException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void initFavoriteList() {
         try {
             String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
             JSONArray jsonArray = new JSONArray(jsonData);
