@@ -10,7 +10,7 @@
         android:id="@+id/textView5"
         android:layout_width="413dp"
         android:layout_height="0dp"
-        android:layout_marginBottom="1dp"
+        android:layout_marginBottom="2dp"
         android:text="네비게이션바 영역"
         android:textAlignment="center"
         android:textColor="@color/design_default_color_error"
@@ -127,5 +127,13 @@
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.181"
         app:tint="@color/purple_500" />
+
+    <ImageButton
+        android:id="@+id/profile_imagebutton_changeimage"
+        android:layout_width="38dp"
+        android:layout_height="33dp"
+        android:src="@android:drawable/stat_notify_sync"
+        tools:layout_editor_absoluteX="142dp"
+        tools:layout_editor_absoluteY="17dp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
