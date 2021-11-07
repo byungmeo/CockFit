@@ -3,34 +3,30 @@ package com.kbd.cockfit;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.constraintlayout.widget.ConstraintLayout;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.google.firebase.auth.FirebaseAuth;
+import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.fragment.app.Fragment;
+
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
-
 public class CommunityFragment extends Fragment implements View.OnClickListener {
+    View v;
     private DatabaseReference mDatabase;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View v = inflater.inflate(R.layout.fragment_community, container, false);
+        v = inflater.inflate(R.layout.fragment_community, container, false);
         mDatabase = FirebaseDatabase.getInstance().getReference();
 
         TextView shareMore = v.findViewById(R.id.community_textView_shareMore);
@@ -64,8 +60,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                         String _titleViewTag = "textView_share" + String.valueOf(index);
                         String _dateViewTag = _titleViewTag + "_date";
 
-                        TextView title = getView().findViewWithTag(_titleViewTag);
-                        TextView date = getView().findViewWithTag(_dateViewTag);
+                        TextView title = v.findViewWithTag(_titleViewTag);
+                        TextView date = v.findViewWithTag(_dateViewTag);
 
                         title.setText("");
                         date.setText("");
@@ -78,9 +74,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     String dateViewTag = titleViewTag + "_date";
                     String constraintTag = "constraintLayout_share" + String.valueOf(i);
 
-                    TextView title = getView().findViewWithTag(titleViewTag);
-                    TextView date = getView().findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = v.findViewWithTag(titleViewTag);
+                    TextView date = v.findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
 
                     Post post = postSnapshot.getValue(Post.class);
                     title.setText(post.getTitle());
@@ -120,8 +116,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                         String _titleViewTag = "textView_qa" + String.valueOf(index);
                         String _dateViewTag = _titleViewTag + "_date";
 
-                        TextView title = getView().findViewWithTag(_titleViewTag);
-                        TextView date = getView().findViewWithTag(_dateViewTag);
+                        TextView title = v.findViewWithTag(_titleViewTag);
+                        TextView date = v.findViewWithTag(_dateViewTag);
 
                         title.setText("");
                         date.setText("");
@@ -134,9 +130,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     String dateViewTag = titleViewTag + "_date";
                     String constraintTag = "constraintLayout_qa" + String.valueOf(i);
 
-                    TextView title = getView().findViewWithTag(titleViewTag);
-                    TextView date = getView().findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = v.findViewWithTag(titleViewTag);
+                    TextView date = v.findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
 
                     Post post = postSnapshot.getValue(Post.class);
                     title.setText(post.getTitle());
@@ -177,8 +173,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                         String _titleViewTag = "textView_general" + String.valueOf(index);
                         String _dateViewTag = _titleViewTag + "_date";
 
-                        TextView title = getView().findViewWithTag(_titleViewTag);
-                        TextView date = getView().findViewWithTag(_dateViewTag);
+                        TextView title = v.findViewWithTag(_titleViewTag);
+                        TextView date = v.findViewWithTag(_dateViewTag);
 
                         title.setText("");
                         date.setText("");
@@ -191,9 +187,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     String dateViewTag = titleViewTag + "_date";
                     String constraintTag = "constraintLayout_general" + String.valueOf(i);
 
-                    TextView title = getView().findViewWithTag(titleViewTag);
-                    TextView date = getView().findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = getView().findViewWithTag(constraintTag);
+                    TextView title = v.findViewWithTag(titleViewTag);
+                    TextView date = v.findViewWithTag(dateViewTag);
+                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
 
                     Post post = postSnapshot.getValue(Post.class);
                     title.setText(post.getTitle());
