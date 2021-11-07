@@ -49,10 +49,19 @@ class CommunityFragment implements OnClickListener {
 
 class ProfileFragment implements OnClickListener {
     - FirebaseAuth mAuth
+    - StorageReference storageRef
+    - StorageReference profileRef
+    - FirebaseUser user
+    - private Uri file
+    - static final int PICK_FROM_ALBUM
+    - String uid
     - TextView editText_nickname
+    - ImageView imageview_profileImage
     - Button button_changeName, button_logout
     - Button button_myFavorite, button_myCommunityActivity
     + View onCreateView(...)
+    - void uploadImageToFirebase(Uri file)
+    + void onActivityResult(int requestCode, int resultCode, Intent data)
     + void onClick(View v)
 }
 
