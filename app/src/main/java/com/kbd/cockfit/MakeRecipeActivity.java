@@ -45,7 +45,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM =1;
     private StorageReference storageRef;
     private Uri file;
-    private boolean imageOn = false;
+    private boolean imageOn;
 
 
     @Override
@@ -59,7 +59,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance().getReference();
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
         storageRef = FirebaseStorage.getInstance().getReference();
-
+        imageOn=false;
     }
 
     public void onStart(){
