@@ -43,6 +43,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private FirebaseUser user;
     private Uri file;
 
+    private String[] imagePath;
+
     private static final int PICK_FROM_ALBUM =1;
 
     private String uid;
@@ -95,7 +97,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     //이미지 firebase store에 올리기
     private void uploadImageToFirebase(Uri file){
-        StorageReference fileRef = storageRef.child("users/"+uid+"profile.jpg");
+        imagePath = file.toString().split("/");
+        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage/"+imagePath[imagePath.length-1]);
         fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
