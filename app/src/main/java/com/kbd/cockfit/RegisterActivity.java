@@ -1,7 +1,10 @@
 package com.kbd.cockfit;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
+import android.provider.MediaStore;
 import android.util.Log;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
@@ -11,22 +14,35 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
+import com.squareup.picasso.Picasso;
 
 import java.util.regex.Pattern;
 
 public class RegisterActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
+    private Uri file;
+    private StorageReference storageRef;
+    private String uid;
     private ConstraintLayout con;
     private ImageView button_back;
+    private ImageView profile_image;
+    private static final int PICK_FROM_ALBUM = 1;
+    boolean imageOn;
 
     private EditText editText_email, editText_pwd, editText_checkPwd, editText_nickname;
     private Button button_register;
@@ -39,6 +55,7 @@ public class RegisterActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         con = findViewById(R.id.register_layout_const);
         button_back = findViewById(R.id.register_button_backButton);
+        imageOn = false;
 
         final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
 
@@ -60,11 +77,48 @@ public class RegisterActivity extends AppCompatActivity {
         editText_pwd = findViewById(R.id.register_editText_pw);
         editText_checkPwd = findViewById(R.id.register_editText_pw2);
         editText_nickname = findViewById(R.id.register_editText_nic);
-
         button_register = findViewById(R.id.register_button_register);
+        profile_image = findViewById(R.id.register_imageview_profileimage);
+    }
+
+    private void uploadImageToFirebase(Uri file){
+        storageRef = FirebaseStorage.getInstance().getReference();
+        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage.jpg");
+        fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    @Override
+                    public void onSuccess(Uri uri) {
+                        //Picasso.get().load(uri).into(imageView_addImage);
+                    }
+                });
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+            }
+        });
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(PICK_FROM_ALBUM == 1){
+            if(resultCode == Activity.RESULT_OK){
+                file = data.getData();
+                Picasso.get().load(file).into(profile_image);
+            }
+        }
     }
 
     public void clickButton(View view) {
+        if(view.getId() == this.profile_image.getId()){
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            startActivityForResult(intent, PICK_FROM_ALBUM);
+            imageOn=true;
+        }
         if(view.getId() == this.button_register.getId()) {
             String e_mail = this.editText_email.getText().toString();
             String pwd = this.editText_pwd.getText().toString();
@@ -100,11 +154,13 @@ public class RegisterActivity extends AppCompatActivity {
 
                         FirebaseUser user = mAuth.getCurrentUser();
                         user.sendEmailVerification(); //인증 이메일을 전송합니다.
-
+                        uid = user.getUid();
                         //유저의 프로필 닉네임을 업데이트 합니다.
                         UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
                                 .setDisplayName(nickname)
+                                .setPhotoUri(file)
                                 .build();
+
 
                         user.updateProfile(profileUpdates)
                                 .addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -115,7 +171,9 @@ public class RegisterActivity extends AppCompatActivity {
                                         }
                                     }
                                 });
-
+                        if(imageOn) {
+                            uploadImageToFirebase(file);
+                        }
                         onBackPressed(); //로그인 화면으로 돌아갑니다.
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();

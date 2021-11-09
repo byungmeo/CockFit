@@ -66,7 +66,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         user = mAuth.getCurrentUser();
         uid = user.getUid();
         storageRef = FirebaseStorage.getInstance().getReference();
-        profileRef = storageRef.child("Users/"+uid+"/ProfileImage");
+        profileRef = storageRef.child("Users/"+uid+"/ProfileImage.jpg");
 
         profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
             @Override
@@ -96,7 +96,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     //이미지 firebase store에 올리기
     private void uploadImageToFirebase(Uri file){
-        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage");
+        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage.jpg");
         fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
