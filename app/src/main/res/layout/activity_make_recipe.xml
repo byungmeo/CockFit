@@ -45,10 +45,10 @@
 
     <ScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
+        android:layout_width="386dp"
+        android:layout_height="280dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="150dp"
+        android:layout_marginTop="285dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/make_button_store"
@@ -259,25 +259,16 @@
 
     <ImageView
         android:id="@+id/make_imageView_addImage"
-        android:layout_width="52dp"
-        android:layout_height="40dp"
-        android:layout_marginTop="84dp"
-        android:layout_marginEnd="15dp"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
+        android:layout_marginTop="80dp"
+        android:layout_marginEnd="80dp"
         android:layout_marginBottom="15dp"
         app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:onClick="clickButton"
         app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
-
-    <TextView
-        android:id="@+id/make_textView_addImage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="칵테일 이미지 추가"
-        android:textColor="#020202"
-        android:textSize="16sp"
-        app:layout_constraintBottom_toBottomOf="@+id/make_imageView_addImage"
-        app:layout_constraintEnd_toStartOf="@+id/make_imageView_addImage"
-        app:layout_constraintTop_toTopOf="@+id/make_imageView_addImage" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
