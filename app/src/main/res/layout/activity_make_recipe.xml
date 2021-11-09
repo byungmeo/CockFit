@@ -36,12 +36,13 @@
         android:id="@+id/make_button_store"
         android:layout_width="108dp"
         android:layout_height="68dp"
-        android:layout_marginBottom="15dp"
+        android:layout_marginTop="12dp"
         android:onClick="clickButton"
         android:text="저장"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="@+id/scrollView3"
+        app:layout_constraintStart_toStartOf="@+id/scrollView3"
+        tools:layout_editor_absoluteY="575dp" />
 
     <ScrollView
         android:id="@+id/scrollView3"
@@ -237,7 +238,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="15dp"
-                    android:text="설명"
+                    android:text="태그"
                     android:textColor="@color/black"
                     android:textSize="20sp"
                     android:textStyle="normal" />
