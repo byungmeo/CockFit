@@ -8,6 +8,7 @@ import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,12 +39,9 @@ import com.squareup.picasso.Picasso;
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
-    private StorageReference storageRef;
-    private StorageReference profileRef;
+    private StorageReference mStorage;
     private FirebaseUser user;
-    private Uri file;
-
-    private String[] imagePath;
+    private Uri deviceImageUri;
 
     private static final int PICK_FROM_ALBUM =1;
 
@@ -65,25 +63,17 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         uid = user.getUid();
-        storageRef = FirebaseStorage.getInstance().getReference();
-        profileRef = storageRef.child("Users/"+uid+"/ProfileImage");
-
-        profileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-            @Override
-            public void onSuccess(Uri uri) {
-                Picasso.get().load(uri).into(imageview_profileImage);
-            }
-        });
+        mStorage = FirebaseStorage.getInstance().getReference();
 
         editText_nickname = v.findViewById(R.id.profile_textView_name);
         imageview_profileImage = v.findViewById(R.id.profile_imageView_photo);
         imageButton_changeName = v.findViewById(R.id.profile_imageButton_changeName);
         imageButton_logout = v.findViewById(R.id.profile_imageButton_logout);
-
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
-        editText_nickname.setText(user.getDisplayName());
+        Picasso.get().load(user.getPhotoUrl()).into(imageview_profileImage); //프로필 사진 표시
+        editText_nickname.setText(user.getDisplayName()); //닉네임 표시
 
         imageButton_changeName.setOnClickListener(this);
         imageButton_logout.setOnClickListener(this);
@@ -94,15 +84,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
-    //이미지 firebase store에 올리기
-    private void uploadImageToFirebase(Uri file){
-        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage");
-        fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+    private void updateProfilePhoto(Uri devicePhotoUri){
+        StorageReference photoReference = mStorage.child("Users/"+uid+"/profileImage.jpg");
+        photoReference.putFile(devicePhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                     @Override
                     public void onSuccess(Uri uri) {
+                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                .setPhotoUri(uri)
+                                .build();
+
+                        user.updateProfile(profileUpdates)
+                                .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<Void> task) {
+                                        if(task.isSuccessful()) {
+                                            Log.d("test", "프로필 사진 업데이트 완료");
+                                        }
+                                    }
+                                });
                         Picasso.get().load(uri).into(imageview_profileImage);
                     }
                 });
@@ -121,8 +123,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         super.onActivityResult(requestCode, resultCode, data);
         if(PICK_FROM_ALBUM == 1){
             if(resultCode == Activity.RESULT_OK){
-                file = data.getData();
-                uploadImageToFirebase(file);
+                deviceImageUri = data.getData();
+                updateProfilePhoto(deviceImageUri);
             }
         }
     }
