@@ -1,6 +1,7 @@
 package com.kbd.cockfit;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.cardview.widget.CardView;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -19,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -104,20 +106,18 @@ public class ListActivity extends AppCompatActivity {
         String uid = mAuth.getUid();
         ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
 
-        mDatabase.child("Users").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
-                    Log.d("test", String.valueOf(numberSnapshot.getValue(Integer.class)));
+                    int recipeNumber = numberSnapshot.getValue(int.class);
                     for(Recipe recipe : recipeArrayList) {
-                        if(recipe.getNumber() == (int)numberSnapshot.getValue(Integer.class)) {
+                        if(recipe.getNumber() == recipeNumber) {
                             favoriteRecipeList.add(recipe);
-                            Log.d("test", String.valueOf(recipe.getNumber()));
                             break;
                         }
                     }
                 }
-
                 recipeAdapter = new RecipeAdapter(ListActivity.this, favoriteRecipeList);
                 recipeRecycler.setAdapter(recipeAdapter);
             }
