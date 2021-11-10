@@ -5,9 +5,16 @@ import android.content.res.AssetManager;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,9 +24,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private ImageButton imageButton_bookmark;
     private TextView textView_name;
     private TextView textView_proof;
     private TextView textView_base;
@@ -33,6 +44,7 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        imageButton_bookmark = findViewById(R.id.recipe_button_bookmark);
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
@@ -49,6 +61,25 @@ public class RecipeActivity extends AppCompatActivity {
             recipe = getIntent().getParcelableExtra("recipe");
         } else {
             recipe = getRecipe(recipeNumber);
+
+            imageButton_bookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Toast.makeText(view.getContext(), "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
+
+                    mAuth = FirebaseAuth.getInstance();
+                    mDatabase = FirebaseDatabase.getInstance().getReference();
+
+                    FirebaseUser user = mAuth.getCurrentUser();
+                    String uid = user.getUid();
+
+                    List<Integer> test = new ArrayList<>();
+                    test.add(1);
+                    test.add(2);
+                    test.add(3);
+                    mDatabase.child("user").child(uid).child("favorite").setValue(test);
+                }
+            });
         }
 
         textView_name.setText(recipe.getName());

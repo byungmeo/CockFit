@@ -9,12 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
 import android.widget.TextView;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,6 +37,7 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
     private ArrayList<Recipe> recipeArrayList;
+    private ArrayList<Recipe> bookmarkRecipeArrayList;
     private TextView textView_screenName;
 
     @Override
@@ -42,25 +52,35 @@ public class ListActivity extends AppCompatActivity {
     public void initRecipeRecycler() {
         recipeRecycler = findViewById(R.id.list_recycler);
         recipeArrayList = new ArrayList<>();
+        bookmarkRecipeArrayList = new ArrayList<>();
         String keyword = getIntent().getStringExtra("keyword");
 
-        textView_screenName.setText("모든 레시피 목록"); //우선 즐겨찾기 레시피 목록은 제외
-        initRecipeList();
+        if(keyword.equals("every")) {
+            textView_screenName.setText("모든 레시피 목록"); //우선 즐겨찾기 레시피 목록은 제외
+        } else if(keyword.equals("favorite")) {
+            textView_screenName.setText("즐겨찾기한 레시피 목록");
+        }
 
-        recipeAdapter = new RecipeAdapter(this, recipeArrayList);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recipeRecycler.setLayoutManager(linearLayoutManager);
-        recipeRecycler.setAdapter(recipeAdapter);
+
+        loadCommonRecipeList();
+
+        if(keyword.equals("every")) {
+            recipeAdapter = new RecipeAdapter(this, recipeArrayList);
+            recipeRecycler.setAdapter(recipeAdapter);
+        } else if(keyword.equals("favorite")) {
+            loadFavoriteRecipeList();
+        }
     }
 
-    public void initRecipeList() {
+    public void loadCommonRecipeList() {
         try {
             String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject jo = jsonArray.getJSONObject(i);
-
                 int number = jo.getInt("number");
                 String name = jo.getString("name");
                 String proof = jo.getString("proof");
@@ -72,9 +92,41 @@ public class ListActivity extends AppCompatActivity {
 
                 recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
             }
+
         } catch (JSONException e) {
             e.printStackTrace();
         }
+    }
+
+    public void loadFavoriteRecipeList() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        String uid = mAuth.getUid();
+        ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
+
+        mDatabase.child("Users").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                    Log.d("test", String.valueOf(numberSnapshot.getValue(Integer.class)));
+                    for(Recipe recipe : recipeArrayList) {
+                        if(recipe.getNumber() == (int)numberSnapshot.getValue(Integer.class)) {
+                            favoriteRecipeList.add(recipe);
+                            Log.d("test", String.valueOf(recipe.getNumber()));
+                            break;
+                        }
+                    }
+                }
+
+                recipeAdapter = new RecipeAdapter(ListActivity.this, favoriteRecipeList);
+                recipeRecycler.setAdapter(recipeAdapter);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
     }
 
     public void clickButton(View view) {
