@@ -9,12 +9,15 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -28,8 +31,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RecipeActivity extends AppCompatActivity {
-    private FirebaseAuth mAuth;
-    private DatabaseReference mDatabase;
     private ImageButton imageButton_bookmark;
     private TextView textView_name;
     private TextView textView_proof;
@@ -56,6 +57,7 @@ public class RecipeActivity extends AppCompatActivity {
         Recipe recipe = null;
 
         int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
+
         if(recipeNumber == 0) {
             Log.d("test", "나만의 레시피임");
             recipe = getIntent().getParcelableExtra("recipe");
@@ -65,19 +67,67 @@ public class RecipeActivity extends AppCompatActivity {
             imageButton_bookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
+                    FirebaseAuth mAuth = FirebaseAuth.getInstance();
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+                    String uid = mAuth.getUid();
+
+                    ArrayList<Recipe> recipeArrayList = new ArrayList<>();
+                    ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
+
+                    for(Recipe recipe : favoriteRecipeList) { //즐겨찾기 목록에서 삭제
+                        if(recipe.getNumber() == recipeNumber) {
+                            DatabaseReference databaseReference = mDatabase.child("user").child(uid).child("favorite").child("즐겨찾기 " + String.valueOf(recipeNumber) + "번");
+                            databaseReference.removeValue();
+                            favoriteRecipeList.remove(recipe);
+
+                            Toast.makeText(view.getContext(), "즐겨찾기 목록에서 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    mDatabase.child("user").child(uid).child("favorite").child("즐겨찾기 " + String.valueOf(recipeNumber) + "번").setValue(recipeNumber); //즐겨찾기 목록에 추가
+
+                    try {
+                        String jsonData = RecipeActivity.jsonToString(RecipeActivity.this, "jsons/basicRecipe.json");
+                        JSONArray jsonArray = new JSONArray(jsonData);
+
+                        for (int i = 0; i < jsonArray.length(); i++) {
+                            JSONObject jo = jsonArray.getJSONObject(i);
+                            int number = jo.getInt("number");
+                            String name = jo.getString("name");
+                            String proof = jo.getString("proof");
+                            String base = jo.getString("base");
+                            String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                            String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
+                            String description = jo.getString("description");
+                            String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+
+                            recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
+                        }
+
+                    } catch (JSONException e) {
+                        e.printStackTrace();
+                    }
+
+                    mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            for (DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                                int recipeNumber = numberSnapshot.getValue(int.class);
+                                for (Recipe recipe : recipeArrayList) {
+                                    if (recipe.getNumber() == recipeNumber) {
+                                        favoriteRecipeList.add(recipe);
+                                        break;
+                                    }
+                                }
+                            }
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                     Toast.makeText(view.getContext(), "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
-
-                    mAuth = FirebaseAuth.getInstance();
-                    mDatabase = FirebaseDatabase.getInstance().getReference();
-
-                    FirebaseUser user = mAuth.getCurrentUser();
-                    String uid = user.getUid();
-
-                    List<Integer> test = new ArrayList<>();
-                    test.add(1);
-                    test.add(2);
-                    test.add(3);
-                    mDatabase.child("user").child(uid).child("favorite").setValue(test);
                 }
             });
         }
