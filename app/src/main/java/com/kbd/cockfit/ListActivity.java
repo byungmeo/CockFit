@@ -35,6 +35,7 @@ public class ListActivity extends AppCompatActivity {
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
     private ArrayList<Recipe> recipeArrayList;
+    private ArrayList<Recipe> sortRecipeList;
     private TextView textView_screenName;
 
     @Override
@@ -49,6 +50,7 @@ public class ListActivity extends AppCompatActivity {
     public void initRecipeRecycler() {
         recipeRecycler = findViewById(R.id.list_recycler);
         recipeArrayList = new ArrayList<>();
+        sortRecipeList = new ArrayList<>();
         String keyword = getIntent().getStringExtra("keyword");
 
         if(keyword.equals("every")) {
@@ -63,7 +65,8 @@ public class ListActivity extends AppCompatActivity {
         loadCommonRecipeList();
 
         if(keyword.equals("every")) {
-            recipeAdapter = new RecipeAdapter(this, recipeArrayList);
+            sortRecipeList = recipeArrayList;
+            recipeAdapter = new RecipeAdapter(this, sortRecipeList);
             recipeRecycler.setAdapter(recipeAdapter);
         } else if(keyword.equals("favorite")) {
             loadFavoriteRecipeList();
@@ -103,6 +106,7 @@ public class ListActivity extends AppCompatActivity {
         mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                favoriteRecipeList.clear();
                 for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
                     int recipeNumber = numberSnapshot.getValue(int.class);
                     for(Recipe recipe : recipeArrayList) {
@@ -112,7 +116,8 @@ public class ListActivity extends AppCompatActivity {
                         }
                     }
                 }
-                recipeAdapter = new RecipeAdapter(ListActivity.this, favoriteRecipeList);
+                sortRecipeList = favoriteRecipeList;
+                recipeAdapter = new RecipeAdapter(ListActivity.this, sortRecipeList);
                 recipeRecycler.setAdapter(recipeAdapter);
             }
 
@@ -124,6 +129,8 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void clickButton(View view) {
+        String keyword = getIntent().getStringExtra("keyword");
+
         if(view.getId() == R.id.list_button_backButton) {
             this.onBackPressed();
         } else if(view.getId() == R.id.list_button_sort) {
@@ -132,64 +139,64 @@ public class ListActivity extends AppCompatActivity {
             popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
                 @Override
                 public boolean onMenuItemClick(MenuItem item) {
-                    if(item.getItemId() == R.id.sortMenu_proof_desc) {
+                    if (item.getItemId() == R.id.sortMenu_proof_desc) {
                         //높은 도수순
-                        Collections.sort(recipeArrayList, new Comparator<Recipe>() {
+                        Collections.sort(sortRecipeList, new Comparator<Recipe>() {
                             @Override
                             public int compare(Recipe o1, Recipe o2) {
                                 int proof1 = Integer.parseInt(o1.getProof());
                                 int proof2 = Integer.parseInt(o2.getProof());
-                                if(proof1 < proof2) {
+                                if (proof1 < proof2) {
                                     return 1;
-                                } else if(proof1 == proof2) {
+                                } else if (proof1 == proof2) {
                                     return 0;
                                 } else {
                                     return -1;
                                 }
                             }
                         });
-                    } else if(item.getItemId() == R.id.sortMenu_proof_asc) {
+                    } else if (item.getItemId() == R.id.sortMenu_proof_asc) {
                         //낮은 도수순
-                        Collections.sort(recipeArrayList, new Comparator<Recipe>() {
+                        Collections.sort(sortRecipeList, new Comparator<Recipe>() {
                             @Override
                             public int compare(Recipe o1, Recipe o2) {
                                 int proof1 = Integer.parseInt(o1.getProof());
                                 int proof2 = Integer.parseInt(o2.getProof());
-                                if(proof1 > proof2) {
+                                if (proof1 > proof2) {
                                     return 1;
-                                } else if(proof1 == proof2) {
+                                } else if (proof1 == proof2) {
                                     return 0;
                                 } else {
                                     return -1;
                                 }
                             }
                         });
-                    } else if(item.getItemId() == R.id.sortMenu_name_asc) {
+                    } else if (item.getItemId() == R.id.sortMenu_name_asc) {
                         //이름순 a-z
-                        Collections.sort(recipeArrayList, new Comparator<Recipe>() {
+                        Collections.sort(sortRecipeList, new Comparator<Recipe>() {
                             @Override
                             public int compare(Recipe o1, Recipe o2) {
                                 String name1 = o1.getName();
                                 String name2 = o2.getName();
-                                if(name1.compareTo(name2) > 0) {
+                                if (name1.compareTo(name2) > 0) {
                                     return 1;
-                                } else if(name1.compareTo(name2) == 0) {
+                                } else if (name1.compareTo(name2) == 0) {
                                     return 0;
                                 } else {
                                     return -1;
                                 }
                             }
                         });
-                    } else if(item.getItemId() == R.id.sortMenu_name_desc) {
+                    } else if (item.getItemId() == R.id.sortMenu_name_desc) {
                         //이름순 a-z
-                        Collections.sort(recipeArrayList, new Comparator<Recipe>() {
+                        Collections.sort(sortRecipeList, new Comparator<Recipe>() {
                             @Override
                             public int compare(Recipe o1, Recipe o2) {
                                 String name1 = o1.getName();
                                 String name2 = o2.getName();
-                                if(name1.compareTo(name2) < 0) {
+                                if (name1.compareTo(name2) < 0) {
                                     return 1;
-                                } else if(name1.compareTo(name2) == 0) {
+                                } else if (name1.compareTo(name2) == 0) {
                                     return 0;
                                 } else {
                                     return -1;
@@ -197,7 +204,6 @@ public class ListActivity extends AppCompatActivity {
                             }
                         });
                     }
-
                     recipeAdapter.notifyDataSetChanged();
                     return false;
                 }

@@ -2,6 +2,8 @@ package com.kbd.cockfit;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -44,8 +46,6 @@ public class RecipeActivity extends AppCompatActivity {
 
     private Recipe recipe;
     private boolean isFavorite = false;
-    //private int size = 0;
-    //private int[] firebaseRecipeNumber = new int[] {};
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -61,8 +61,6 @@ public class RecipeActivity extends AppCompatActivity {
         textView_description = findViewById(R.id.recipe_textview_description);
         textView_tags = findViewById(R.id.recipe_textView_tags);
 
-
-
         int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
 
         if(recipeNumber == 0) {
@@ -71,11 +69,11 @@ public class RecipeActivity extends AppCompatActivity {
         } else {
             recipe = getRecipe(recipeNumber);
 
+            ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
+
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
             DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
             String uid = mAuth.getUid();
-
-            ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
 
             mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -85,7 +83,13 @@ public class RecipeActivity extends AppCompatActivity {
                         int firebaseRecipeNumber = numberSnapshot.getValue(int.class);
                         favoriteRecipeList.add(getRecipe(firebaseRecipeNumber));
                     }
-                    Log.d("테스트", String.valueOf(favoriteRecipeList.size()));
+                    for(Recipe favor : favoriteRecipeList) {
+                        if(favor.getNumber() == recipe.getNumber()) {
+                            isFavorite = true;
+                            break;
+                        }
+                    }
+                    Log.d("테스트1", String.valueOf(favoriteRecipeList.size()));
                 }
 
                 @Override
@@ -94,21 +98,16 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             });
 
-            for(Recipe favorite : favoriteRecipeList) {
-                if(favorite.getNumber() == recipe.getNumber()) {
-                    isFavorite = true;
-                    break;
-                }
-            }
-
             imageButton_bookmark.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     Map<String, Object> childUpdates = new HashMap<>();
                     if(!isFavorite) {
                         favoriteRecipeList.add(recipe);
+                        Log.d("테스트2", String.valueOf(favoriteRecipeList.size()));
 
                         Toast.makeText(view.getContext(), "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                        imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
 
                         childUpdates.put(String.valueOf(favoriteRecipeList.size() - 1), recipe.getNumber());
                         mDatabase.child("user").child(uid).child("favorite").updateChildren(childUpdates); //즐겨찾기 목록(Firebase)에 추가
@@ -117,7 +116,6 @@ public class RecipeActivity extends AppCompatActivity {
                     } else {
                         for(Recipe favorite : favoriteRecipeList) {
                             if(favorite.getNumber() == recipe.getNumber()) {
-                                //int favoriteIndex = favoriteRecipeList.indexOf(favorite);
                                 favoriteRecipeList.remove(favorite);
                                 break;
                             }
@@ -130,8 +128,27 @@ public class RecipeActivity extends AppCompatActivity {
                         databaseReference.setValue(childUpdates);
 
                         Toast.makeText(RecipeActivity.this, "즐겨찾기 목록에서 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        imageButton_bookmark.setColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN);
+
                         isFavorite = false;
                     }
+
+                }
+            });
+            mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                        int recipeNumber = numberSnapshot.getValue(int.class);
+                        if(recipeNumber == recipe.getNumber()) {
+                            imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
                 }
             });
