@@ -22,6 +22,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -44,7 +45,7 @@ public class RegisterActivity extends AppCompatActivity {
     private static final int PICK_FROM_ALBUM = 1;
     boolean imageOn;
 
-    private EditText editText_email, editText_pwd, editText_checkPwd, editText_nickname;
+    private TextInputLayout editText_email, editText_pwd, editText_checkPwd, editText_nickname;
     private Button button_register;
 
     @Override
@@ -73,10 +74,10 @@ public class RegisterActivity extends AppCompatActivity {
             }
         });
 
-        editText_email = findViewById(R.id.register_editText_email);
-        editText_pwd = findViewById(R.id.register_editText_pw);
-        editText_checkPwd = findViewById(R.id.register_editText_pw2);
-        editText_nickname = findViewById(R.id.register_editText_nic);
+        editText_email = (TextInputLayout)findViewById(R.id.register_editText_email);
+        editText_pwd = (TextInputLayout)findViewById(R.id.register_editText_pw);
+        editText_checkPwd = (TextInputLayout)findViewById(R.id.register_editText_pw2);
+        editText_nickname = (TextInputLayout)findViewById(R.id.register_editText_nic);
         button_register = findViewById(R.id.register_button_register);
         profile_image = findViewById(R.id.register_imageview_profileimage);
     }
@@ -120,10 +121,10 @@ public class RegisterActivity extends AppCompatActivity {
             imageOn=true;
         }
         if(view.getId() == this.button_register.getId()) {
-            String e_mail = this.editText_email.getText().toString();
-            String pwd = this.editText_pwd.getText().toString();
-            String checkPwd = this.editText_checkPwd.getText().toString();
-            String nickname = this.editText_nickname.getText().toString();
+            String e_mail = this.editText_email.getEditText().getText().toString();
+            String pwd = this.editText_pwd.getEditText().getText().toString();
+            String checkPwd = this.editText_checkPwd.getEditText().getText().toString();
+            String nickname = this.editText_nickname.getEditText().getText().toString();
 
             String e_mailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$"; // 이메일 형식 패턴
             if(!Pattern.matches(e_mailPattern , e_mail)){
