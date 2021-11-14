@@ -2,12 +2,24 @@ package com.kbd.cockfit;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Color;
+import android.graphics.PorterDuff;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -17,9 +29,13 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class RecipeActivity extends AppCompatActivity {
+    private ImageButton imageButton_bookmark;
     private TextView textView_name;
     private TextView textView_proof;
     private TextView textView_base;
@@ -28,11 +44,15 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView textView_description;
     private TextView textView_tags;
 
+    private Recipe recipe;
+    private boolean isFavorite = false;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
 
+        imageButton_bookmark = findViewById(R.id.recipe_button_bookmark);
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
@@ -41,14 +61,97 @@ public class RecipeActivity extends AppCompatActivity {
         textView_description = findViewById(R.id.recipe_textview_description);
         textView_tags = findViewById(R.id.recipe_textView_tags);
 
-        Recipe recipe = null;
-
         int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
+
         if(recipeNumber == 0) {
             Log.d("test", "나만의 레시피임");
             recipe = getIntent().getParcelableExtra("recipe");
         } else {
             recipe = getRecipe(recipeNumber);
+
+            ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
+
+            FirebaseAuth mAuth = FirebaseAuth.getInstance();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            String uid = mAuth.getUid();
+
+            mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    favoriteRecipeList.clear();
+                    for (DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                        int firebaseRecipeNumber = numberSnapshot.getValue(int.class);
+                        favoriteRecipeList.add(getRecipe(firebaseRecipeNumber));
+                    }
+                    for(Recipe favor : favoriteRecipeList) {
+                        if(favor.getNumber() == recipe.getNumber()) {
+                            isFavorite = true;
+                            break;
+                        }
+                    }
+                    Log.d("테스트1", String.valueOf(favoriteRecipeList.size()));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            imageButton_bookmark.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    if(!isFavorite) {
+                        favoriteRecipeList.add(recipe);
+                        Log.d("테스트2", String.valueOf(favoriteRecipeList.size()));
+
+                        Toast.makeText(view.getContext(), "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                        imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
+
+                        childUpdates.put(String.valueOf(favoriteRecipeList.size() - 1), recipe.getNumber());
+                        mDatabase.child("user").child(uid).child("favorite").updateChildren(childUpdates); //즐겨찾기 목록(Firebase)에 추가
+
+                        isFavorite = true;
+                    } else {
+                        for(Recipe favorite : favoriteRecipeList) {
+                            if(favorite.getNumber() == recipe.getNumber()) {
+                                favoriteRecipeList.remove(favorite);
+                                break;
+                            }
+                        }
+                        int i = 0;
+                        for(Recipe favoriteRecipe : favoriteRecipeList) {
+                            childUpdates.put(String.valueOf(i++), favoriteRecipe.getNumber());
+                        }
+                        DatabaseReference databaseReference = mDatabase.child("user").child(uid).child("favorite");
+                        databaseReference.setValue(childUpdates);
+
+                        Toast.makeText(RecipeActivity.this, "즐겨찾기 목록에서 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                        imageButton_bookmark.setColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN);
+
+                        isFavorite = false;
+                    }
+
+                }
+            });
+            mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                        int recipeNumber = numberSnapshot.getValue(int.class);
+                        if(recipeNumber == recipe.getNumber()) {
+                            imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
+                            break;
+                        }
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
         }
 
         textView_name.setText(recipe.getName());
