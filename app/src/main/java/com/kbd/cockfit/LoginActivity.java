@@ -12,6 +12,8 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.textfield.TextInputEditText;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -23,8 +25,8 @@ import com.google.firebase.database.ValueEventListener;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
-    private EditText editText_email; //id 입력창
-    private EditText editText_pwd; //pw 입력창
+    private TextInputLayout editText_email; //id 입력창
+    private TextInputLayout editText_pwd; //pw 입력창
     private Button button_login; //로그인 버튼
     private Button button_register; //회원가입 버튼
     private FirebaseUser user;
@@ -37,8 +39,8 @@ public class LoginActivity extends AppCompatActivity {
         setContentView(R.layout.activity_login);
 
         mAuth = FirebaseAuth.getInstance();
-        editText_email = findViewById(R.id.login_editText_id);
-        editText_pwd = findViewById(R.id.login_editText_pw);
+        editText_email = (TextInputLayout)findViewById(R.id.login_editText_id);
+        editText_pwd = (TextInputLayout)findViewById(R.id.login_editText_pw);
         button_login = findViewById(R.id.login_button_login);
         button_register = findViewById(R.id.login_button_register);
         user = FirebaseAuth.getInstance().getCurrentUser();
@@ -63,8 +65,8 @@ public class LoginActivity extends AppCompatActivity {
 
         public void clickButton (View view){
             if (view.getId() == this.button_login.getId()) {
-                String email = this.editText_email.getText().toString();
-                String password = this.editText_pwd.getText().toString();
+                String email = this.editText_email.getEditText().getText().toString();
+                String password = this.editText_pwd.getEditText().getText().toString();
 
                 //비어 있으면 다시 입력하라고 되돌림
                 if (email.equals("") || password.equals("")) {

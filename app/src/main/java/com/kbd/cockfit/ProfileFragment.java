@@ -63,6 +63,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         mAuth = FirebaseAuth.getInstance();
         user = mAuth.getCurrentUser();
         uid = user.getUid();
+
         mStorage = FirebaseStorage.getInstance().getReference();
 
         editText_nickname = v.findViewById(R.id.profile_textView_name);
@@ -84,9 +85,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         return v;
     }
 
+
     private void updateProfilePhoto(Uri devicePhotoUri){
         StorageReference photoReference = mStorage.child("Users/"+uid+"/profileImage.jpg");
         photoReference.putFile(devicePhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 photoReference.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

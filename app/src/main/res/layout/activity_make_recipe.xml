@@ -34,25 +34,27 @@
 
     <Button
         android:id="@+id/make_button_store"
-        android:layout_width="108dp"
-        android:layout_height="68dp"
-        android:layout_marginTop="12dp"
+        style="@style/Widget.MaterialComponents.Button.TextButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5dp"
+        android:layout_marginEnd="5dp"
         android:onClick="clickButton"
         android:text="저장"
-        app:layout_constraintTop_toBottomOf="@+id/scrollView3"
-        app:layout_constraintEnd_toEndOf="@+id/scrollView3"
-        app:layout_constraintStart_toStartOf="@+id/scrollView3"
-        tools:layout_editor_absoluteY="575dp" />
+        android:textStyle="bold"
+        app:icon="@drawable/ic_baseline_receipt_long_24"
+        app:iconGravity="textStart"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"></Button>
 
     <ScrollView
         android:id="@+id/scrollView3"
-        android:layout_width="386dp"
-        android:layout_height="280dp"
+        android:layout_width="410dp"
+        android:layout_height="595dp"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="285dp"
+        android:layout_marginTop="65dp"
         android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/make_button_store"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -60,216 +62,188 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="300dp"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <ImageView
+                    android:id="@+id/make_imageView_addImage"
+                    android:layout_width="380dp"
+                    android:layout_height="300dp"
+                    android:onClick="clickButton"
+                    app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
+            </LinearLayout>
+
 
             <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="49dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="이름"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal"
-                    tools:layout_editor_absoluteX="-22dp"
-                    tools:layout_editor_absoluteY="184dp" />
-
-                <EditText
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_name"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:hint="칵테일의 이름을 입력하세요."
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
-
+                    android:padding="5dp"
+                    app:startIconContentDescription="CocktailName"
+                    app:startIconDrawable="@drawable/ic_baseline_list_alt_24">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:hint="이름"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_proof"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="도수"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_proof"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:hint="도수를 입력하세요."
-                    android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:hint="도수"
+                    app:boxBackgroundColor="@color/white"
+                    android:inputType="numberDecimal"
+                    android:padding="5dp"
+                    app:startIconContentDescription="CocktailProof"
+                    app:startIconDrawable="@drawable/ic_baseline_proof_24">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_base"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="기주"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_base"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:hint="기주를 입력하세요."
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:hint="기주"
+                    app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
+                    android:padding="5dp"
+                    app:startIconContentDescription="email"
+                    app:startIconDrawable="@drawable/ic_baseline_base_24">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_ingredient"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="재료"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_ingredient"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:hint="재료를 입력하세요."
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:hint="재료"
+                    app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
+                    android:padding="5dp"
+                    app:startIconContentDescription="email"
+                    app:startIconDrawable="@drawable/ic_baseline_ingredient_24">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_equipment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="장비"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_equipment"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:hint="장비를 입력하세요."
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:hint="장비"
+                    app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
+                    android:padding="5dp"
+                    app:startIconContentDescription="email"
+                    app:startIconDrawable="@drawable/ic_shaker">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_description"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="설명"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
-                    android:id="@+id/make_editText_description"
-                    android:layout_width="260dp"
-                    android:layout_height="150dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:gravity="start|top"
-                    android:hint="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
-                    android:inputType="textMultiLine"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/make_textView_tags"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="15dp"
-                    android:text="태그"
-                    android:textColor="@color/black"
-                    android:textSize="20sp"
-                    android:textStyle="normal" />
-
-                <EditText
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
+                <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_tags"
-                    android:layout_width="260dp"
-                    android:layout_height="50dp"
-                    android:layout_marginStart="15dp"
-                    android:ems="12"
-                    android:gravity="top"
-                    android:hint='태그를 입력하세요. (", "구분)'
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    android:hint='태그 (", "구분)'
+                    app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
-                    android:textColor="@color/black"
-                    android:textStyle="normal" />
+                    android:padding="5dp"
+                    app:startIconContentDescription="email"
+                    app:startIconDrawable="@drawable/ic_baseline_tag_24">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:inputType="textPersonName"
+                        android:maxLines="1" />
+                </com.google.android.material.textfield.TextInputLayout>
             </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                android:gravity="center">
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/make_editText_description"
+                    android:layout_width="380dp"
+                    android:layout_height="wrap_content"
+                    app:boxBackgroundColor="@color/white"
+                    android:padding="5dp">
+                    <EditText
+                        android:layout_width="400dp"
+                        android:layout_height="200dp"
+                        android:ems="12"
+                        android:gravity="start|top"
+                        android:hint="상세설명을 입력하세요 \n1.\n2.\n3.\n..."
+                        android:inputType="textMultiLine"
+                        />
+                </com.google.android.material.textfield.TextInputLayout>
+            </LinearLayout>
+
         </LinearLayout>
     </ScrollView>
-
-    <ImageView
-        android:id="@+id/make_imageView_addImage"
-        android:layout_width="250dp"
-        android:layout_height="180dp"
-        android:layout_marginTop="80dp"
-        android:layout_marginEnd="80dp"
-        android:layout_marginBottom="15dp"
-        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.0"
-        android:onClick="clickButton"
-        app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
