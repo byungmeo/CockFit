@@ -3,6 +3,7 @@ package com.kbd.cockfit;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -17,6 +18,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+enum ForumType {
+    QA,
+    Share,
+    General
+}
 
 public class CommunityFragment extends Fragment implements View.OnClickListener {
     View v;
@@ -37,13 +44,35 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         qaMore.setOnClickListener(this);
         generalMore.setOnClickListener(this);
 
-        initRecentPost();
+        loadRecentPost(ForumType.Share);
+        loadRecentPost(ForumType.QA);
+        loadRecentPost(ForumType.General);
 
         return v;
     }
 
-    public void initRecentPost() {
-        mDatabase.child("forum").child("share").limitToLast(4).addValueEventListener(new ValueEventListener() {
+    public void loadRecentPost(ForumType forumType) {
+        String type = null;
+        switch (forumType) {
+            case Share:
+                type = "share";
+                break;
+            case QA:
+                type = "qa";
+                break;
+            case General:
+                type = "general";
+                break;
+            default:
+                break;
+        }
+        if(type == null) {
+            Log.d("error", "게시판유형 식별 실패");
+            return;
+        }
+
+        String finalType = type; //익명클래스 참조 문제
+        mDatabase.child("forum").child(type).limitToLast(4).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 long i = 4;
@@ -57,7 +86,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
                 if(postNum < 4) {
                     for(long index = 4; index > postNum; index--) {
-                        String _titleViewTag = "textView_share" + String.valueOf(index);
+                        String _titleViewTag = "textView_" + finalType + String.valueOf(index);
                         String _dateViewTag = _titleViewTag + "_date";
 
                         TextView title = v.findViewWithTag(_titleViewTag);
@@ -70,9 +99,9 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 }
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    String titleViewTag = "textView_share" + String.valueOf(i);
+                    String titleViewTag = "textView_" + finalType + String.valueOf(i);
                     String dateViewTag = titleViewTag + "_date";
-                    String constraintTag = "constraintLayout_share" + String.valueOf(i);
+                    String constraintTag = "constraintLayout_" + finalType + String.valueOf(i);
 
                     TextView title = v.findViewWithTag(titleViewTag);
                     TextView date = v.findViewWithTag(dateViewTag);
@@ -88,128 +117,18 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                             Intent intent = new Intent(v.getContext(), PostActivity.class);
                             intent.putExtra("post", post);
                             intent.putExtra("postId", postSnapshot.getKey());
-                            intent.putExtra("forum", "share");
+                            intent.putExtra("forum", finalType);
                             startActivity(intent);
                         }
                     });
                     i--;
                 }
             }
+
             @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
+            public void onCancelled(@NonNull DatabaseError error) {
 
-        mDatabase.child("forum").child("qa").limitToLast(4).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long i = 4;
-                long postNum = snapshot.getChildrenCount();
-
-                if(postNum == 0) {
-                    return;
-                }
-
-                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
-                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
-                if(postNum < 4) {
-                    for(long index = 4; index > postNum; index--) {
-                        String _titleViewTag = "textView_qa" + String.valueOf(index);
-                        String _dateViewTag = _titleViewTag + "_date";
-
-                        TextView title = v.findViewWithTag(_titleViewTag);
-                        TextView date = v.findViewWithTag(_dateViewTag);
-
-                        title.setText("");
-                        date.setText("");
-                    }
-                    i = postNum;
-                }
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    String titleViewTag = "textView_qa" + String.valueOf(i);
-                    String dateViewTag = titleViewTag + "_date";
-                    String constraintTag = "constraintLayout_qa" + String.valueOf(i);
-
-                    TextView title = v.findViewWithTag(titleViewTag);
-                    TextView date = v.findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
-
-                    Post post = postSnapshot.getValue(Post.class);
-                    title.setText(post.getTitle());
-                    date.setText(post.getDate());
-
-                    constraintLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), PostActivity.class);
-                            intent.putExtra("post", post);
-                            intent.putExtra("postId", postSnapshot.getKey());
-                            intent.putExtra("forum", "qa");
-                            startActivity(intent);
-                        }
-                    });
-                    i--;
-                }
             }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
-        });
-
-
-        mDatabase.child("forum").child("general").limitToLast(4).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long i = 4;
-                long postNum = snapshot.getChildrenCount();
-
-                if(postNum == 0) {
-                    return;
-                }
-
-                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
-                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
-                if (postNum < 4) {
-                    for (long index = 4; index > postNum; index--) {
-                        String _titleViewTag = "textView_general" + String.valueOf(index);
-                        String _dateViewTag = _titleViewTag + "_date";
-
-                        TextView title = v.findViewWithTag(_titleViewTag);
-                        TextView date = v.findViewWithTag(_dateViewTag);
-
-                        title.setText("");
-                        date.setText("");
-                    }
-                    i = postNum;
-                }
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    String titleViewTag = "textView_general" + String.valueOf(i);
-                    String dateViewTag = titleViewTag + "_date";
-                    String constraintTag = "constraintLayout_general" + String.valueOf(i);
-
-                    TextView title = v.findViewWithTag(titleViewTag);
-                    TextView date = v.findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
-
-                    Post post = postSnapshot.getValue(Post.class);
-                    title.setText(post.getTitle());
-                    date.setText(post.getDate());
-
-                    constraintLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), PostActivity.class);
-                            intent.putExtra("post", post);
-                            intent.putExtra("postId", postSnapshot.getKey());
-                            intent.putExtra("forum", "general");
-                            startActivity(intent);
-                        }
-                    });
-                    i--;
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
