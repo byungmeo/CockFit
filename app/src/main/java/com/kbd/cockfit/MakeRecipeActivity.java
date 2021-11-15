@@ -17,6 +17,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -122,13 +123,13 @@ public class MakeRecipeActivity extends AppCompatActivity {
             this.onBackPressed();
         }
         else if(view.getId() == R.id.make_button_store) {
-            String name = ((EditText) findViewById(R.id.make_editText_name)).getText().toString();
-            String proof = ((EditText) findViewById(R.id.make_editText_proof)).getText().toString();
-            String base = ((EditText) findViewById(R.id.make_editText_base)).getText().toString();
-            String[] ingredient = ((EditText) findViewById(R.id.make_editText_ingredient)).getText().toString().split(", ");
-            String[] equipment = ((EditText) findViewById(R.id.make_editText_equipment)).getText().toString().split(", ");
-            String description = ((EditText) findViewById(R.id.make_editText_description)).getText().toString();
-            String[] tags = ((EditText) findViewById(R.id.make_editText_tags)).getText().toString().split(", ");
+            String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
+            String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
+            String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
+            String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
+            String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
+            String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
+            String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();
 
             if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
                 Toast.makeText(this , "모든 항목을 입력해주세요.",Toast.LENGTH_SHORT).show();
