@@ -62,15 +62,16 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical">
-
+            android:orientation="vertical"
+            >
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="300dp"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
                 <ImageView
                     android:id="@+id/make_imageView_addImage"
-                    android:layout_width="410dp"
+                    android:layout_width="380dp"
                     android:layout_height="300dp"
                     android:onClick="clickButton"
                     app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
@@ -80,10 +81,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_name"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/white"
                     android:inputType="textPersonName"
@@ -91,7 +94,7 @@
                     app:startIconContentDescription="CocktailName"
                     app:startIconDrawable="@drawable/ic_baseline_list_alt_24">
                     <com.google.android.material.textfield.TextInputEditText
-                        android:hint="칵테일 이름"
+                        android:hint="이름"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -102,10 +105,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_proof"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="도수"
                     app:boxBackgroundColor="@color/white"
@@ -123,10 +128,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_base"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="기주"
                     app:boxBackgroundColor="@color/white"
@@ -145,10 +152,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_ingredient"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="재료"
                     app:boxBackgroundColor="@color/white"
@@ -167,10 +176,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_equipment"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="장비"
                     app:boxBackgroundColor="@color/white"
@@ -189,10 +200,12 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center"
+                >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_tags"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint='태그 (", "구분)'
                     app:boxBackgroundColor="@color/white"
@@ -211,10 +224,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="horizontal"
+                android:gravity="center">
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_description"
-                    android:layout_width="400dp"
+                    android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/white"
                     android:padding="5dp">
