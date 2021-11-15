@@ -1,23 +1,31 @@
 package com.kbd.cockfit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
+import com.squareup.picasso.Picasso;
 
 public class PostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -29,10 +37,10 @@ public class PostActivity extends AppCompatActivity {
 
     private TextView textView_title;
     private TextView textView_writer;
-    private TextView textView_content;
+    private TextView textView_date;
+    //private TextView textView_content;
     private ImageButton button_more;
-
-    private Boolean isMyPost;
+    private ImageView imageView_writerProfile;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +55,10 @@ public class PostActivity extends AppCompatActivity {
 
         textView_title = findViewById(R.id.post_textView_title);
         textView_writer = findViewById(R.id.post_textView_writer);
-        textView_content = findViewById(R.id.post_textView_content);
+        textView_date = findViewById(R.id.post_textView_date);
+        //textView_content = findViewById(R.id.post_textView_content);
         button_more = findViewById(R.id.post_button_more);
+        imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
 
         Log.d("forumType", forumType);
         Log.d("postId", postId);
@@ -59,7 +69,17 @@ public class PostActivity extends AppCompatActivity {
                 if(post != null) {
                     textView_title.setText(post.getTitle());
                     textView_writer.setText(post.getWriter());
-                    textView_content.setText(post.getContent());
+                    textView_date.setText(post.getDate());
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+                    mStorage.child("Users").child(post.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Log.d("test", uri.toString());
+                            Picasso.get().load(uri).into(imageView_writerProfile);
+                        }
+                    });
+
+                    //textView_content.setText(post.getContent());
 
                     if(mAuth.getUid().equals(post.getUid())) {
                         button_more.setOnClickListener(new View.OnClickListener() {
@@ -92,19 +112,14 @@ public class PostActivity extends AppCompatActivity {
                         button_more.setVisibility(View.INVISIBLE);
                     }
                 }
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
     public void clickButton(View view) {
-        if(view.getId() == R.id.post_button_backButton) {
-            this.onBackPressed();
-        }
+        if(view.getId() == R.id.post_button_backButton) { this.onBackPressed(); }
     }
 }
