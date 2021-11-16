@@ -89,12 +89,12 @@
 
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <androidx.fragment.app.FragmentContainerView
-                android:id="@+id/fragmentContainerView"
-                android:name="com.kbd.cockfit.GeneralPostFragment"
+            <FrameLayout
+                android:id="@+id/post_frameLayout"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:visibility="visible" />
+                android:layout_height="match_parent">
+
+            </FrameLayout>
 
         </LinearLayout>
     </ScrollView>

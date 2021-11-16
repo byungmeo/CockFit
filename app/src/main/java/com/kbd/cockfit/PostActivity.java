@@ -3,7 +3,6 @@ package com.kbd.cockfit;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
@@ -15,6 +14,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.FragmentManager;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -31,6 +32,9 @@ public class PostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
+    private FragmentManager fragmentManager;
+    private GeneralPostFragment generalPostFragment;
+
     private Post post;
     private String postId;
     private String forumType;
@@ -44,6 +48,7 @@ public class PostActivity extends AppCompatActivity {
     private ScrollView scrollView;
     private ProgressBar progressBar;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +58,11 @@ public class PostActivity extends AppCompatActivity {
         scrollView = findViewById(R.id.post_scrollView_content);
         scrollView.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
+
+        fragmentManager = getSupportFragmentManager();
+        generalPostFragment = new GeneralPostFragment();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        transaction.replace(R.id.post_frameLayout, generalPostFragment).commitAllowingStateLoss();
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
@@ -67,8 +77,6 @@ public class PostActivity extends AppCompatActivity {
         button_more = findViewById(R.id.post_button_more);
         imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
 
-        Log.d("forumType", forumType);
-        Log.d("postId", postId);
         mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
