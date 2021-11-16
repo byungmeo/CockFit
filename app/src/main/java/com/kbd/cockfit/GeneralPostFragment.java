@@ -31,7 +31,6 @@ public class GeneralPostFragment extends Fragment {
 
     private String forumType;
     private String postId;
-    private String contents;
     private List<String> likeUidList;
 
     private TextView textView_contents;
@@ -54,7 +53,6 @@ public class GeneralPostFragment extends Fragment {
         Bundle bundle = getArguments();
         forumType = bundle.getString("forum");
         postId = bundle.getString("postId");
-        contents = bundle.getString("contents");
 
         //view initialize
         textView_contents = v.findViewById(R.id.general_textView_contents);

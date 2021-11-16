@@ -81,7 +81,6 @@ public class PostActivity extends AppCompatActivity {
         Bundle bundle = new Bundle();
         bundle.putString("postId", postId);
         bundle.putString("forum", forumType);
-        bundle.putString("contents", post.getContent());
         generalPostFragment.setArguments(bundle);
 
         //view initialize
