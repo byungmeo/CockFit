@@ -7,6 +7,24 @@
     android:layout_height="match_parent"
     tools:context=".MakeRecipeActivity">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:title="나만의 레시피 제작" />
+    </com.google.android.material.appbar.AppBarLayout>
+
     <ImageView
         android:id="@+id/make_button_backButton"
         android:layout_width="35dp"

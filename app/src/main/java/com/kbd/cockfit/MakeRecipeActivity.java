@@ -71,7 +71,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-
             }
         });
     }
