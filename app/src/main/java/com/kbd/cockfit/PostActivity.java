@@ -74,6 +74,7 @@ public class PostActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Glide.with(PostActivity.this)
                                     .load(uri)
+                                    .thumbnail(0.1f)
                                     .into(imageView_writerProfile);
                         }
                     });

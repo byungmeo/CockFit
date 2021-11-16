@@ -75,6 +75,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         Glide.with(this)
                 .load(user.getPhotoUrl())
+                .thumbnail(0.1f)
                 .into(imageview_profileImage);
 
         editText_nickname.setText(user.getDisplayName()); //닉네임 표시
