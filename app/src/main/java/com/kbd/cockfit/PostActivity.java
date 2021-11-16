@@ -48,7 +48,7 @@ public class PostActivity extends AppCompatActivity {
         setContentView(R.layout.activity_post);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         postId = getIntent().getStringExtra("postId");
         forumType = getIntent().getStringExtra("forum");
@@ -70,7 +70,7 @@ public class PostActivity extends AppCompatActivity {
                     textView_title.setText(post.getTitle());
                     textView_writer.setText(post.getWriter());
                     textView_date.setText(post.getDate());
-                    StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
                     mStorage.child("Users").child(post.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {

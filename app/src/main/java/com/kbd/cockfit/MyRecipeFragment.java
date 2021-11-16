@@ -41,7 +41,7 @@ public class MyRecipeFragment extends Fragment {
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
 
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         layoutManager = new GridLayoutManager(v.getContext(), 2);
 

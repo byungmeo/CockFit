@@ -99,7 +99,7 @@ public class ListActivity extends AppCompatActivity {
 
     public void loadFavoriteRecipeList() {
         FirebaseAuth mAuth = FirebaseAuth.getInstance();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         String uid = mAuth.getUid();
         ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
 

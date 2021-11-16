@@ -57,7 +57,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
         storageRef = FirebaseStorage.getInstance().getReference();
         imageOn=false;

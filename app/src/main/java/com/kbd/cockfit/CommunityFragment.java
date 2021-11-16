@@ -19,12 +19,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-enum ForumType {
-    QA,
-    Share,
-    General
-}
-
 public class CommunityFragment extends Fragment implements View.OnClickListener {
     View v;
     private DatabaseReference mDatabase;
@@ -34,7 +28,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_community, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         TextView shareMore = v.findViewById(R.id.community_textView_shareMore);
         TextView qaMore = v.findViewById(R.id.community_textView_qaMore);
@@ -49,6 +43,12 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         loadRecentPost(ForumType.General);
 
         return v;
+    }
+
+    enum ForumType {
+        QA,
+        Share,
+        General
     }
 
     public void loadRecentPost(ForumType forumType) {

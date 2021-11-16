@@ -64,7 +64,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         user = mAuth.getCurrentUser();
         uid = user.getUid();
 
-        mStorage = FirebaseStorage.getInstance().getReference();
+        mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
 
         editText_nickname = v.findViewById(R.id.profile_textView_name);
         imageview_profileImage = v.findViewById(R.id.profile_imageView_photo);
