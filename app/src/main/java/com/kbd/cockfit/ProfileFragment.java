@@ -24,6 +24,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,7 +35,6 @@ import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 
 public class ProfileFragment extends Fragment implements View.OnClickListener {
@@ -73,7 +73,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
-        Picasso.get().load(user.getPhotoUrl()).into(imageview_profileImage); //프로필 사진 표시
+        Glide.with(this)
+                .load(user.getPhotoUrl())
+                .into(imageview_profileImage);
+
         editText_nickname.setText(user.getDisplayName()); //닉네임 표시
 
         imageButton_changeName.setOnClickListener(this);
@@ -108,7 +111,10 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                         }
                                     }
                                 });
-                        Picasso.get().load(uri).into(imageview_profileImage);
+                        //Picasso.get().load(uri).into(imageview_profileImage);
+                        Glide.with(ProfileFragment.this)
+                                .load(uri)
+                                .into(imageview_profileImage);
                     }
                 });
             }
