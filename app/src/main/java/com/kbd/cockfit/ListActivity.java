@@ -14,6 +14,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -37,11 +38,15 @@ public class ListActivity extends AppCompatActivity {
     private ArrayList<Recipe> recipeArrayList;
     private ArrayList<Recipe> sortRecipeList;
     private TextView textView_screenName;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
+        progressBar = findViewById(R.id.list_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
         textView_screenName = findViewById(R.id.list_textView_screenName);
 
         initRecipeRecycler();
@@ -68,6 +73,7 @@ public class ListActivity extends AppCompatActivity {
             sortRecipeList = recipeArrayList;
             recipeAdapter = new RecipeAdapter(this, sortRecipeList);
             recipeRecycler.setAdapter(recipeAdapter);
+            progressBar.setVisibility(View.GONE);
         } else if(keyword.equals("favorite")) {
             loadFavoriteRecipeList();
         }
@@ -119,6 +125,7 @@ public class ListActivity extends AppCompatActivity {
                 sortRecipeList = favoriteRecipeList;
                 recipeAdapter = new RecipeAdapter(ListActivity.this, sortRecipeList);
                 recipeRecycler.setAdapter(recipeAdapter);
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

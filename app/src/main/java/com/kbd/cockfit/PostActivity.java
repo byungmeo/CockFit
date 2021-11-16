@@ -9,6 +9,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -39,11 +41,18 @@ public class PostActivity extends AppCompatActivity {
     //private TextView textView_content;
     private ImageButton button_more;
     private ImageView imageView_writerProfile;
+    private ScrollView scrollView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        progressBar = findViewById(R.id.post_progressBar);
+        scrollView = findViewById(R.id.post_scrollView_content);
+        scrollView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
@@ -74,8 +83,10 @@ public class PostActivity extends AppCompatActivity {
                         public void onSuccess(Uri uri) {
                             Glide.with(PostActivity.this)
                                     .load(uri)
-                                    .thumbnail(0.1f)
                                     .into(imageView_writerProfile);
+
+                            progressBar.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.VISIBLE);
                         }
                     });
 
