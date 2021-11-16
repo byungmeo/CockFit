@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -34,20 +35,25 @@ public class MyRecipeFragment extends Fragment {
     private MyRecipeAdapter adapter;
     private ArrayList<Recipe> myRecipeArrayList;
 
+    private ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
 
+        progressBar = v.findViewById(R.id.myRecipe_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         layoutManager = new GridLayoutManager(v.getContext(), 2);
-
-        myRecipeRecyclerView = (RecyclerView) v.findViewById(R.id.myRecipe_recyclerView);
+        myRecipeRecyclerView = v.findViewById(R.id.myRecipe_recyclerView);
         myRecipeRecyclerView.setHasFixedSize(true);
         myRecipeRecyclerView.setLayoutManager(layoutManager);
+        myRecipeRecyclerView.setVisibility(View.INVISIBLE);
 
         myRecipeArrayList = new ArrayList<>();
         adapter = new MyRecipeAdapter(myRecipeArrayList);
@@ -73,6 +79,9 @@ public class MyRecipeFragment extends Fragment {
 
                 adapter = new MyRecipeAdapter(myRecipeArrayList);
                 myRecipeRecyclerView.setAdapter(adapter);
+                myRecipeRecyclerView.setVisibility(View.VISIBLE);
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -122,7 +131,17 @@ public class MyRecipeFragment extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             if(viewType == TYPE_ITEM) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myrecipeitem_layout, parent, false);
-                return new ItemViewHolder(view);
+                ItemViewHolder itemViewHolder = new ItemViewHolder(view);
+                itemViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Context context = v.getContext();
+                        Intent intent = new Intent(context, RecipeActivity.class);
+                        intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
+                        context.startActivity(intent);
+                    }
+                });
+                return itemViewHolder;
             } else if(viewType == TYPE_FOOTER) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.addmyrecipe_layout, parent, false);
                 return new FooterViewHolder(view);
@@ -134,20 +153,8 @@ public class MyRecipeFragment extends Fragment {
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
             if(holder instanceof ItemViewHolder) {
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
-                itemViewHolder.name.setText(myRecipeArrayList.get(position).getName());
+                itemViewHolder.name.setText(myRecipeArrayList.get(holder.getAdapterPosition()).getName());
 
-                itemViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View v) {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, RecipeActivity.class);
-                        Log.d("r_ingredient", myRecipeArrayList.get(holder.getAdapterPosition()).getIngredient().toString());
-                        Log.d("r_equipment", myRecipeArrayList.get(holder.getAdapterPosition()).getEquipment().toString());
-                        Log.d("r_tags", myRecipeArrayList.get(holder.getAdapterPosition()).getTags().toString());
-                        intent.putExtra("recipe", myRecipeArrayList.get(holder.getAdapterPosition()));
-                        context.startActivity(intent);
-                    }
-                });
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;
                 footViewHolder.cardView.setOnClickListener(new View.OnClickListener() {

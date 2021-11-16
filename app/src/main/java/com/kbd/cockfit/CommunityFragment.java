@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -19,22 +20,22 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-enum ForumType {
-    QA,
-    Share,
-    General
-}
-
 public class CommunityFragment extends Fragment implements View.OnClickListener {
-    View v;
+    private View v;
     private DatabaseReference mDatabase;
+
+    private ProgressBar progressBar;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         v = inflater.inflate(R.layout.fragment_community, container, false);
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+
+        progressBar = v.findViewById(R.id.community_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
+
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         TextView shareMore = v.findViewById(R.id.community_textView_shareMore);
         TextView qaMore = v.findViewById(R.id.community_textView_qaMore);
@@ -49,6 +50,12 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         loadRecentPost(ForumType.General);
 
         return v;
+    }
+
+    enum ForumType {
+        QA,
+        Share,
+        General
     }
 
     public void loadRecentPost(ForumType forumType) {
@@ -123,6 +130,8 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     });
                     i--;
                 }
+
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override

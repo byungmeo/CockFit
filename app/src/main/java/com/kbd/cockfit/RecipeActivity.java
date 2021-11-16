@@ -72,7 +72,7 @@ public class RecipeActivity extends AppCompatActivity {
             ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
 
             FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance().getReference();
+            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
             String uid = mAuth.getUid();
 
             mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {

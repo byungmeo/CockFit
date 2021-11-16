@@ -1,23 +1,31 @@
 package com.kbd.cockfit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 public class PostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -29,26 +37,35 @@ public class PostActivity extends AppCompatActivity {
 
     private TextView textView_title;
     private TextView textView_writer;
-    private TextView textView_content;
+    private TextView textView_date;
+    //private TextView textView_content;
     private ImageButton button_more;
-
-    private Boolean isMyPost;
+    private ImageView imageView_writerProfile;
+    private ScrollView scrollView;
+    private ProgressBar progressBar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
 
+        progressBar = findViewById(R.id.post_progressBar);
+        scrollView = findViewById(R.id.post_scrollView_content);
+        scrollView.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
         mAuth = FirebaseAuth.getInstance();
-        mDatabase = FirebaseDatabase.getInstance().getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         postId = getIntent().getStringExtra("postId");
         forumType = getIntent().getStringExtra("forum");
 
         textView_title = findViewById(R.id.post_textView_title);
         textView_writer = findViewById(R.id.post_textView_writer);
-        textView_content = findViewById(R.id.post_textView_content);
+        textView_date = findViewById(R.id.post_textView_date);
+        //textView_content = findViewById(R.id.post_textView_content);
         button_more = findViewById(R.id.post_button_more);
+        imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
 
         Log.d("forumType", forumType);
         Log.d("postId", postId);
@@ -59,7 +76,21 @@ public class PostActivity extends AppCompatActivity {
                 if(post != null) {
                     textView_title.setText(post.getTitle());
                     textView_writer.setText(post.getWriter());
-                    textView_content.setText(post.getContent());
+                    textView_date.setText(post.getDate());
+                    StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+                    mStorage.child("Users").child(post.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                        @Override
+                        public void onSuccess(Uri uri) {
+                            Glide.with(PostActivity.this)
+                                    .load(uri)
+                                    .into(imageView_writerProfile);
+
+                            progressBar.setVisibility(View.GONE);
+                            scrollView.setVisibility(View.VISIBLE);
+                        }
+                    });
+
+                    //textView_content.setText(post.getContent());
 
                     if(mAuth.getUid().equals(post.getUid())) {
                         button_more.setOnClickListener(new View.OnClickListener() {
@@ -92,19 +123,14 @@ public class PostActivity extends AppCompatActivity {
                         button_more.setVisibility(View.INVISIBLE);
                     }
                 }
-
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
     public void clickButton(View view) {
-        if(view.getId() == R.id.post_button_backButton) {
-            this.onBackPressed();
-        }
+        if(view.getId() == R.id.post_button_backButton) { this.onBackPressed(); }
     }
 }
