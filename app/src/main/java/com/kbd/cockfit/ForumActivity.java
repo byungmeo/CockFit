@@ -137,7 +137,7 @@ public class ForumActivity extends AppCompatActivity {
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.title.setText(postArrayList.get(position).getTitle());
-            postViewHolder.writer.setText(postArrayList.get(position).getWriter());
+            postViewHolder.writer.setText(postArrayList.get(position).getNickname());
             postViewHolder.date.setText(postArrayList.get(position).getDate());
 
             postViewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
