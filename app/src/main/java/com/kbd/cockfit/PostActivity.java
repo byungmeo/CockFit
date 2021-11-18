@@ -8,15 +8,18 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -32,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.List;
 
 public class PostActivity extends AppCompatActivity {
@@ -52,7 +56,8 @@ public class PostActivity extends AppCompatActivity {
     private ImageView imageView_writerProfile;
     private TextView textView_writer;
     private TextView textView_date;
-    private ScrollView scrollView;
+    private NestedScrollView scrollView;
+    private EditText editText_comment;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,6 +95,7 @@ public class PostActivity extends AppCompatActivity {
         imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
         textView_writer = findViewById(R.id.post_textView_writer);
         textView_date = findViewById(R.id.post_textView_date);
+        editText_comment = findViewById(R.id.post_editText_comment);
 
         //Intent로부터 전달받은 postId를 Firebase에서 탐색한 후 해당 Post객체를 받아옵니다.
         mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
@@ -180,5 +186,11 @@ public class PostActivity extends AppCompatActivity {
 
     public void clickButton(View view) {
         if(view.getId() == R.id.post_button_backButton) { this.onBackPressed(); }
+        else if(view.getId() == R.id.post_button_comment) {
+            String commentText = editText_comment.getText().toString();
+            if(commentText.length() == 0) { Toast.makeText(this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show(); }
+            Comment comment = new Comment(editText_comment.getText().toString(), mAuth.getCurrentUser().getDisplayName(), mAuth.getUid());
+            mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
+        }
     }
 }

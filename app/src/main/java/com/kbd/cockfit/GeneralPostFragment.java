@@ -1,25 +1,34 @@
 package com.kbd.cockfit;
 
-import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -35,6 +44,8 @@ public class GeneralPostFragment extends Fragment {
 
     private TextView textView_contents;
     private Button button_like;
+    private ProgressBar progressBar;
+    private ConstraintLayout constraintLayout;
 
     private Drawable drawable_alreadyLike;
     private Drawable drawable_waitLike;
@@ -48,6 +59,12 @@ public class GeneralPostFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_general_post, container, false);
+
+        constraintLayout = v.findViewById(R.id.general_constraintLayout_comments);
+        progressBar = v.findViewById(R.id.general_progressBar);
+        constraintLayout.setVisibility(View.INVISIBLE);
+        progressBar.setVisibility(View.VISIBLE);
+
 
         //firebase initialize
         mAuth = FirebaseAuth.getInstance();
@@ -67,16 +84,6 @@ public class GeneralPostFragment extends Fragment {
 
         //
         recycler_comments = v.findViewById(R.id.general_recycler_comments);
-        commentArrayList = new ArrayList<>();
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
-        commentArrayList.add(new Comment());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false) {
             @Override
             public boolean canScrollVertically() {
@@ -84,6 +91,7 @@ public class GeneralPostFragment extends Fragment {
             }
         };
         recycler_comments.setLayoutManager(linearLayoutManager);
+        commentArrayList = new ArrayList<>();
         commentAdapter = new CommentAdapter(commentArrayList);
         recycler_comments.setAdapter(commentAdapter);
         //
@@ -116,6 +124,28 @@ public class GeneralPostFragment extends Fragment {
                     button_like.setOnClickListener(new LikeListener());
                 }
             }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
+        mDatabase.child("forum").child(forumType).child(postId).child("comments").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                progressBar.setVisibility(View.VISIBLE);
+                constraintLayout.setVisibility(View.INVISIBLE);
+                commentArrayList.clear();
+
+                for(DataSnapshot commentSnapshot : snapshot.getChildren()) {
+                    commentArrayList.add(commentSnapshot.getValue(Comment.class));
+                }
+
+                commentAdapter.notifyDataSetChanged();
+
+                if(commentArrayList.size() == 0) {
+                    progressBar.setVisibility(View.GONE);
+                    constraintLayout.setVisibility(View.VISIBLE);
+                }
+            }
+
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
         return v;
@@ -155,7 +185,35 @@ public class GeneralPostFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
+            Comment comment = commentArrayList.get(holder.getAdapterPosition());
 
+            StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+            mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Log.d("test", "프로필 사진이 있는 사용자");
+
+                    Glide.with(getContext())
+                            .load(uri)
+                            .into(commentViewHolder.imageView_profile);
+
+                    if(holder.getAdapterPosition() == getItemCount() - 1) {
+                        progressBar.setVisibility(View.GONE);
+                        constraintLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.d("test", "프로필 사진이 없는 사용자");
+                    progressBar.setVisibility(View.GONE);
+                    constraintLayout.setVisibility(View.VISIBLE);
+                }
+            });
+
+            commentViewHolder.textView_nickname.setText(comment.getNickname());
+            commentViewHolder.textView_text.setText(comment.getText());
         }
 
         @Override
@@ -164,8 +222,14 @@ public class GeneralPostFragment extends Fragment {
         }
 
         private class CommentViewHolder extends RecyclerView.ViewHolder {
+            private ImageView imageView_profile;
+            private TextView textView_nickname;
+            private TextView textView_text;
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
+                imageView_profile = itemView.findViewById(R.id.comment_imageView_profile);
+                textView_nickname = itemView.findViewById(R.id.comment_textView_nickname);
+                textView_text = itemView.findViewById(R.id.comment_textView_text);
             }
         }
     }
