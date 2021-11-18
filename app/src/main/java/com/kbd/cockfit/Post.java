@@ -3,8 +3,8 @@ package com.kbd.cockfit;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Post implements Parcelable {
@@ -13,7 +13,7 @@ public class Post implements Parcelable {
     private String uid; //작성자의 uid
     private String date; //글 작성일자
     private String content; //본문내용
-    private List<String> likeUidList; //좋아요 한 사용자의 uid 리스트
+    private HashMap<String, String> likeUidMap; //좋아요 한 사용자의 uid 리스트
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
@@ -37,16 +37,16 @@ public class Post implements Parcelable {
         this.uid = uid;
         this.date = date;
         this.content = "";
-        this.likeUidList = Collections.emptyList();
+        this.likeUidMap = null;
     }
 
-    public Post(String title, String nickname, String uid, String date, String content, List<String> likeUidList) {
+    public Post(String title, String nickname, String uid, String date, String content, HashMap<String,String> likeUidMap) {
         this.title = title;
         this.nickname = nickname;
         this.uid = uid;
         this.date = date;
         this.content = content;
-        this.likeUidList = likeUidList;
+        this.likeUidMap = likeUidMap;
     }
 
     protected Post(Parcel in) {
@@ -55,7 +55,7 @@ public class Post implements Parcelable {
         uid = in.readString();
         date = in.readString();
         content = in.readString();
-        likeUidList = in.createStringArrayList();
+        likeUidMap = in.readHashMap(HashMap.class.getClassLoader());
     }
 
 
@@ -65,14 +65,14 @@ public class Post implements Parcelable {
     public String getUid() { return uid; }
     public String getDate() { return date; }
     public String getContent() { return content; }
-    public List<String> getLikeUidList() { return likeUidList; }
+    public HashMap<String, String> getLikeUidMap() { return likeUidMap; }
 
     public void setTitle(String title) { this.title = title; }
     public void setNickname(String nickname) { this.nickname = nickname; }
     public void setUid(String uid) { this.uid = uid; }
     public void setDate(String date) { this.date = date; }
     public void setContent(String content) { this.content = content; }
-    public void setLikeUidList(List<String> likeUidList) { this.likeUidList = likeUidList; }
+    public void setLikeUidMap(HashMap<String, String> likeUidMap) { this.likeUidMap = likeUidMap; }
 
     @Override
     public int describeContents() { return 0; }
@@ -84,6 +84,6 @@ public class Post implements Parcelable {
         dest.writeString(uid);
         dest.writeString(date);
         dest.writeString(content);
-        dest.writeStringList(likeUidList);
+        dest.writeMap(likeUidMap);
     }
 }
