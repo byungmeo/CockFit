@@ -2,16 +2,14 @@ package com.kbd.cockfit;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,9 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GeneralPostFragment extends Fragment {
@@ -31,7 +27,7 @@ public class GeneralPostFragment extends Fragment {
 
     private String forumType;
     private String postId;
-    private List<String> likeUidList;
+    private HashMap<String, String> likeUidMap;
 
     private TextView textView_contents;
     private Button button_like;
@@ -69,15 +65,15 @@ public class GeneralPostFragment extends Fragment {
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
 
-        mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("test", "likeUidList onDataChange");
-                likeUidList = (List<String>) snapshot.getValue();
+                likeUidMap = (HashMap<String, String>) snapshot.getValue();
+                int likeCount = (int) snapshot.getChildrenCount();
 
-                if(likeUidList != null) {
-                    button_like.setText(String.valueOf(likeUidList.size()));
-                    if(likeUidList.contains(mAuth.getUid())) {
+                if(likeUidMap != null) {
+                    button_like.setText(String.valueOf(likeCount));
+                    if(likeUidMap.containsKey(mAuth.getUid())) {
                         button_like.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_alreadyLike, null, null, null);
                         button_like.setOnClickListener(new UnLikeListener());
                     } else {
@@ -85,7 +81,6 @@ public class GeneralPostFragment extends Fragment {
                         button_like.setOnClickListener(new LikeListener());
                     }
                 } else {
-                    likeUidList = Collections.emptyList();
                     button_like.setText("0");
                     button_like.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_waitLike, null, null, null);
                     button_like.setOnClickListener(new LikeListener());
@@ -102,17 +97,15 @@ public class GeneralPostFragment extends Fragment {
         @Override
         public void onClick(View v) {
             Map<String, Object> childUpdates = new HashMap<>();
-            childUpdates.put(String.valueOf(likeUidList.size()), mAuth.getUid());
-            mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").updateChildren(childUpdates);
+            childUpdates.put(mAuth.getUid(), mAuth.getCurrentUser().getDisplayName());
+            mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").updateChildren(childUpdates);
         }
     }
 
     private class UnLikeListener implements View.OnClickListener {
-
         @Override
         public void onClick(View v) {
-            int index = likeUidList.indexOf(mAuth.getUid());
-            mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").child(String.valueOf(index)).removeValue();
+            mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").child(mAuth.getUid()).removeValue();
         }
     }
 }
