@@ -2,6 +2,8 @@ package com.kbd.cockfit;
 
 import android.content.Context;
 import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
@@ -12,6 +14,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -49,6 +52,7 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView textView_equipment;
     private TextView textView_description;
     private TextView textView_tags;
+    private ImageView image;
     private Toolbar appBarRecipe;
     private Recipe recipe;
     private boolean isFavorite = false;
@@ -63,6 +67,7 @@ public class RecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
         setSupportActionBar(findViewById(R.id.topAppBarRecipe));
+        image = findViewById(R.id.recipe_imageView);
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
@@ -121,6 +126,7 @@ public class RecipeActivity extends AppCompatActivity {
         textView_name.setText(recipe.getName());
         textView_proof.setText(recipe.getProof()+"%");
         textView_base.setText(recipe.getBase());
+        image.setImageBitmap(recipe.getImage());
 
         List<String> ingredientList = recipe.getIngredient();
         String text_ingredient = "";
@@ -237,10 +243,14 @@ public class RecipeActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipe = new Recipe(number, name, proof, base, ingredient, equipment, description, tags);
+                AssetManager assetManager = this.getResources().getAssets();
+                InputStream is = assetManager.open("image/recipe/" + name.replace(" ", "_") + ".png");
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                recipe = new Recipe(number, bitmap, name, proof, base, ingredient, equipment, description, tags);
                 break;
             }
-        } catch (JSONException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
 

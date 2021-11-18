@@ -1,5 +1,6 @@
 package com.kbd.cockfit;
 
+import android.graphics.Bitmap;
 import android.os.Parcel;
 import android.os.Parcelable;
 
@@ -7,6 +8,7 @@ import java.util.Arrays;
 import java.util.List;
 
 public class Recipe implements Parcelable {
+    private Bitmap image;
     private int number;
     private String name; //칵테일 이름
     private String proof; //칵테일 도수
@@ -31,7 +33,8 @@ public class Recipe implements Parcelable {
     public Recipe() {
     }
 
-    public Recipe(int number, String name, String proof, String base, List<String> ingredient, List<String> equipment, String description, List<String> tags) {
+    public Recipe(int number, Bitmap src, String name, String proof, String base, List<String> ingredient, List<String> equipment, String description, List<String> tags) {
+        this.image = src;
         this.number = number;
         this.name = name;
         this.proof = proof;
@@ -40,6 +43,18 @@ public class Recipe implements Parcelable {
         this.equipment = equipment;
         this.description = description;
         this.tags = tags;
+    }
+
+    public Recipe(int number, Bitmap src, String name, String proof, String base, String[] ingredient, String[] equipment, String description, String[] tags) {
+        this.number = number;
+        this.image = src;
+        this.name = name;
+        this.proof = proof;
+        this.base = base;
+        this.ingredient = Arrays.asList(ingredient);
+        this.equipment = Arrays.asList(equipment);
+        this.description = description;
+        this.tags = Arrays.asList(tags);
     }
 
     public Recipe(int number, String name, String proof, String base, String[] ingredient, String[] equipment, String description, String[] tags) {
@@ -64,6 +79,9 @@ public class Recipe implements Parcelable {
         tags = in.createStringArrayList();
     }
 
+    public Bitmap getImage() {
+        return image;
+    }
     public int getNumber() { return number; }
     public void setNumber() { this.number = number; }
     public String getName() { return name; }
