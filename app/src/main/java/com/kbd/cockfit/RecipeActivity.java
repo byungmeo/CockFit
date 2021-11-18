@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Color;
 import android.graphics.PorterDuff;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -35,7 +42,6 @@ import java.util.List;
 import java.util.Map;
 
 public class RecipeActivity extends AppCompatActivity {
-    private ImageButton imageButton_bookmark;
     private TextView textView_name;
     private TextView textView_proof;
     private TextView textView_base;
@@ -43,16 +49,20 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView textView_equipment;
     private TextView textView_description;
     private TextView textView_tags;
-
+    private Toolbar appBarRecipe;
     private Recipe recipe;
     private boolean isFavorite = false;
+    private MenuItem menuItem_bookmark;
+    private DatabaseReference mDatabase;
+    private String uid;
+    private FirebaseAuth mAuth;
+    private ArrayList<Recipe> favoriteRecipeList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-
-        imageButton_bookmark = findViewById(R.id.recipe_button_bookmark);
+        setSupportActionBar(findViewById(R.id.topAppBarRecipe));
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
@@ -60,6 +70,19 @@ public class RecipeActivity extends AppCompatActivity {
         textView_equipment = findViewById(R.id.recipe_textview_equipment);
         textView_description = findViewById(R.id.recipe_textview_description);
         textView_tags = findViewById(R.id.recipe_textView_tags);
+        appBarRecipe = findViewById(R.id.topAppBarRecipe);
+        setSupportActionBar(appBarRecipe);
+        mAuth = FirebaseAuth.getInstance();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+        uid = mAuth.getUid();
+
+        appBarRecipe.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecipeActivity.this.onBackPressed();
+            }
+        });
+
 
         int recipeNumber = getIntent().getIntExtra("recipe_number", 0);
 
@@ -69,11 +92,7 @@ public class RecipeActivity extends AppCompatActivity {
         } else {
             recipe = getRecipe(recipeNumber);
 
-            ArrayList<Recipe> favoriteRecipeList = new ArrayList<>();
-
-            FirebaseAuth mAuth = FirebaseAuth.getInstance();
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
-            String uid = mAuth.getUid();
+            favoriteRecipeList = new ArrayList<>();
 
             mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
                 @Override
@@ -90,61 +109,6 @@ public class RecipeActivity extends AppCompatActivity {
                         }
                     }
                     Log.d("테스트1", String.valueOf(favoriteRecipeList.size()));
-                }
-
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
-
-                }
-            });
-
-            imageButton_bookmark.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View view) {
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    if(!isFavorite) {
-                        favoriteRecipeList.add(recipe);
-                        Log.d("테스트2", String.valueOf(favoriteRecipeList.size()));
-
-                        Toast.makeText(view.getContext(), "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
-                        imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
-
-                        childUpdates.put(String.valueOf(favoriteRecipeList.size() - 1), recipe.getNumber());
-                        mDatabase.child("user").child(uid).child("favorite").updateChildren(childUpdates); //즐겨찾기 목록(Firebase)에 추가
-
-                        isFavorite = true;
-                    } else {
-                        for(Recipe favorite : favoriteRecipeList) {
-                            if(favorite.getNumber() == recipe.getNumber()) {
-                                favoriteRecipeList.remove(favorite);
-                                break;
-                            }
-                        }
-                        int i = 0;
-                        for(Recipe favoriteRecipe : favoriteRecipeList) {
-                            childUpdates.put(String.valueOf(i++), favoriteRecipe.getNumber());
-                        }
-                        DatabaseReference databaseReference = mDatabase.child("user").child(uid).child("favorite");
-                        databaseReference.setValue(childUpdates);
-
-                        Toast.makeText(RecipeActivity.this, "즐겨찾기 목록에서 삭제되었습니다", Toast.LENGTH_SHORT).show();
-                        imageButton_bookmark.setColorFilter(Color.parseColor("#AEAEAE"), PorterDuff.Mode.SRC_IN);
-
-                        isFavorite = false;
-                    }
-
-                }
-            });
-            mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
-                        int recipeNumber = numberSnapshot.getValue(int.class);
-                        if(recipeNumber == recipe.getNumber()) {
-                            imageButton_bookmark.setColorFilter(Color.parseColor("#FFD700"), PorterDuff.Mode.SRC_IN);
-                            break;
-                        }
-                    }
                 }
 
                 @Override
@@ -179,6 +143,74 @@ public class RecipeActivity extends AppCompatActivity {
             text_tags += tag + " ";
         }
         textView_tags.setText(text_tags);
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.top_app_bar_recipe, menu);
+        appBarRecipe.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                Map<String, Object> childUpdates = new HashMap<>();
+                if(!isFavorite) {
+                    favoriteRecipeList.add(recipe);
+                    Log.d("테스트2", String.valueOf(favoriteRecipeList.size()));
+
+                    Toast.makeText(RecipeActivity.this, "즐겨찾기 목록에 추가되었습니다", Toast.LENGTH_SHORT).show();
+                    childUpdates.put(String.valueOf(favoriteRecipeList.size() - 1), recipe.getNumber());
+                    mDatabase.child("user").child(uid).child("favorite").updateChildren(childUpdates); //즐겨찾기 목록(Firebase)에 추가
+
+                    isFavorite = true;
+                } else {
+                    for(Recipe favorite : favoriteRecipeList) {
+                        if(favorite.getNumber() == recipe.getNumber()) {
+                            favoriteRecipeList.remove(favorite);
+                            break;
+                        }
+                    }
+                    int i = 0;
+                    for(Recipe favoriteRecipe : favoriteRecipeList) {
+                        childUpdates.put(String.valueOf(i++), favoriteRecipe.getNumber());
+                    }
+                    DatabaseReference databaseReference = mDatabase.child("user").child(uid).child("favorite");
+                    databaseReference.setValue(childUpdates);
+
+                    Toast.makeText(RecipeActivity.this, "즐겨찾기 목록에서 삭제되었습니다", Toast.LENGTH_SHORT).show();
+                    isFavorite = false;
+                }
+
+                return true;
+            }
+        });
+
+        // change color for icon 0
+        mDatabase.child("user").child(uid).child("favorite").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                boolean isBookmarked = false;
+                for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
+                    int recipeNumber = numberSnapshot.getValue(int.class);
+                    if(recipeNumber == recipe.getNumber()) {
+                        Log.d("test", "onDataChange: ");
+                        menuItem_bookmark.setIcon(R.drawable.ic_baseline_bookmark_true_24);
+                        isBookmarked = true;
+                        break;
+                    }
+                }
+                if(!isBookmarked){
+                    menuItem_bookmark.setIcon(R.drawable.ic_baseline_bookmark_false_24);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+        menuItem_bookmark = menu.getItem(0);
+        Drawable drawable = menuItem_bookmark.getIcon();
+        drawable.mutate();
+        return true;
     }
 
     public Recipe getRecipe(int recipeNumber) {
@@ -249,9 +281,5 @@ public class RecipeActivity extends AppCompatActivity {
             arr[i]=array.optString(i);
         }
         return arr;
-    }
-
-    public void onBackButtonTapped(View view) {
-        super.onBackPressed();
     }
 }
