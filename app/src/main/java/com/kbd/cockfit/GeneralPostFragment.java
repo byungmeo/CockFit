@@ -2,16 +2,14 @@ package com.kbd.cockfit;
 
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-
-import androidx.annotation.NonNull;
-import androidx.fragment.app.Fragment;
-
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+
+import androidx.annotation.NonNull;
+import androidx.fragment.app.Fragment;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -20,9 +18,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class GeneralPostFragment extends Fragment {
@@ -69,7 +65,7 @@ public class GeneralPostFragment extends Fragment {
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
 
-        mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").addValueEventListener(new ValueEventListener() {
+        mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 likeUidMap = (HashMap<String, String>) snapshot.getValue();
@@ -102,14 +98,14 @@ public class GeneralPostFragment extends Fragment {
         public void onClick(View v) {
             Map<String, Object> childUpdates = new HashMap<>();
             childUpdates.put(mAuth.getUid(), mAuth.getCurrentUser().getDisplayName());
-            mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").updateChildren(childUpdates);
+            mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").updateChildren(childUpdates);
         }
     }
 
     private class UnLikeListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
-            mDatabase.child("forum").child(forumType).child(postId).child("likeUidList").child(mAuth.getUid()).removeValue();
+            mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").child(mAuth.getUid()).removeValue();
         }
     }
 }

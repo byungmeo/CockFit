@@ -2,6 +2,7 @@ package com.kbd.cockfit;
 
 import android.os.Parcel;
 import android.os.Parcelable;
+import android.util.Log;
 
 import java.util.Collections;
 import java.util.HashMap;
@@ -28,7 +29,10 @@ public class Post implements Parcelable {
     };
 
     public Post() {
-
+        //firebase에서 getValue(Post.class)시, 이 생성자가 호출된 후,
+        //setter로 할당합니다.
+        //(firebase내의 key값이 setter명과 매칭이 되야 setter가호출됨)
+        //ex) key값:uid -> setter명:setUid
     }
 
     public Post(String title, String nickname, String uid, String date) {
