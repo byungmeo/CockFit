@@ -220,7 +220,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         try {
             AssetManager assetManager = context.getResources().getAssets();
-            InputStream is = assetManager.open("jsons/basicRecipe.json");
+            InputStream is = assetManager.open(filePath);
             InputStreamReader isr = new InputStreamReader(is);
             BufferedReader reader = new BufferedReader(isr);
 
