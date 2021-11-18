@@ -49,9 +49,13 @@ public class IngredientListActivity extends AppCompatActivity {
 
         ingredientArrayList.add(new Ingredient(R.drawable.simple_syrup, "심플 시럽", "설탕과 물을 끓여서 만든 시럽\n\n플레인 시럽, 설탕 시럽이라고도 부름\n\n주로 단 맛을 내는 칵테일에 사용"));
         ingredientArrayList.add(new Ingredient(R.drawable.grenadine_syrup, "그레나딘 시럽", "설탕과 석류를 섞어서 만든 시럽\n\n붉은 색을 띄고 달콤한 맛을 냄"));
-        ingredientArrayList.add(new Ingredient(R.drawable.lemon_juice, "레몬 주스", "레몬즙을 짜서 모아놓은 제품\n\n생레몬즙을 사용하기 어려울 때 대체하여 사용"));
-        ingredientArrayList.add(new Ingredient(R.drawable.lime_juice, "라임 주스", "라임즙을 짜서 모아놓은 제품\n\n생라임즙을 사용하기 어려울 때 대체하여 사용"));
-
+        ingredientArrayList.add(new Ingredient(R.drawable.lemon_juice, "레몬 주스", "레몬즙을 짜서 모아놓은 제품\n\n생레몬즙을 사용하기 어려울 때 \n대체하여 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.lime_juice, "라임 주스", "라임즙을 짜서 모아놓은 제품\n\n생라임즙을 사용하기 어려울 때 \n대체하여 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.lemon, "레몬", "칵테일 조주시 장식용과 스퀴저를 \n이용한 즙으로 사용\n\n상큼한 맛이 나서 산뜻한 맛을 내는데 \n효과적\n\n많은 칵테일에 널리 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.lime, "라임", "칵테일 조주시 장식용과 스퀴저를 \n이용한 즙으로 사용\n\n레몬보다 조금 더 시고 조금 더 달다\n\n대표적으로 쿠바 리브레, 모히또에 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.olive, "올리브", "칵테일 조주시에 검정색, 녹색 올리브 \n두 종류 사용\n\n보통 가니쉬로 칵테일 픽에 꽂아서 제공\n\n대표적으로 드라이 마티니에 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.cherry, "체리", "칵테일 픽에 꽂아서 가니쉬로 주로 사용\n\n달게 가공된 체리를 사용하기도 함\n\n상큼한 트로피칼 칵테일이 주로 사용"));
+        ingredientArrayList.add(new Ingredient(R.drawable.cinnamon, "시나몬", "가니쉬로 칵테일 잔에 꽂거나 \n칵테일에 향을 입히기 위해 사용\n\n향을 입힐 땐 토치를 이용하여 \n시나몬 스틱을 가열\n\n대표적으로 갓마더, 갓파더에 사용"));
 
     }
 
@@ -64,7 +68,7 @@ public class IngredientListActivity extends AppCompatActivity {
         String json = "";
 
         try {
-            InputStream is = getAssets().open("basicIngre.json");
+            InputStream is = getAssets().open("basicIngredient.json");
             int fileSize = is.available();
 
             byte[] buffer = new byte[fileSize];

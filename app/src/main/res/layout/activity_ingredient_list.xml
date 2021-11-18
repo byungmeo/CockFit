@@ -9,7 +9,7 @@
 
 
     <ImageView
-        android:id="@+id/list_button_backButton"
+        android:id="@+id/ingredient_list_button_backButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="15dp"
@@ -20,28 +20,16 @@
         app:srcCompat="@drawable/ic_baseline_arrow_back_24"
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <ImageButton
-        android:id="@+id/list_button_sort"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginTop="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@null"
-        android:onClick="clickButton"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_sort_24" />
-
     <TextView
-        android:id="@+id/list_textView_screenName"
+        android:id="@+id/ingredient_ist_textView_screenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
         android:text="칵테일 재료 목록"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/list_button_backButton"
-        app:layout_constraintStart_toEndOf="@+id/list_button_backButton"
-        app:layout_constraintTop_toTopOf="@+id/list_button_backButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/ingredient_list_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/ingredient_list_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/ingredient_list_button_backButton" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ingredient_list_recyclerView"
@@ -55,6 +43,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/list_button_backButton"
+        app:layout_constraintTop_toBottomOf="@+id/ingredient_list_button_backButton"
         app:layout_constraintVertical_bias="0.0"/>
 </androidx.constraintlayout.widget.ConstraintLayout>
