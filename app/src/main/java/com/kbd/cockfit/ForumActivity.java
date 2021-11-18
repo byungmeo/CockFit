@@ -140,6 +140,11 @@ public class ForumActivity extends AppCompatActivity {
             postViewHolder.writer.setText(postArrayList.get(position).getNickname());
             postViewHolder.date.setText(postArrayList.get(position).getDate());
 
+            HashMap<String, String> likeUidMap = postArrayList.get(position).getLikeUidMap();
+            if(likeUidMap != null) {
+                postViewHolder.like.setText(String.valueOf(postArrayList.get(position).getLikeUidMap().size()));
+            }
+
             postViewHolder.constraintLayout.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -162,6 +167,7 @@ public class ForumActivity extends AppCompatActivity {
             private TextView title;
             private TextView writer;
             private TextView date;
+            private TextView like;
 
             public PostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -169,6 +175,7 @@ public class ForumActivity extends AppCompatActivity {
                 title = itemView.findViewById(R.id.myPostItem_textView_postTitle);
                 writer = itemView.findViewById(R.id.myPostItem_textView_writer);
                 date = itemView.findViewById(R.id.myPostItem_textView_postDate);
+                like = itemView.findViewById(R.id.myPostItem_textView_like);
             }
         }
     }
