@@ -15,6 +15,7 @@ public class Post implements Parcelable {
     private String date; //글 작성일자
     private String content; //본문내용
     private HashMap<String, String> likeUidMap; //좋아요 한 사용자의 uid 리스트
+    private List<Comment> commentList;
 
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
@@ -42,15 +43,7 @@ public class Post implements Parcelable {
         this.date = date;
         this.content = "";
         this.likeUidMap = null;
-    }
-
-    public Post(String title, String nickname, String uid, String date, String content, HashMap<String,String> likeUidMap) {
-        this.title = title;
-        this.nickname = nickname;
-        this.uid = uid;
-        this.date = date;
-        this.content = content;
-        this.likeUidMap = likeUidMap;
+        this.commentList = null;
     }
 
     protected Post(Parcel in) {
@@ -60,9 +53,8 @@ public class Post implements Parcelable {
         date = in.readString();
         content = in.readString();
         likeUidMap = in.readHashMap(HashMap.class.getClassLoader());
+        commentList = in.createTypedArrayList(Comment.CREATOR);
     }
-
-
 
     public String getTitle() { return title; }
     public String getNickname() { return nickname; }
@@ -70,6 +62,7 @@ public class Post implements Parcelable {
     public String getDate() { return date; }
     public String getContent() { return content; }
     public HashMap<String, String> getLikeUidMap() { return likeUidMap; }
+    public List<Comment> getCommentList() { return commentList; }
 
     public void setTitle(String title) { this.title = title; }
     public void setNickname(String nickname) { this.nickname = nickname; }
@@ -77,6 +70,7 @@ public class Post implements Parcelable {
     public void setDate(String date) { this.date = date; }
     public void setContent(String content) { this.content = content; }
     public void setLikeUidMap(HashMap<String, String> likeUidMap) { this.likeUidMap = likeUidMap; }
+    public void setCommentList(List<Comment> commentList) { this.commentList = commentList; }
 
     @Override
     public int describeContents() { return 0; }
@@ -89,5 +83,6 @@ public class Post implements Parcelable {
         dest.writeString(date);
         dest.writeString(content);
         dest.writeMap(likeUidMap);
+        dest.writeTypedList(commentList);
     }
 }

@@ -11,13 +11,18 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -34,6 +39,8 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -128,10 +135,15 @@ public class ListActivity extends AppCompatActivity {
                 String description = jo.getString("description");
                 String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
 
-                recipeArrayList.add(new Recipe(number, name, proof, base, ingredient, equipment, description, tags));
+
+                AssetManager assetManager = this.getResources().getAssets();
+                InputStream is = assetManager.open("image/recipe/" + name.replace(" ", "_") + ".png");
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                recipeArrayList.add(new Recipe(number, bitmap, name, proof, base, ingredient, equipment, description, tags));
             }
 
-        } catch (JSONException e) {
+        } catch (JSONException | IOException e) {
             e.printStackTrace();
         }
     }
@@ -280,6 +292,7 @@ public class ListActivity extends AppCompatActivity {
             String proofText = recipeViewHolder.proof.getText().toString();
             proofText += (recipeArrayList.get(position).getProof());
 
+            recipeViewHolder.image.setImageBitmap(recipeArrayList.get(position).getImage());
             recipeViewHolder.base.setText(baseText);
             recipeViewHolder.tags.setText(tagsText);
             recipeViewHolder.proof.setText(proofText);
@@ -305,6 +318,7 @@ public class ListActivity extends AppCompatActivity {
             private TextView base;
             private TextView tags;
             private TextView proof;
+            private ImageView image;
 
             public RecipeViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -313,6 +327,7 @@ public class ListActivity extends AppCompatActivity {
                 base = itemView.findViewById(R.id.recipeitem_base);
                 tags = itemView.findViewById(R.id.recipeitem_tags);
                 proof = itemView.findViewById(R.id.recipeitem_proof);
+                image = itemView.findViewById(R.id.recipeitem_image);
             }
         }
     }
