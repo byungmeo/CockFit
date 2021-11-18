@@ -17,8 +17,11 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_cocktail_info, container, false);
 
+
         AppCompatImageButton listButton = v.findViewById(R.id.cock_listButton);
+        AppCompatImageButton ingrdButton = v.findViewById(R.id.cock_ingrdButton);
         listButton.setOnClickListener(this);
+        ingrdButton.setOnClickListener(this);
 
         return v;
     }
@@ -30,6 +33,13 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ListActivity.class);
                 intent.putExtra("keyword", "every");
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.cock_ingrdButton: {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, IngredientListActivity.class);
+                intent.putExtra("keyword", "ingre");
                 context.startActivity(intent);
                 break;
             }
