@@ -62,7 +62,6 @@ public class RecipeActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_recipe);
-        setSupportActionBar(findViewById(R.id.topAppBarRecipe));
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
