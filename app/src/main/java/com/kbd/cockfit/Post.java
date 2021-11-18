@@ -16,6 +16,7 @@ public class Post implements Parcelable {
     private String content; //본문내용
     private HashMap<String, String> likeUidMap; //좋아요 한 사용자의 uid 리스트
 
+
     public static final Creator<Post> CREATOR = new Creator<Post>() {
         @Override
         public Post createFromParcel(Parcel in) {
@@ -44,6 +45,7 @@ public class Post implements Parcelable {
         this.likeUidMap = null;
     }
 
+    /*
     public Post(String title, String nickname, String uid, String date, String content, HashMap<String,String> likeUidMap) {
         this.title = title;
         this.nickname = nickname;
@@ -52,6 +54,7 @@ public class Post implements Parcelable {
         this.content = content;
         this.likeUidMap = likeUidMap;
     }
+    */
 
     protected Post(Parcel in) {
         title = in.readString();

@@ -1,5 +1,6 @@
 package com.kbd.cockfit;
 
+import android.content.Context;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,6 +11,8 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -18,6 +21,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +38,10 @@ public class GeneralPostFragment extends Fragment {
 
     private Drawable drawable_alreadyLike;
     private Drawable drawable_waitLike;
+
+    private RecyclerView recycler_comments;
+    private CommentAdapter commentAdapter;
+    private ArrayList<Comment> commentArrayList;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -57,6 +65,28 @@ public class GeneralPostFragment extends Fragment {
         drawable_alreadyLike = getResources().getDrawable(R.drawable.ic_baseline_thumb_up_24);
         drawable_waitLike = getResources().getDrawable(R.drawable.ic_outline_thumb_up_24);
 
+        //
+        recycler_comments = v.findViewById(R.id.general_recycler_comments);
+        commentArrayList = new ArrayList<>();
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        commentArrayList.add(new Comment());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this.getContext(), LinearLayoutManager.VERTICAL, false) {
+            @Override
+            public boolean canScrollVertically() {
+                return false;
+            }
+        };
+        recycler_comments.setLayoutManager(linearLayoutManager);
+        commentAdapter = new CommentAdapter(commentArrayList);
+        recycler_comments.setAdapter(commentAdapter);
+        //
 
         mDatabase.child("forum").child(forumType).child(postId).child("content").addValueEventListener(new ValueEventListener() {
             @Override
@@ -88,7 +118,6 @@ public class GeneralPostFragment extends Fragment {
             }
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
-
         return v;
     }
 
@@ -106,6 +135,38 @@ public class GeneralPostFragment extends Fragment {
         @Override
         public void onClick(View v) {
             mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").child(mAuth.getUid()).removeValue();
+        }
+    }
+
+    private class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private ArrayList<Comment> commentArrayList;
+
+        CommentAdapter(ArrayList<Comment> commentArrayList) {
+            this.commentArrayList = commentArrayList;
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.commenitem_layout, parent, false);
+            CommentViewHolder commentViewHolder = new CommentViewHolder(view);
+            return commentViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+
+        }
+
+        @Override
+        public int getItemCount() {
+            return commentArrayList.size();
+        }
+
+        private class CommentViewHolder extends RecyclerView.ViewHolder {
+            public CommentViewHolder(@NonNull View itemView) {
+                super(itemView);
+            }
         }
     }
 }
