@@ -5,11 +5,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".IngredientListActivity">
+    tools:context=".EquipmentListActivity">
 
 
     <ImageView
-        android:id="@+id/ingredient_list_button_backButton"
+        android:id="@+id/equipment_list_button_backButton"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginStart="15dp"
@@ -21,7 +21,7 @@
         tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
     <ImageButton
-        android:id="@+id/ingredient_list_button_sort"
+        android:id="@+id/equipment_list_button_sort"
         android:layout_width="35dp"
         android:layout_height="35dp"
         android:layout_marginTop="15dp"
@@ -33,18 +33,18 @@
         app:srcCompat="@drawable/ic_baseline_sort_24" />
 
     <TextView
-        android:id="@+id/ingredient_ist_textView_screenName"
+        android:id="@+id/equipment_ist_textView_screenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"
-        android:text="칵테일 재료 목록"
+        android:text="칵테일 장비 목록"
         android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/ingredient_list_button_backButton"
-        app:layout_constraintStart_toEndOf="@+id/ingredient_list_button_backButton"
-        app:layout_constraintTop_toTopOf="@+id/ingredient_list_button_backButton" />
+        app:layout_constraintBottom_toBottomOf="@+id/equipment_list_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/equipment_list_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/equipment_list_button_backButton" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/ingredient_list_recyclerView"
+        android:id="@+id/equipment_list_recyclerView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:layout_marginStart="15dp"
@@ -55,6 +55,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/ingredient_list_button_backButton"
+        app:layout_constraintTop_toBottomOf="@+id/equipment_list_button_backButton"
         app:layout_constraintVertical_bias="0.0"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

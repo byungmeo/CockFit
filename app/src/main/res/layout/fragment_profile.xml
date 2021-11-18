@@ -31,6 +31,7 @@
 
     <Button
         android:id="@+id/profile_button_recipe"
+        android:fontFamily="@font/font_custom"
         app:icon="@drawable/ic_baseline_bookmarks_24"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="350dp"
@@ -47,6 +48,7 @@
 
     <Button
         android:id="@+id/profile_button_communityActivity"
+        android:fontFamily="@font/font_custom"
         app:icon="@drawable/ic_baseline_brush_24"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="350dp"

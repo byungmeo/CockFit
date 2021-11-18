@@ -15,6 +15,9 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CockFit">
         <activity
+            android:name=".EquipmentListActivity"
+            android:exported="true" />
+        <activity
             android:name=".IngredientListActivity"
             android:exported="true" />
         <activity
