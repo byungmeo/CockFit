@@ -237,6 +237,9 @@ public class GeneralPostFragment extends Fragment {
             CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
             Comment comment = commentArrayList.get(holder.getAdapterPosition());
 
+            if(!comment.getUid().equals(mAuth.getUid())) {
+                commentViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
+            }
             StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
