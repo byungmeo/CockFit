@@ -81,7 +81,7 @@ public class UtilitySet {
     }
 
     public static String formatTimeString(String date) throws ParseException {
-        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
+        DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         return formatTimeString(dateFormat.parse(date).getTime());
     }
 }

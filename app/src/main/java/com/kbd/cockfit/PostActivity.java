@@ -188,7 +188,7 @@ public class PostActivity extends AppCompatActivity {
             String commentText = editText_comment.getText().toString();
             String nickname = mAuth.getCurrentUser().getDisplayName();
             String uid = mAuth.getUid();
-            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(System.currentTimeMillis()));
+            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
 
             if(commentText.length() == 0) { Toast.makeText(this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show(); }
             Comment comment = new Comment(commentText, nickname, uid, date);
