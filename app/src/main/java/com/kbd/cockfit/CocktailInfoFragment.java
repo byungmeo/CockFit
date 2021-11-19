@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
+import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 
@@ -18,10 +19,11 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
         View v = inflater.inflate(R.layout.fragment_cocktail_info, container, false);
 
 
-        AppCompatImageButton listButton = v.findViewById(R.id.cock_listButton);
-        AppCompatImageButton ingrdButton = v.findViewById(R.id.cock_ingrdButton);
-        AppCompatImageButton equipButton = v.findViewById(R.id.cock_equipButton);
-        AppCompatImageButton senseButton = v.findViewById(R.id.cock_recipeButton);
+        AppCompatButton listButton = v.findViewById(R.id.cock_listButton);
+        AppCompatButton ingrdButton = v.findViewById(R.id.cock_ingrdButton);
+        AppCompatButton equipButton = v.findViewById(R.id.cock_equipButton);
+        AppCompatButton senseButton = v.findViewById(R.id.cock_senseButton);
+
         listButton.setOnClickListener(this);
         ingrdButton.setOnClickListener(this);
         equipButton.setOnClickListener(this);
@@ -52,7 +54,7 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
                 context.startActivity(intent);
                 break;
             }
-            case R.id.cock_recipeButton: {
+            case R.id.cock_senseButton: {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, CommonSenseActivity.class);
                 context.startActivity(intent);
