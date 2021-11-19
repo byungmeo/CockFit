@@ -106,12 +106,6 @@ public class BaseSpiritActivity extends AppCompatActivity {
 
     }
 
-    public void clickButton(View view) {
-        if(view.getId() == R.id.basespirit_button_backButton) {
-            this.onBackPressed();
-        }
-    }
-
 
     public boolean onOptionsItemSelected (MenuItem item)
     {

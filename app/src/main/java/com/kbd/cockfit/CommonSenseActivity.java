@@ -38,10 +38,8 @@ public class CommonSenseActivity extends AppCompatActivity {
         return super.onCreateOptionsMenu(menu);
     }
     public void clickButton(View view) {
-        if(view.getId() == R.id.commonsense_button_backButton) {
-            this.onBackPressed();
-        }
-        else if(view.getId() == R.id.commonsense_technique_button) {
+
+        if(view.getId() == R.id.commonsense_technique_button) {
             Intent intent = new Intent(getApplicationContext(), TechniqueActivity.class);
             startActivity(intent);
         }

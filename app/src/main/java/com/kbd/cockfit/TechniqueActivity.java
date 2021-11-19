@@ -106,11 +106,6 @@ public class TechniqueActivity extends AppCompatActivity {
         techniqueRecycler.setAdapter(techniqueAdapter);
     }
 
-    public void clickButton(View view) {
-        if(view.getId() == R.id.technique_button_backButton) {
-            this.onBackPressed();
-        }
-    }
 
     public boolean onOptionsItemSelected (MenuItem item)
     {

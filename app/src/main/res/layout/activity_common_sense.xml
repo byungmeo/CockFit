@@ -26,86 +26,52 @@
             app:title="칵테일 기본 상식" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <ImageView
-        android:id="@+id/commonsense_button_backButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:onClick="clickButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
 
-    <TextView
-        android:id="@+id/commonsense_textView_screenName"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:text="칵테일 기본 상식"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/commonsense_button_backButton"
-        app:layout_constraintStart_toEndOf="@+id/commonsense_button_backButton"
-        app:layout_constraintTop_toTopOf="@+id/commonsense_button_backButton" />
-
-    <ImageButton
+    <Button
         android:id="@+id/commonsense_technique_button"
-        android:layout_width="329dp"
-        android:layout_height="161dp"
-        android:layout_marginTop="116dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
+        android:layout_width="237dp"
+        android:layout_height="165dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_cocktail_equipment_image"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
         android:onClick="clickButton"
-        android:src="@drawable/ic_cocktail_shaker"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.524"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
-
-    <ImageButton
-        android:id="@+id/commonsense_basespirit_button"
-        android:layout_width="325dp"
-        android:layout_height="159dp"
-        android:layout_marginTop="28dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
-        android:onClick="clickButton"
-        android:padding="2dp"
-        android:src="@drawable/ic_cocktail"
-        app:layout_constraintEnd_toEndOf="@+id/commonsense_technique_textview"
-        app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="@+id/commonsense_technique_textview"
-        app:layout_constraintTop_toBottomOf="@+id/commonsense_technique_textview"
-        app:tint="@color/black" />
-
-    <TextView
-        android:id="@+id/commonsense_technique_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="24dp"
+        android:paddingTop="15sp"
+        android:shape="rectangle"
         android:text="기법"
         android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/commonsense_technique_button"
-        app:layout_constraintHorizontal_bias="0.491"
-        app:layout_constraintStart_toStartOf="@+id/commonsense_technique_button"
-        app:layout_constraintTop_toBottomOf="@+id/commonsense_technique_button" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.477"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commonsense_basespirit_button" />
 
-    <TextView
-        android:id="@+id/commonsense_basespirit_textview"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
+    <Button
+        android:id="@+id/commonsense_basespirit_button"
+        android:layout_width="233dp"
+        android:layout_height="175dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_base_bottle"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
+        android:onClick="clickButton"
+        android:paddingTop="15sp"
+        android:shape="rectangle"
         android:text="기주"
         android:textColor="@color/black"
-        android:textSize="24sp"
-        android:textStyle="bold"
-        app:layout_constraintEnd_toEndOf="@+id/commonsense_basespirit_button"
-        app:layout_constraintStart_toStartOf="@+id/commonsense_basespirit_button"
-        app:layout_constraintTop_toBottomOf="@+id/commonsense_basespirit_button" />
+        android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@+id/commonsense_technique_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.466"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/commonsense_appBarLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
