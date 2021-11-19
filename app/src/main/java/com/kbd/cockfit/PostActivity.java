@@ -186,11 +186,15 @@ public class PostActivity extends AppCompatActivity {
     public void clickButton(View view) {
         if(view.getId() == R.id.post_button_comment) {
             String commentText = editText_comment.getText().toString();
+            if(commentText.length() == 0) {
+                Toast.makeText(this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             String nickname = mAuth.getCurrentUser().getDisplayName();
             String uid = mAuth.getUid();
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
 
-            if(commentText.length() == 0) { Toast.makeText(this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show(); }
             Comment comment = new Comment(commentText, nickname, uid, date);
             mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
         }
