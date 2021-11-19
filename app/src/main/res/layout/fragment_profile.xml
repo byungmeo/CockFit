@@ -31,7 +31,6 @@
 
     <Button
         android:id="@+id/profile_button_recipe"
-        app:icon="@drawable/ic_baseline_bookmarks_24"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="350dp"
         android:layout_height="55dp"
@@ -40,6 +39,7 @@
         android:layout_marginEnd="15dp"
         android:text="즐겨찾기한 레시피"
         android:textSize="28sp"
+        app:icon="@drawable/ic_baseline_bookmarks_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.557"
         app:layout_constraintStart_toStartOf="parent"
@@ -47,7 +47,6 @@
 
     <Button
         android:id="@+id/profile_button_communityActivity"
-        app:icon="@drawable/ic_baseline_brush_24"
         style="@style/Widget.MaterialComponents.Button.TextButton"
         android:layout_width="350dp"
         android:layout_height="55dp"
@@ -56,6 +55,7 @@
         android:layout_marginEnd="15dp"
         android:text="커뮤니티 활동 내역"
         android:textSize="28sp"
+        app:icon="@drawable/ic_baseline_brush_24"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.557"
         app:layout_constraintStart_toStartOf="parent"
@@ -84,15 +84,35 @@
         app:layout_constraintTop_toTopOf="@+id/profile_textView_name" />
 
     <ImageButton
-        android:id="@+id/profile_imageButton_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="20dp"
-        android:background="@drawable/button_round"
-        android:src="@drawable/ic_logout"
+        android:id="@+id/profile_imageButton_userInfo"
+        android:layout_width="30dp"
+        android:layout_height="0dp"
+        android:layout_marginStart="5dp"
+        android:background="@null"
+        android:src="@drawable/ic_baseline_settings_24"
+        app:layout_constraintBottom_toBottomOf="@+id/profile_imageButton_changeName"
+        app:layout_constraintStart_toEndOf="@+id/profile_imageButton_changeName"
+        app:layout_constraintTop_toTopOf="@+id/profile_imageButton_changeName" />
+
+    <TextView
+        android:id="@+id/profile_textView_userEmail"
+        android:layout_width="210dp"
+        android:layout_height="30dp"
+        android:layout_marginTop="15dp"
+        android:text="TextView"
+        android:textSize="20sp"
         app:layout_constraintStart_toStartOf="@+id/profile_textView_name"
-        app:layout_constraintTop_toBottomOf="@+id/profile_textView_name"
-        app:tint="@color/purple_500" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_textView_name" />
+
+    <TextView
+        android:id="@+id/profile_textView_userRegisterDate"
+        android:layout_width="160dp"
+        android:layout_height="20dp"
+        android:layout_marginTop="15dp"
+        android:text="TextView"
+        android:textSize="18sp"
+        app:layout_constraintStart_toStartOf="@+id/profile_textView_userEmail"
+        app:layout_constraintTop_toBottomOf="@+id/profile_textView_userEmail" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

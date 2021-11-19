@@ -111,7 +111,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
             imageOn=true;
         }
 
-        if(view.getId() == R.id.make_button_backButton) {
+        if(view.getId() == R.id.user_button_backButton) {
             this.onBackPressed();
         }
         else if(view.getId() == R.id.make_button_store) {
