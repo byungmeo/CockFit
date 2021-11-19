@@ -8,6 +8,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -151,7 +152,6 @@ public class GeneralPostFragment extends Fragment {
         return v;
     }
 
-
     private class LikeListener implements View.OnClickListener {
         @Override
         public void onClick(View v) {
@@ -180,6 +180,27 @@ public class GeneralPostFragment extends Fragment {
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.commenitem_layout, parent, false);
             CommentViewHolder commentViewHolder = new CommentViewHolder(view);
+
+            commentViewHolder.imageButton_reply.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                }
+            });
+
+            commentViewHolder.imageButton_like.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
+            commentViewHolder.imageButton_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+
             return commentViewHolder;
         }
 
@@ -225,11 +246,22 @@ public class GeneralPostFragment extends Fragment {
             private ImageView imageView_profile;
             private TextView textView_nickname;
             private TextView textView_text;
+            private TextView textView_date;
+            private TextView textView_likeCount;
+            private ImageButton imageButton_reply;
+            private ImageButton imageButton_like;
+            private ImageButton imageButton_more;
+
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView_profile = itemView.findViewById(R.id.comment_imageView_profile);
                 textView_nickname = itemView.findViewById(R.id.comment_textView_nickname);
                 textView_text = itemView.findViewById(R.id.comment_textView_text);
+                textView_date = itemView.findViewById(R.id.comment_textView_date);
+                textView_likeCount = itemView.findViewById(R.id.comment_textView_likeCount);
+                imageButton_reply = itemView.findViewById(R.id.comment_imageButton_reply);
+                imageButton_like = itemView.findViewById(R.id.comment_imageButton_like);
+                imageButton_more = itemView.findViewById(R.id.comment_imageButton_more);
             }
         }
     }

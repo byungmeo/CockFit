@@ -39,7 +39,7 @@
         android:background="@null"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+        app:srcCompat="@drawable/ic_baseline_more_horiz_24" />
 
     <androidx.core.widget.NestedScrollView
         android:id="@+id/post_scrollView_content"

@@ -86,6 +86,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 long postNum = snapshot.getChildrenCount();
 
                 if(postNum == 0) {
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
