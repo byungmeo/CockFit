@@ -11,6 +11,7 @@ public class Comment implements Parcelable {
     private String uid;
     private String date;
     private HashMap<String, String> likeUidMap;
+    private String commentId;
 
     public Comment() {
 
@@ -22,6 +23,7 @@ public class Comment implements Parcelable {
         this.uid = uid;
         this.date = date;
         this.likeUidMap = null;
+        this.commentId = null;
     }
 
     protected Comment(Parcel in) {
@@ -30,6 +32,7 @@ public class Comment implements Parcelable {
         uid = in.readString();
         date = in.readString();
         likeUidMap = in.readHashMap(HashMap.class.getClassLoader());
+        commentId = in.readString();
     }
 
     public static final Creator<Comment> CREATOR = new Creator<Comment>() {
@@ -52,6 +55,7 @@ public class Comment implements Parcelable {
         dest.writeString(uid);
         dest.writeString(date);
         dest.writeMap(likeUidMap);
+        dest.writeString(commentId);
     }
 
     public String getText() { return text; }
@@ -59,10 +63,12 @@ public class Comment implements Parcelable {
     public String getUid() { return uid; }
     public String getDate() { return date; }
     public HashMap<String, String> getLikeUidMap() { return likeUidMap; }
+    public String getCommentId() { return commentId; }
 
     public void setText(String text) { this.text = text; }
     public void setNickname(String nickname) { this.nickname = nickname; }
     public void setUid(String uid) { this.uid = uid; }
     public void setDate(String date) { this.date = date; }
     public void setLikeUidMap(HashMap<String, String> likeUidMap) { this.likeUidMap = likeUidMap; }
+    public void setCommentId(String commentId) { this.commentId = commentId; }
 }

@@ -138,7 +138,9 @@ public class GeneralPostFragment extends Fragment {
                 commentArrayList.clear();
 
                 for(DataSnapshot commentSnapshot : snapshot.getChildren()) {
-                    commentArrayList.add(commentSnapshot.getValue(Comment.class));
+                    Comment comment = commentSnapshot.getValue(Comment.class);
+                    comment.setCommentId(commentSnapshot.getKey());
+                    commentArrayList.add(comment);
                 }
 
                 commentAdapter.notifyDataSetChanged();
@@ -200,9 +202,6 @@ public class GeneralPostFragment extends Fragment {
                 @Override
                 public void onClick(View v) {
                     AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
-                    //dialog.setTitle("제목");
-                    //dialog.setMessage("내용");
-                    //dialog.setIcon(R.mipmap.ic_launcher_round);
                     View dialogView = View.inflate(getContext(), R.layout.comment_dialog_layout, null);
                     Button button_delete = dialogView.findViewById(R.id.commentDialog_button_delete);
                     Button button_edit = dialogView.findViewById(R.id.commentDialog_button_edit);
@@ -213,6 +212,8 @@ public class GeneralPostFragment extends Fragment {
                     button_delete.setOnClickListener(new View.OnClickListener() {
                         @Override
                         public void onClick(View v) {
+                            Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).removeValue();
                             alertDialog.dismiss();
                         }
                     });
