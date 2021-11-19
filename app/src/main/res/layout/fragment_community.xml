@@ -19,19 +19,16 @@
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarFragment"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar_fragment"
             android:backgroundTint="@color/white"
-            app:navigationIcon="@drawable/ic_baseline_menu_24"
-            >
+            android:theme="@style/ThemeOverlay.AppCompat.Light">
 
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:src="@drawable/ic_cockfit_name"/>
+                android:src="@drawable/ic_cockfit_name" />
 
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>

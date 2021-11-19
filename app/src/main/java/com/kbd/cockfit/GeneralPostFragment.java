@@ -31,6 +31,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -235,6 +236,17 @@ public class GeneralPostFragment extends Fragment {
 
             commentViewHolder.textView_nickname.setText(comment.getNickname());
             commentViewHolder.textView_text.setText(comment.getText());
+            try {
+                commentViewHolder.textView_date.setText(UtilitySet.formatTimeString(comment.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if(comment.getLikeUidMap() != null) {
+                commentViewHolder.textView_likeCount.setText(comment.getLikeUidMap().size());
+            } else {
+                commentViewHolder.textView_likeCount.setText("0");
+            }
         }
 
         @Override
