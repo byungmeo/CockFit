@@ -58,7 +58,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private TextView textView_userRegisterDate;
     private ImageView imageview_profileImage;
     private ImageButton imageButton_changeName;
-    private ImageButton imageButton_userInfo;
+    private Button imageButton_userInfo;
 
     private Button button_myFavorite;
     private Button button_myCommunityActivity;
