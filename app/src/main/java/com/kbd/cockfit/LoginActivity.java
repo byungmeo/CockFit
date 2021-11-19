@@ -82,6 +82,7 @@ public class LoginActivity extends AppCompatActivity {
                                 finish();
                             } else {
                                 Toast.makeText(LoginActivity.this, "인증이 되지 않은 이메일입니다. 해당 이메일 주소에 전송된 인증 링크를 확인하세요.", Toast.LENGTH_SHORT).show();
+                                mAuth.signOut();
                                 return;
                             }
                         } else {
