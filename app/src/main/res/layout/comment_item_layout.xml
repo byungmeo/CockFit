@@ -72,16 +72,8 @@
             android:layout_marginRight="10dp"
             android:layout_weight="1"
             android:background="@null"
+            android:visibility="invisible"
             app:srcCompat="@drawable/ic_baseline_message_24" />
-
-        <ImageButton
-            android:id="@+id/comment_imageButton_like"
-            android:layout_width="20dp"
-            android:layout_height="20dp"
-            android:layout_marginRight="10dp"
-            android:layout_weight="1"
-            android:background="@null"
-            app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
 
         <ImageButton
             android:id="@+id/comment_imageButton_more"
@@ -90,5 +82,16 @@
             android:background="@null"
             app:srcCompat="@drawable/ic_baseline_more_vert_24" />
     </LinearLayout>
+
+    <ImageButton
+        android:id="@+id/comment_imageButton_like"
+        android:layout_width="20dp"
+        android:layout_height="20dp"
+        android:layout_weight="1"
+        android:background="@null"
+        android:visibility="invisible"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_textView_text"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_outline_thumb_up_24" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
