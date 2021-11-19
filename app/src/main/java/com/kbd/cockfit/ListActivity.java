@@ -50,7 +50,6 @@ public class ListActivity extends AppCompatActivity {
     private RecipeAdapter recipeAdapter;
     private ArrayList<Recipe> recipeArrayList;
     private ArrayList<Recipe> sortRecipeList;
-    private TextView textView_screenName;
     private ProgressBar progressBar;
     private Toolbar appBarList;
     private String keyword;
@@ -64,7 +63,6 @@ public class ListActivity extends AppCompatActivity {
         setSupportActionBar(appBarList);
         progressBar = findViewById(R.id.list_progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        textView_screenName = findViewById(R.id.list_textView_screenName);
         keyword = getIntent().getStringExtra("keyword");
 
         initRecipeRecycler();
@@ -97,12 +95,6 @@ public class ListActivity extends AppCompatActivity {
         recipeRecycler = findViewById(R.id.list_recycler);
         recipeArrayList = new ArrayList<>();
         sortRecipeList = new ArrayList<>();
-
-        if(keyword.equals("every")) {
-            textView_screenName.setText("모든 레시피 목록"); //우선 즐겨찾기 레시피 목록은 제외
-        } else if(keyword.equals("favorite")) {
-            textView_screenName.setText("즐겨찾기한 레시피 목록");
-        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recipeRecycler.setLayoutManager(linearLayoutManager);
