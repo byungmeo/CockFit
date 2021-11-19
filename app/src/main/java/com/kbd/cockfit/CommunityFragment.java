@@ -20,6 +20,8 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
+
 public class CommunityFragment extends Fragment implements View.OnClickListener {
     private View v;
     private DatabaseReference mDatabase;
@@ -86,6 +88,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 long postNum = snapshot.getChildrenCount();
 
                 if(postNum == 0) {
+                    progressBar.setVisibility(View.GONE);
                     return;
                 }
 
@@ -116,7 +119,11 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
 
                     Post post = postSnapshot.getValue(Post.class);
                     title.setText(post.getTitle());
-                    date.setText(post.getDate());
+                    try {
+                        date.setText(UtilitySet.formatTimeString(post.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     constraintLayout.setOnClickListener(new View.OnClickListener() {
                         @Override

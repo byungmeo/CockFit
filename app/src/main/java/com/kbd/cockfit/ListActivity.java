@@ -15,7 +15,6 @@ import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,10 +22,8 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -50,9 +47,8 @@ public class ListActivity extends AppCompatActivity {
     private RecipeAdapter recipeAdapter;
     private ArrayList<Recipe> recipeArrayList;
     private ArrayList<Recipe> sortRecipeList;
-    private TextView textView_screenName;
     private ProgressBar progressBar;
-    private Toolbar appBarList;
+    private Toolbar toolbar;
     private String keyword;
 
     @Override
@@ -60,11 +56,10 @@ public class ListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_list);
 
-        appBarList = findViewById(R.id.topAppBarList);
-        setSupportActionBar(appBarList);
+        toolbar = findViewById(R.id.list_materialToolbar);
+        setSupportActionBar(toolbar);
         progressBar = findViewById(R.id.list_progressBar);
         progressBar.setVisibility(View.VISIBLE);
-        textView_screenName = findViewById(R.id.list_textView_screenName);
         keyword = getIntent().getStringExtra("keyword");
 
         initRecipeRecycler();
@@ -72,19 +67,18 @@ public class ListActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.top_app_bar_list, menu);
         Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_baseline_sort_24);
-        appBarList.setOverflowIcon(drawable);
+        toolbar.setOverflowIcon(drawable);
 
         if(keyword.equals("every")) {
-            appBarList.setTitle("모든 레시피 목록");
+            toolbar.setTitle("모든 레시피 목록");
         } else if(keyword.equals("favorite")) {
-            appBarList.setTitle("즐겨찾기한 레시피 목록");
+            toolbar.setTitle("즐겨찾기한 레시피 목록");
         }
 
-        appBarList.setNavigationOnClickListener(new View.OnClickListener() {
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 ListActivity.this.onBackPressed();
@@ -97,12 +91,6 @@ public class ListActivity extends AppCompatActivity {
         recipeRecycler = findViewById(R.id.list_recycler);
         recipeArrayList = new ArrayList<>();
         sortRecipeList = new ArrayList<>();
-
-        if(keyword.equals("every")) {
-            textView_screenName.setText("모든 레시피 목록"); //우선 즐겨찾기 레시피 목록은 제외
-        } else if(keyword.equals("favorite")) {
-            textView_screenName.setText("즐겨찾기한 레시피 목록");
-        }
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recipeRecycler.setLayoutManager(linearLayoutManager);
@@ -121,7 +109,7 @@ public class ListActivity extends AppCompatActivity {
 
     public void loadCommonRecipeList() {
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicRecipe.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -130,10 +118,10 @@ public class ListActivity extends AppCompatActivity {
                 String name = jo.getString("name");
                 String proof = jo.getString("proof");
                 String base = jo.getString("base");
-                String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
-                String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
+                String[] ingredient = UtilitySet.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = UtilitySet.jsonArrayToArray(jo.getJSONArray("equipment"));
                 String description = jo.getString("description");
-                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+                String[] tags = UtilitySet.jsonArrayToArray(jo.getJSONArray("tags"));
 
 
                 AssetManager assetManager = this.getResources().getAssets();

@@ -1,15 +1,22 @@
 package com.kbd.cockfit;
 
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,6 +26,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -31,20 +39,60 @@ public class ForumActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
     private ArrayList<Post> postArrayList;
     private HashMap<Post, String> postIdMap;
+    private Toolbar toolbar;
 
     private String forumType;
-
-    private TextView screenName;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_forum);
+        Context context = this;
 
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
-        screenName = findViewById(R.id.forom_textView_screenName);
-        setScreenName();
+        toolbar = findViewById(R.id.forum_materialToolbar);
+        forumType = getIntent().getStringExtra("forum");
+        switch (forumType) {
+            case "share" : {
+                toolbar.setTitle("레시피 공유 게시판");
+                break;
+            }
+            case "qa" : {
+                toolbar.setTitle("질문 게시판");
+                //screenName.setText("질문 게시판");
+                break;
+            }
+            case "general" : {
+                toolbar.setTitle("자유 게시판");
+                //screenName.setText("자유 게시판");
+                break;
+            }
+            case "myPost" : {
+                toolbar.setTitle("내 게시글 목록");
+                //screenName.setText("내 게시글 목록");
+                break;
+            }
+            default: {
+                break;
+            }
+        }
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.forum_menuItem_wirtePost) {
+                    Intent intent = new Intent(context, WritePostActivity.class);
+                    intent.putExtra("forum", forumType);
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -58,31 +106,6 @@ public class ForumActivity extends AppCompatActivity {
         postRecycler.setAdapter(postAdapter);
 
         initPostList();
-    }
-
-    public void setScreenName() {
-        forumType = getIntent().getStringExtra("forum");
-        switch (forumType) {
-            case "share" : {
-                screenName.setText("레시피 공유 게시판");
-                break;
-            }
-            case "qa" : {
-                screenName.setText("질문 게시판");
-                break;
-            }
-            case "general" : {
-                screenName.setText("자유 게시판");
-                break;
-            }
-            case "myPost" : {
-                screenName.setText("내 게시글 목록");
-                break;
-            }
-            default: {
-                break;
-            }
-        }
     }
 
     public void initPostList() {
@@ -102,21 +125,8 @@ public class ForumActivity extends AppCompatActivity {
                 postRecycler.setAdapter(postAdapter);
             }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
+            @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
-    }
-
-    public void clickButton(View view) {
-        if(view.getId() == R.id.forum_button_backButton) {
-            this.onBackPressed();
-        } else if(view.getId() == R.id.forum_button_write) {
-            Intent intent = new Intent(this, WritePostActivity.class);
-            intent.putExtra("forum", forumType);
-            startActivity(intent);
-        }
     }
 
     public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
@@ -138,7 +148,11 @@ public class ForumActivity extends AppCompatActivity {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.title.setText(postArrayList.get(position).getTitle());
             postViewHolder.writer.setText(postArrayList.get(position).getNickname());
-            postViewHolder.date.setText(postArrayList.get(position).getDate());
+            try {
+                postViewHolder.date.setText(UtilitySet.formatTimeString(postArrayList.get(position).getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             HashMap<String, String> likeUidMap = postArrayList.get(position).getLikeUidMap();
             if(likeUidMap != null) {

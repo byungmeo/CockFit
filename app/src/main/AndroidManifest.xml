@@ -15,6 +15,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CockFit">
         <activity
+            android:name=".BaseSpiritActivity"
+            android:exported="true" />
+        <activity
+            android:name=".TechniqueActivity"
+            android:exported="true" />
+        <activity
+            android:name=".CommonSenseActivity"
+            android:exported="true" />
+        <activity
             android:name=".EquipmentListActivity"
             android:exported="true" />
         <activity

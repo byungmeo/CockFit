@@ -6,6 +6,35 @@
     android:layout_height="match_parent"
     tools:context=".CocktailInfoFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:id="@+id/toolFragmentBarLayout"
+        >
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarFragment"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar_fragment"
+            android:backgroundTint="@color/white"
+            app:navigationIcon="@drawable/ic_baseline_menu_24"
+            >
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:src="@drawable/ic_cockfit_name"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
 
     <TextView
         android:id="@+id/textView2"
@@ -19,54 +48,94 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
+    <Button
         android:id="@+id/cock_ingrdButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginStart="30dp"
-        android:layout_marginTop="130dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
-        android:src="@drawable/ic_cocktail_ingredient"
+        android:layout_width="170dp"
+        android:layout_height="155dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_drinks"
+        android:paddingTop="15sp"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
+        android:shape="rectangle"
+        android:text="칵테일 재료"
+        android:textColor="@color/black"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toStartOf="@+id/cock_listButton"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/black" />
+        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout" />
 
-    <ImageButton
+    <Button
         android:id="@+id/cock_listButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginEnd="30dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
-        android:src="@drawable/ic_cocktail_list"
+        android:layout_width="170dp"
+        android:layout_height="155dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="20dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_cocktail_list_image"
+        android:paddingTop="15sp"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
+        android:shape="rectangle"
+        android:text="칵테일 리스트"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/cock_ingrdButton"
-        app:tint="@color/black" />
+        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout" />
 
-    <ImageButton
+    <Button
         android:id="@+id/cock_equipButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:layout_marginBottom="130dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
-        android:padding="2dp"
-        android:src="@drawable/ic_cocktail_equipment"
+        android:layout_width="170dp"
+        android:layout_height="155dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_cocktail_equipment_real"
+        android:paddingTop="15sp"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
+        android:shape="rectangle"
+        android:text="칵테일 장비"
+        android:textColor="@color/black"
+        android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintStart_toStartOf="@+id/cock_ingrdButton"
-        app:tint="@color/black" />
+        app:layout_constraintEnd_toStartOf="@+id/cock_senseButton"
+        app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageButton
-        android:id="@+id/cock_receipButton"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        android:background="@drawable/button_round"
-        android:elevation="10dp"
-        android:src="@drawable/ic_cocktail_basetip"
-        app:layout_constraintBottom_toBottomOf="@+id/cock_equipButton"
-        app:layout_constraintEnd_toEndOf="@+id/cock_listButton"
-        app:tint="@color/black" />
+    <Button
+        android:id="@+id/cock_senseButton"
+        android:layout_width="170dp"
+        android:layout_height="155dp"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentBottom="true"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="100dp"
+        android:backgroundTint="@color/white"
+        android:drawableTop="@drawable/ic_cocktail_base_image"
+        android:paddingTop="15sp"
+        android:drawablePadding="-5dp"
+        android:elevation="15dp"
+        android:fontFamily="@font/nanumbarunpenb"
+        android:shape="rectangle"
+        android:text="칵테일 기본상식"
+        android:textColor="@color/black"
+        android:textSize="18dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintEnd_toEndOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

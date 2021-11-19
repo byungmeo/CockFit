@@ -6,6 +6,34 @@
     android:layout_height="match_parent"
     tools:context=".CommunityFragment">
 
+    <com.google.android.material.appbar.AppBarLayout
+        android:id="@+id/toolFragmentBarLayout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBarFragment"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar_fragment"
+            android:backgroundTint="@color/white"
+            app:navigationIcon="@drawable/ic_baseline_menu_24"
+            >
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_cockfit_name"/>
+
+        </com.google.android.material.appbar.MaterialToolbar>
+    </com.google.android.material.appbar.AppBarLayout>
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/myRecipe_recyclerView"
         android:layout_width="match_parent"
@@ -14,10 +42,11 @@
         android:layout_marginTop="15dp"
         android:layout_marginEnd="15dp"
         android:layout_marginBottom="15dp"
+        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout"
         app:layout_constraintBottom_toTopOf="@+id/textView"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        />
 
     <TextView
         android:id="@+id/textView"

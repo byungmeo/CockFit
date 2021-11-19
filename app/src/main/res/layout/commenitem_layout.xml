@@ -3,7 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:layout_marginTop="10dp"
+    android:background="@drawable/bottomborder"
+    android:paddingBottom="10dp">
 
     <ImageView
         android:id="@+id/comment_imageView_profile"
@@ -18,18 +21,70 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="@+id/comment_imageView_profile"
         app:layout_constraintStart_toEndOf="@+id/comment_imageView_profile"
         app:layout_constraintTop_toTopOf="@+id/comment_imageView_profile" />
+
+    <TextView
+        android:id="@+id/comment_textView_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_textView_nickname"
+        app:layout_constraintStart_toEndOf="@+id/comment_textView_nickname"
+        app:layout_constraintTop_toTopOf="@+id/comment_textView_nickname" />
+
+    <TextView
+        android:id="@+id/comment_textView_likeCount"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:text="TextView"
+        app:layout_constraintBottom_toBottomOf="@+id/comment_textView_date"
+        app:layout_constraintStart_toEndOf="@+id/comment_textView_date"
+        app:layout_constraintTop_toTopOf="@+id/comment_textView_date" />
 
     <TextView
         android:id="@+id/comment_textView_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="5dp"
-        android:layout_marginBottom="10dp"
         android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/comment_imageView_profile" />
+
+    <LinearLayout
+        android:id="@+id/comment_linearLayout"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <ImageButton
+            android:id="@+id/comment_imageButton_reply"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/ic_baseline_message_24" />
+
+        <ImageButton
+            android:id="@+id/comment_imageButton_like"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"
+            android:background="@null"
+            app:srcCompat="@drawable/ic_baseline_thumb_up_24" />
+
+        <ImageButton
+            android:id="@+id/comment_imageButton_more"
+            android:layout_width="20dp"
+            android:layout_height="20dp"
+            android:background="@null"
+            app:srcCompat="@drawable/ic_baseline_more_vert_24" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>

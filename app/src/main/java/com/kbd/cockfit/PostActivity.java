@@ -1,24 +1,23 @@
 package com.kbd.cockfit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.ImageButton;
 import android.widget.ImageView;
-import android.widget.PopupMenu;
 import android.widget.ProgressBar;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.core.widget.NestedScrollView;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -35,10 +34,12 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
-import java.util.HashMap;
-import java.util.List;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class PostActivity extends AppCompatActivity {
+    private Context context;
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -51,18 +52,19 @@ public class PostActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
 
-    private TextView textView_title;
-    private ImageButton button_more;
     private ImageView imageView_writerProfile;
     private TextView textView_writer;
     private TextView textView_date;
     private NestedScrollView scrollView;
     private EditText editText_comment;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_post);
+
+        context = this;
 
         //loading...
         progressBar = findViewById(R.id.post_progressBar);
@@ -90,12 +92,16 @@ public class PostActivity extends AppCompatActivity {
         generalPostFragment.setArguments(bundle);
 
         //view initialize
-        textView_title = findViewById(R.id.post_textView_title);
-        button_more = findViewById(R.id.post_button_more);
         imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
         textView_writer = findViewById(R.id.post_textView_writer);
         textView_date = findViewById(R.id.post_textView_date);
         editText_comment = findViewById(R.id.post_editText_comment);
+        toolbar = findViewById(R.id.post_materialToolbar);
+        setSupportActionBar(toolbar);
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { onBackPressed(); }
+        });
 
         //Intent로부터 전달받은 postId를 Firebase에서 탐색한 후 해당 Post객체를 받아옵니다.
         mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
@@ -105,9 +111,13 @@ public class PostActivity extends AppCompatActivity {
                 
                 //postId에 해당하는 게시글이 있는 경우
                 if(post != null) {
-                    textView_title.setText(post.getTitle());
+                    toolbar.setTitle(post.getTitle());
                     textView_writer.setText(post.getNickname());
-                    textView_date.setText(post.getDate());
+                    try {
+                        textView_date.setText(UtilitySet.formatTimeString(post.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     //FirebaseStorage에서 작성자의 프로필 사진을 불러옵니다.
                     StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
@@ -134,41 +144,6 @@ public class PostActivity extends AppCompatActivity {
                             scrollView.setVisibility(View.VISIBLE);
                         }
                     });
-
-                    //작성자가 자신의 게시물을 보게 되면, 상단 우측에 more버튼이 보이며, 클릭 시 메뉴가 뜹니다. (게시글 수정, 삭제버튼)
-                    if(mAuth.getUid().equals(post.getUid())) {
-                        button_more.setOnClickListener(new View.OnClickListener() {
-                            @Override
-                            public void onClick(View v) {
-                                //메뉴를 생성하고, 수정,삭제 메뉴아이템에 기능을 추가합니다.
-                                final PopupMenu popupMenu = new PopupMenu(getApplicationContext(), v);
-                                getMenuInflater().inflate(R.menu.post_menu, popupMenu.getMenu());
-                                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                                    @Override
-                                    public boolean onMenuItemClick(MenuItem item) {
-                                        if(item.getItemId() == R.id.postMenu_edit) {
-                                            //게시글 수정
-                                            Intent intent = new Intent(v.getContext(), WritePostActivity.class);
-                                            intent.putExtra("isEdit", true);
-                                            intent.putExtra("post", post);
-                                            intent.putExtra("postId", postId);
-                                            intent.putExtra("forum", forumType);
-                                            startActivity(intent);
-                                        } else if(item.getItemId() == R.id.postMenu_delete) {
-                                            //게시글 삭제
-                                            mDatabase.child("forum").child(forumType).child(postId).setValue(null);
-                                            onBackPressed();
-                                        }
-
-                                        return false;
-                                    }
-                                });
-                                popupMenu.show(); //최종적으로 more버튼 클릭 시 메뉴가 보이도록 합니다.
-                            }
-                        });
-                    } else {
-                        button_more.setVisibility(View.INVISIBLE); //작성자가 아닐 경우, 메뉴는 보이지 않습니다.
-                    }
                 } else {
                     //postId가 Firebase에 존재하지 않는 경우
                     Log.d("Exception", "서버에서 해당하는 게시글을 찾을 수 없습니다.");
@@ -180,16 +155,43 @@ public class PostActivity extends AppCompatActivity {
         });
     }
 
-    public Boolean isLiked() {
-        return false;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        if(!mAuth.getUid().equals(post.getUid())) {
+            menu.setGroupVisible(0, false);
+        } else {
+            getMenuInflater().inflate(R.menu.top_app_bar_post, menu);
+        }
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
+        if(item.getItemId() == R.id.post_menuItem_delete) {
+            //게시글 삭제
+            mDatabase.child("forum").child(forumType).child(postId).setValue(null);
+            onBackPressed();
+        } else if(item.getItemId() == R.id.post_menuItem_edit) {
+            //게시글 수정
+            Intent intent = new Intent(context, WritePostActivity.class);
+            intent.putExtra("isEdit", true);
+            intent.putExtra("post", post);
+            intent.putExtra("postId", postId);
+            intent.putExtra("forum", forumType);
+            startActivity(intent);
+        }
+        return super.onOptionsItemSelected(item);
     }
 
     public void clickButton(View view) {
-        if(view.getId() == R.id.post_button_backButton) { this.onBackPressed(); }
-        else if(view.getId() == R.id.post_button_comment) {
+        if(view.getId() == R.id.post_button_comment) {
             String commentText = editText_comment.getText().toString();
+            String nickname = mAuth.getCurrentUser().getDisplayName();
+            String uid = mAuth.getUid();
+            String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(System.currentTimeMillis()));
+
             if(commentText.length() == 0) { Toast.makeText(this, "댓글을 입력해 주세요.", Toast.LENGTH_SHORT).show(); }
-            Comment comment = new Comment(editText_comment.getText().toString(), mAuth.getCurrentUser().getDisplayName(), mAuth.getUid());
+            Comment comment = new Comment(commentText, nickname, uid, date);
             mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
         }
     }

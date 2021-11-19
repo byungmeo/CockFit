@@ -4,15 +4,22 @@ import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -23,30 +30,54 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class IngredientListActivity extends AppCompatActivity {
 
     private ArrayList<Ingredient> ingredientArrayList;
+    private ArrayList<Ingredient> sortIngredientList;
+    private IngredientAdapter ingredientAdapter;
+    private Toolbar toolbar;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_ingredient_list);
-
+        toolbar = findViewById(R.id.etc_list_materialToolbar);
+        setSupportActionBar(toolbar);
 
         initIngredientRecycler();
+    }
 
-        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.ingredient_list_recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
-        ingredientRecyclerView.setAdapter(new IngredientAdapter(ingredientArrayList));  // Adapter 등록
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_app_bar_etc_list, menu);
+        Drawable drawable = ContextCompat.getDrawable(getApplicationContext(),R.drawable.ic_baseline_sort_24);
+        toolbar.setOverflowIcon(drawable);
+
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                IngredientListActivity.this.onBackPressed();
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
     }
 
     public void initIngredientRecycler() {
 
         ingredientArrayList = new ArrayList<>();
+        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.ingredient_list_recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
+        ingredientRecyclerView.setAdapter(new IngredientAdapter(this, ingredientArrayList));  // Adapter 등록
+
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicIngredient.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicIngredient.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
 
@@ -68,13 +99,54 @@ public class IngredientListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        sortIngredientList = ingredientArrayList;
+        ingredientAdapter = new IngredientAdapter(this, sortIngredientList);
+        ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
 
-    public void clickButton(View view) {
-        if(view.getId() == R.id.ingredient_list_button_backButton) {
-            this.onBackPressed();
+    public boolean onOptionsItemSelected (MenuItem item)
+    {
+        switch(item.getItemId())
+        {
+            case R.id.sortMenu_name_asc:
+                Collections.sort(sortIngredientList, new Comparator<Ingredient>() {
+                    @Override
+                    public int compare(Ingredient o1, Ingredient o2) {
+                        String name1 = o1.getName();
+                        String name2 = o2.getName();
+                        if (name1.compareTo(name2) > 0) {
+                            return 1;
+                        } else if (name1.compareTo(name2) == 0) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+                ingredientAdapter.notifyDataSetChanged();
+                break;
+            case R.id.sortMenu_name_desc:
+                Collections.sort(sortIngredientList, new Comparator<Ingredient>() {
+                    @Override
+                    public int compare(Ingredient o1, Ingredient o2) {
+                        String name1 = o1.getName();
+                        String name2 = o2.getName();
+                        if (name1.compareTo(name2) < 0) {
+                            return 1;
+                        } else if (name1.compareTo(name2) == 0) {
+                            return 0;
+                        } else {
+                            return -1;
+                        }
+                    }
+                });
+                ingredientAdapter.notifyDataSetChanged();
+                break;
         }
+        return super.onOptionsItemSelected(item);
     }
+
+
     public static class Ingredient {
 
         private Bitmap image;
@@ -117,10 +189,12 @@ public class IngredientListActivity extends AppCompatActivity {
     //Adapter
     public class IngredientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        private Context context;
         private ArrayList<Ingredient> ingredientArrayList = null;
 
-        IngredientAdapter(ArrayList<Ingredient> ingredientList) {
+        IngredientAdapter(Context context, ArrayList<Ingredient> ingredientList) {
             this.ingredientArrayList=ingredientList;
+            this.context=context;
         }
 
         @Override

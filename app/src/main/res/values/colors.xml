@@ -6,7 +6,8 @@
     <color name="teal_200">#FF03DAC5</color>
     <color name="teal_700">#FF018786</color>
     <color name="black">#FF000000</color>
-    <color name="CockFitMainColor1">#795a65</color>
+    <color name="CockFitMainColor1">#6A1B9A</color>
     <color name="CockFitMainColor2">#fcecf2</color>
     <color name="white">#FFFFFFFF</color>
+    <color name="test">#EA80FC</color>
 </resources>

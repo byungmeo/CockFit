@@ -1,9 +1,12 @@
 package com.kbd.cockfit;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
@@ -19,21 +22,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class WritePostActivity extends AppCompatActivity {
+    private Context context;
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     private EditText editText_title;
     private EditText editText_content;
-
     private Boolean isEdit;
     private Post editPost;
     private String editPostId;
     private String forumType;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_write_post);
+
+        context = this;
 
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
@@ -48,44 +55,50 @@ public class WritePostActivity extends AppCompatActivity {
             initEditPost();
         }
         forumType = intent.getStringExtra("forum");
+
+        toolbar = findViewById(R.id.write_materialToolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) { onBackPressed(); }
+        });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.write_menuItem_write) {
+                    if(editText_title.getText().toString().equals("")) {
+                        Toast.makeText(context, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+
+                    if(editText_content.getText().toString().equals("")) {
+                        Toast.makeText(context, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                        return true;
+                    }
+
+                    if(isEdit) {
+                        editPost.setTitle(editText_title.getText().toString());
+                        editPost.setContent(editText_content.getText().toString());
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(editPostId, editPost);
+                        mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
+                    } else {
+                        FirebaseUser user = mAuth.getCurrentUser();
+                        String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(System.currentTimeMillis()));
+                        Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), date);
+                        post.setContent(editText_content.getText().toString());
+
+                        mDatabase.child("forum").child(forumType).push().setValue(post);
+                    }
+                    onBackPressed();
+
+                    return true;
+                }
+                return false;
+            }
+        });
     }
 
     public void initEditPost() {
         editText_title.setText(editPost.getTitle());
         editText_content.setText(editPost.getContent());
-    }
-
-    public void clickButton(View view) {
-        if(view.getId() == R.id.write_button_backButton) {
-            this.onBackPressed();
-        } else if(view.getId() == R.id.write_button_done) {
-            if(editText_title.getText().toString().equals("")) {
-                Toast.makeText(this , "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
-                return;
-            }
-            
-            if(editText_content.getText().toString().equals("")) {
-                Toast.makeText(this , "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
-                return;
-            }
-
-            if(isEdit) {
-                editPost.setTitle(editText_title.getText().toString());
-                editPost.setContent(editText_content.getText().toString());
-                Map<String, Object> childUpdates = new HashMap<>();
-                childUpdates.put(editPostId, editPost);
-                mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
-            } else {
-                FirebaseUser user = mAuth.getCurrentUser();
-                Date date = new Date(System.currentTimeMillis());
-                SimpleDateFormat sdf = new SimpleDateFormat("MM-dd");
-                Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), sdf.format(date));
-                post.setContent(editText_content.getText().toString());
-
-                mDatabase.child("forum").child(forumType).push().setValue(post);
-            }
-
-            this.onBackPressed();
-        }
     }
 }
