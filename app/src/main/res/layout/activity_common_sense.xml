@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:onClick="clickButton"
+    tools:context=".CocktailInfoFragment">
+
+
+    <ImageView
+        android:id="@+id/commonsense_button_backButton"
+        android:layout_width="35dp"
+        android:layout_height="35dp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="15dp"
+        android:onClick="clickButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/ic_baseline_arrow_back_24"
+        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
+
+    <TextView
+        android:id="@+id/commonsense_textView_screenName"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:text="칵테일 기본 상식"
+        android:textAppearance="@style/TextAppearance.AppCompat.Large"
+        app:layout_constraintBottom_toBottomOf="@+id/commonsense_button_backButton"
+        app:layout_constraintStart_toEndOf="@+id/commonsense_button_backButton"
+        app:layout_constraintTop_toTopOf="@+id/commonsense_button_backButton" />
+
+    <ImageButton
+        android:id="@+id/commonsense_technique_button"
+        android:layout_width="329dp"
+        android:layout_height="161dp"
+        android:layout_marginTop="116dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:onClick="clickButton"
+        android:src="@drawable/ic_cocktail_shaker"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.524"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:tint="@color/black" />
+
+    <ImageButton
+        android:id="@+id/commonsense_basespirit_button"
+        android:layout_width="325dp"
+        android:layout_height="159dp"
+        android:layout_marginTop="28dp"
+        android:background="@drawable/button_round"
+        android:elevation="10dp"
+        android:onClick="clickButton"
+        android:padding="2dp"
+        android:src="@drawable/ic_cocktail"
+        app:layout_constraintEnd_toEndOf="@+id/commonsense_technique_textview"
+        app:layout_constraintHorizontal_bias="0.498"
+        app:layout_constraintStart_toStartOf="@+id/commonsense_technique_textview"
+        app:layout_constraintTop_toBottomOf="@+id/commonsense_technique_textview"
+        app:tint="@color/black" />
+
+    <TextView
+        android:id="@+id/commonsense_technique_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="24dp"
+        android:text="기법"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/commonsense_technique_button"
+        app:layout_constraintHorizontal_bias="0.491"
+        app:layout_constraintStart_toStartOf="@+id/commonsense_technique_button"
+        app:layout_constraintTop_toBottomOf="@+id/commonsense_technique_button" />
+
+    <TextView
+        android:id="@+id/commonsense_basespirit_textview"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="20dp"
+        android:text="기주"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/commonsense_basespirit_button"
+        app:layout_constraintStart_toStartOf="@+id/commonsense_basespirit_button"
+        app:layout_constraintTop_toBottomOf="@+id/commonsense_basespirit_button" />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

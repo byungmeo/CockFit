@@ -112,11 +112,11 @@
         android:textColor="@color/black"
         android:textSize="18sp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
-        app:layout_constraintEnd_toStartOf="@+id/cock_receipButton"
+        app:layout_constraintEnd_toStartOf="@+id/cock_senseButton"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/cock_receipButton"
+        android:id="@+id/cock_senseButton"
         android:layout_width="170dp"
         android:layout_height="155dp"
         android:layout_alignParentLeft="true"
@@ -135,6 +135,7 @@
         android:textSize="18dp"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintEnd_toEndOf="parent" />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
