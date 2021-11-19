@@ -78,9 +78,8 @@ public class ForumActivity extends AppCompatActivity {
             }
         }
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                ForumActivity.this.onBackPressed();
+            @Override public void onClick(View v) {
+                onBackPressed();
             }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
@@ -107,12 +106,6 @@ public class ForumActivity extends AppCompatActivity {
         postRecycler.setAdapter(postAdapter);
 
         initPostList();
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-
-        return super.onOptionsItemSelected(item);
     }
 
     public void initPostList() {

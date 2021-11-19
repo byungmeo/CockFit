@@ -3,7 +3,7 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
-        android:id="@+id/forum_menuItem_wirtePost"
-        android:title="글작성"
+        android:id="@+id/write_menuItem_write"
+        android:title="게시"
         app:showAsAction="always" />
 </menu>
