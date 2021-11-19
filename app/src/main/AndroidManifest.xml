@@ -68,6 +68,9 @@
         <activity
             android:name=".MainActivity"
             android:exported="true" />
+        <activity
+            android:name=".UserAdminActivity"
+            android:exported="true" />
     </application>
 
 </manifest>

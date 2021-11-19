@@ -82,7 +82,7 @@ public class WritePostActivity extends AppCompatActivity {
                         mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
                     } else {
                         FirebaseUser user = mAuth.getCurrentUser();
-                        String date = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss").format(new Date(System.currentTimeMillis()));
+                        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
                         Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), date);
                         post.setContent(editText_content.getText().toString());
 

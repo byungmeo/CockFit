@@ -157,7 +157,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
             startActivityForResult(intent, PICK_FROM_ALBUM);
             imageOn=true;
         }
-
     }
 }
 

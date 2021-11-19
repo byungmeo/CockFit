@@ -14,6 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -137,7 +138,9 @@ public class GeneralPostFragment extends Fragment {
                 commentArrayList.clear();
 
                 for(DataSnapshot commentSnapshot : snapshot.getChildren()) {
-                    commentArrayList.add(commentSnapshot.getValue(Comment.class));
+                    Comment comment = commentSnapshot.getValue(Comment.class);
+                    comment.setCommentId(commentSnapshot.getKey());
+                    commentArrayList.add(comment);
                 }
 
                 commentAdapter.notifyDataSetChanged();
@@ -179,7 +182,7 @@ public class GeneralPostFragment extends Fragment {
         @NonNull
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.commenitem_layout, parent, false);
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_layout, parent, false);
             CommentViewHolder commentViewHolder = new CommentViewHolder(view);
 
             commentViewHolder.imageButton_reply.setOnClickListener(new View.OnClickListener() {
@@ -198,7 +201,31 @@ public class GeneralPostFragment extends Fragment {
             commentViewHolder.imageButton_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    View dialogView = View.inflate(getContext(), R.layout.comment_dialog_layout, null);
+                    Button button_delete = dialogView.findViewById(R.id.commentDialog_button_delete);
+                    Button button_edit = dialogView.findViewById(R.id.commentDialog_button_edit);
 
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+
+                    button_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).removeValue();
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    button_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
                 }
             });
 
@@ -210,6 +237,9 @@ public class GeneralPostFragment extends Fragment {
             CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
             Comment comment = commentArrayList.get(holder.getAdapterPosition());
 
+            if(!comment.getUid().equals(mAuth.getUid())) {
+                commentViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
+            }
             StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
