@@ -33,7 +33,7 @@
         app:srcCompat="@drawable/ic_baseline_sort_24" />
 
     <TextView
-        android:id="@+id/equipment_ist_textView_screenName"
+        android:id="@+id/technique_textView_screenName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="15dp"

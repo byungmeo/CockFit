@@ -24,7 +24,8 @@ public class CommonSenseActivity extends AppCompatActivity {
             startActivity(intent);
         }
         else if(view.getId() == R.id.commonsense_basespirit_button) {
-
+            Intent intent = new Intent(getApplicationContext(), BaseSpiritActivity.class);
+            startActivity(intent);
         }
     }
 }
