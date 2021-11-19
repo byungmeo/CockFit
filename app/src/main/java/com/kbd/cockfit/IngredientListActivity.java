@@ -7,9 +7,11 @@ import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -23,10 +25,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class IngredientListActivity extends AppCompatActivity {
 
     private ArrayList<Ingredient> ingredientArrayList;
+    private ArrayList<Ingredient> sortIngredientList;
+    private IngredientAdapter ingredientAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,15 +42,16 @@ public class IngredientListActivity extends AppCompatActivity {
 
         initIngredientRecycler();
 
-        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.ingredient_list_recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
-        ingredientRecyclerView.setAdapter(new IngredientAdapter(ingredientArrayList));  // Adapter 등록
     }
 
     public void initIngredientRecycler() {
 
         ingredientArrayList = new ArrayList<>();
+        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.ingredient_list_recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
+        ingredientRecyclerView.setAdapter(new IngredientAdapter(this, ingredientArrayList));  // Adapter 등록
+
         try {
             String jsonData = UtilitySet.jsonToString(this, "jsons/basicIngredient.json");
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -68,11 +75,61 @@ public class IngredientListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        sortIngredientList = ingredientArrayList;
+        ingredientAdapter = new IngredientAdapter(this, sortIngredientList);
+        ingredientRecyclerView.setAdapter(ingredientAdapter);
     }
 
     public void clickButton(View view) {
         if(view.getId() == R.id.ingredient_list_button_backButton) {
             this.onBackPressed();
+        }
+        else if (view.getId() == R.id.ingredient_list_button_sort) {
+            PopupMenu p = new PopupMenu(getApplicationContext(), view);
+            getMenuInflater().inflate(R.menu.sort_popup, p.getMenu());
+            p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.sortPopup_name_asc:
+                            Collections.sort(sortIngredientList, new Comparator<Ingredient>() {
+                                @Override
+                                public int compare(Ingredient o1, Ingredient o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) > 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            ingredientAdapter.notifyDataSetChanged();
+                            break;
+                        case R.id.sortPopup_name_desc:
+                            Collections.sort(sortIngredientList, new Comparator<Ingredient>() {
+                                @Override
+                                public int compare(Ingredient o1, Ingredient o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) < 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            ingredientAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                    return true;
+                }
+            });
+            p.show(); // 메뉴를 띄우기
         }
     }
     public static class Ingredient {
@@ -117,10 +174,12 @@ public class IngredientListActivity extends AppCompatActivity {
     //Adapter
     public class IngredientAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        private Context context;
         private ArrayList<Ingredient> ingredientArrayList = null;
 
-        IngredientAdapter(ArrayList<Ingredient> ingredientList) {
+        IngredientAdapter(Context context, ArrayList<Ingredient> ingredientList) {
             this.ingredientArrayList=ingredientList;
+            this.context=context;
         }
 
         @Override
