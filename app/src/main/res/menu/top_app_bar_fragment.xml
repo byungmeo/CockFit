@@ -1,16 +1,4 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android"
 xmlns:app="http://schemas.android.com/apk/res-auto">
 
-<item
-    android:id="@+id/first"
-    android:title="첫번째" />
-<item
-    android:id="@+id/second"
-    android:title="두번째" />
-<item
-    android:id="@+id/third"
-    android:title="세번째" />
-<item
-    android:id="@+id/fourth"
-    android:title="네번째" />
 </menu>
