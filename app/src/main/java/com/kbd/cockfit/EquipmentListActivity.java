@@ -1,15 +1,19 @@
 package com.kbd.cockfit;
 
 import android.content.Context;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -22,10 +26,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class EquipmentListActivity extends AppCompatActivity {
 
     private ArrayList<Equipment> equipmentArrayList;
+    private ArrayList<Equipment> sortEquipmentList;
+    private EquipmentAdapter equipmentAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +43,16 @@ public class EquipmentListActivity extends AppCompatActivity {
 
         initEquipmentRecycler();
 
-        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.equipment_list_recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
-        ingredientRecyclerView.setAdapter(new EquipmentAdapter(equipmentArrayList));  // Adapter 등록
     }
 
     public void initEquipmentRecycler() {
 
         equipmentArrayList = new ArrayList<>();
+        RecyclerView equipmentRecyclerView = (RecyclerView)findViewById(R.id.equipment_list_recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        equipmentRecyclerView.setLayoutManager(manager); // LayoutManager 등록
+        equipmentRecyclerView.setAdapter(new EquipmentAdapter(this, equipmentArrayList));  // Adapter 등록
+
         try {
             String jsonData = RecipeActivity.jsonToString(this, "jsons/basicEquipment.json");
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -67,13 +76,66 @@ public class EquipmentListActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        sortEquipmentList = equipmentArrayList;
+        equipmentAdapter = new EquipmentAdapter(this, sortEquipmentList);
+        equipmentRecyclerView.setAdapter(equipmentAdapter);
+
     }
 
     public void clickButton(View view) {
         if(view.getId() == R.id.equipment_list_button_backButton) {
             this.onBackPressed();
         }
+        else if (view.getId() == R.id.equipment_list_button_sort) {
+            PopupMenu p = new PopupMenu(getApplicationContext(), view);
+            getMenuInflater().inflate(R.menu.sort_popup, p.getMenu());
+            p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.sortPopup_name_asc:
+                            Collections.sort(sortEquipmentList, new Comparator<Equipment>() {
+                                @Override
+                                public int compare(Equipment o1, Equipment o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) > 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            equipmentAdapter.notifyDataSetChanged();
+                            break;
+                        case R.id.sortPopup_name_desc:
+                            Collections.sort(sortEquipmentList, new Comparator<Equipment>() {
+                                @Override
+                                public int compare(Equipment o1, Equipment o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) < 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            equipmentAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                    return true;
+                }
+            });
+            p.show(); // 메뉴를 띄우기
+        }
     }
+
+
     public static class Equipment {
 
         private Bitmap image;
@@ -116,10 +178,12 @@ public class EquipmentListActivity extends AppCompatActivity {
     //Adapter
     public class EquipmentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        private Context context;
         private ArrayList<Equipment> equipmentArrayList = null;
 
-        EquipmentAdapter(ArrayList<Equipment> ingredientList) {
-            this.equipmentArrayList=ingredientList;
+        EquipmentAdapter(Context context, ArrayList<Equipment> equipmentList) {
+            this.equipmentArrayList=equipmentList;
+            this.context=context;
         }
 
         @Override

@@ -6,9 +6,11 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,10 +24,14 @@ import org.json.JSONObject;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 
 public class TechniqueActivity extends AppCompatActivity {
 
     private ArrayList<Technique> techniqueArrayList;
+    private ArrayList<Technique> sortTechniqueList;
+    private TechniqueAdapter techniqueAdapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -35,15 +41,16 @@ public class TechniqueActivity extends AppCompatActivity {
 
         initTechniqueRecycler();
 
-        RecyclerView ingredientRecyclerView = (RecyclerView)findViewById(R.id.technique_recyclerView);
-        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
-        ingredientRecyclerView.setLayoutManager(manager); // LayoutManager 등록
-        ingredientRecyclerView.setAdapter(new TechniqueAdapter(techniqueArrayList));  // Adapter 등록
     }
 
     public void initTechniqueRecycler() {
 
         techniqueArrayList = new ArrayList<>();
+        RecyclerView techniqueRecyclerView = (RecyclerView)findViewById(R.id.technique_recyclerView);
+        LinearLayoutManager manager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL,false);
+        techniqueRecyclerView.setLayoutManager(manager); // LayoutManager 등록
+        techniqueRecyclerView.setAdapter(new TechniqueAdapter(this, techniqueArrayList));  // Adapter 등록
+
         try {
             String jsonData = RecipeActivity.jsonToString(this, "jsons/basicTechnique.json");
             JSONArray jsonArray = new JSONArray(jsonData);
@@ -67,11 +74,61 @@ public class TechniqueActivity extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        sortTechniqueList = techniqueArrayList;
+        techniqueAdapter = new TechniqueAdapter(this, sortTechniqueList);
+        techniqueRecyclerView.setAdapter(techniqueAdapter);
     }
 
     public void clickButton(View view) {
         if(view.getId() == R.id.technique_button_backButton) {
             this.onBackPressed();
+        }
+        else if (view.getId() == R.id.technique_button_sort) {
+            PopupMenu p = new PopupMenu(getApplicationContext(), view);
+            getMenuInflater().inflate(R.menu.sort_popup, p.getMenu());
+            p.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    switch(item.getItemId()) {
+                        case R.id.sortPopup_name_asc:
+                            Collections.sort(sortTechniqueList, new Comparator<Technique>() {
+                                @Override
+                                public int compare(Technique o1, Technique o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) > 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            techniqueAdapter.notifyDataSetChanged();
+                            break;
+                        case R.id.sortPopup_name_desc:
+                            Collections.sort(sortTechniqueList, new Comparator<Technique>() {
+                                @Override
+                                public int compare(Technique o1, Technique o2) {
+                                    String name1 = o1.getName();
+                                    String name2 = o2.getName();
+                                    if (name1.compareTo(name2) < 0) {
+                                        return 1;
+                                    } else if (name1.compareTo(name2) == 0) {
+                                        return 0;
+                                    } else {
+                                        return -1;
+                                    }
+                                }
+                            });
+                            techniqueAdapter.notifyDataSetChanged();
+                            break;
+                    }
+                    return true;
+                }
+            });
+            p.show(); // 메뉴를 띄우기
         }
     }
     public static class Technique {
@@ -116,10 +173,12 @@ public class TechniqueActivity extends AppCompatActivity {
     //Adapter
     public class TechniqueAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
 
+        private Context context;
         private ArrayList<Technique> techniqueArrayList = null;
 
-        TechniqueAdapter(ArrayList<Technique> ingredientList) {
-            this.techniqueArrayList=ingredientList;
+        TechniqueAdapter(Context context, ArrayList<Technique> techniqueList) {
+            this.techniqueArrayList=techniqueList;
+            this.context=context;
         }
 
         @Override
