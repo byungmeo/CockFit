@@ -110,6 +110,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_share1"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -120,6 +121,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_share1_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share1"
@@ -145,6 +147,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_share2"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -155,6 +158,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_share2_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share2"
@@ -180,6 +184,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_share3"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -190,6 +195,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_share3_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share3"
@@ -213,6 +219,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_share4"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -223,6 +230,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_share4_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_share4"
@@ -295,6 +303,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_qa1"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -305,6 +314,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_qa1_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa1"
@@ -329,6 +339,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_qa2"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -339,6 +350,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_qa2_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa2"
@@ -363,6 +375,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_qa3"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -373,6 +386,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_qa3_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa3"
@@ -397,6 +411,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_qa4"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -407,6 +422,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_qa4_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_qa4"
@@ -480,6 +496,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_general1"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -490,6 +507,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_general1_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general1"
@@ -513,6 +531,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_general2"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -523,6 +542,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_general2_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general2"
@@ -546,6 +566,7 @@
                             android:layout_marginTop="5dp"
                             android:tag="textView_general3"
                             android:text=" "
+                            android:textColor="@color/black"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toTopOf="parent" />
 
@@ -556,6 +577,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_general3_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general3"
@@ -580,7 +602,8 @@
                             android:tag="textView_general4"
                             android:text=" "
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent" />
+                            app:layout_constraintTop_toTopOf="parent"
+                            android:textColor="@color/black" />
 
                         <TextView
                             android:id="@+id/textView_general4_date"
@@ -589,6 +612,7 @@
                             android:layout_marginBottom="5dp"
                             android:tag="textView_general4_date"
                             android:text=" "
+                            android:textColor="@color/black"
                             android:textSize="10sp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/textView_general4"

@@ -39,6 +39,7 @@
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="5dp"
                 android:text="Test"
+                android:textColor="@color/black"
                 app:layout_constraintBottom_toTopOf="@+id/general_button_like"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
