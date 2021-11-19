@@ -58,7 +58,7 @@
         app:tint="@color/black" />
 
     <ImageButton
-        android:id="@+id/cock_receipButton"
+        android:id="@+id/cock_recipeButton"
         android:layout_width="150dp"
         android:layout_height="150dp"
         android:background="@drawable/button_round"

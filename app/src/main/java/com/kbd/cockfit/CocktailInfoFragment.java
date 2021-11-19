@@ -21,9 +21,11 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
         AppCompatImageButton listButton = v.findViewById(R.id.cock_listButton);
         AppCompatImageButton ingrdButton = v.findViewById(R.id.cock_ingrdButton);
         AppCompatImageButton equipButton = v.findViewById(R.id.cock_equipButton);
+        AppCompatImageButton senseButton = v.findViewById(R.id.cock_recipeButton);
         listButton.setOnClickListener(this);
         ingrdButton.setOnClickListener(this);
         equipButton.setOnClickListener(this);
+        senseButton.setOnClickListener(this);
 
         return v;
     }
@@ -47,6 +49,12 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
             case R.id.cock_equipButton: {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, EquipmentListActivity.class);
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.cock_recipeButton: {
+                Context context = v.getContext();
+                Intent intent = new Intent(context, CommonSenseActivity.class);
                 context.startActivity(intent);
                 break;
             }
