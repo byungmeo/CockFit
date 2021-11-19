@@ -13,7 +13,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
-
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarFragment"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
@@ -23,15 +22,84 @@
             android:backgroundTint="@color/white"
             app:menu="@menu/top_app_bar_fragment"
             app:navigationIcon="@drawable/ic_baseline_menu_24">
-
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:src="@drawable/ic_cockfit_name" />
-
         </com.google.android.material.appbar.MaterialToolbar>
     </com.google.android.material.appbar.AppBarLayout>
+
+
+    <LinearLayout
+        android:id="@+id/linearLayout"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="15dp"
+        android:background="@drawable/bottomborder"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout">
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginVertical="15dp">
+            <ImageView
+                android:id="@+id/profile_imageView_photo"
+                android:layout_width="150dp"
+                android:layout_height="150dp"
+                android:layout_gravity="center"
+                android:src="@drawable/ic_baseline_person_24" />
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="15dp"
+                android:background="@drawable/bottomborder">
+                <TextView
+                    android:id="@+id/profile_textView_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="칵테일보이"
+                    android:textSize="24sp" />
+                <ImageButton
+                    android:id="@+id/profile_imageButton_changeName"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@null"
+                    android:src="@drawable/ic_baseline_create_24"
+                    android:layout_marginLeft="5dp"
+                    android:layout_marginVertical="5dp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="10dp"
+                android:layout_marginTop="10dp">
+                <ImageButton
+                    android:id="@+id/profile_imageButton_logout"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/button_round"
+                    android:src="@drawable/ic_baseline_logout_24"
+                    app:tint="@color/black" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+
 
     <TextView
         android:id="@+id/textView5"
@@ -46,83 +114,45 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
-    <ImageView
-        android:id="@+id/profile_imageView_photo"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
+    <Button
+        android:id="@+id/profile_button_recipe"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="20dp"
-        android:src="@drawable/ic_baseline_person_24"
+        android:layout_marginTop="10dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="195dp"
+        android:fontFamily="@font/font_custom"
+        android:text="즐겨찾기한 레시피"
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        app:icon="@drawable/ic_baseline_bookmarks_24"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/textView5"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout" />
+        app:layout_constraintTop_toBottomOf="@+id/profile_button_communityActivity" />
 
     <Button
         android:id="@+id/profile_button_communityActivity"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="350dp"
         android:layout_height="55dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="15dp"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="20dp"
+        android:layout_marginBottom="10dp"
         android:fontFamily="@font/font_custom"
         android:text="커뮤니티 활동 내역"
+        android:textColor="@color/black"
         android:textSize="28sp"
         app:icon="@drawable/ic_baseline_brush_24"
+        app:iconGravity="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/profile_button_recipe"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button_recipe" />
-
-    <Button
-        android:id="@+id/profile_button_recipe"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="350dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="44dp"
-        android:layout_marginEnd="15dp"
-        android:fontFamily="@font/font_custom"
-        android:text="즐겨찾기한 레시피"
-        android:textSize="28sp"
-        app:icon="@drawable/ic_baseline_bookmarks_24"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.483"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_imageView_photo" />
-
-    <TextView
-        android:id="@+id/profile_textView_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="20dp"
-        android:text="칵테일보이"
-        android:textSize="24sp"
-        app:layout_constraintStart_toEndOf="@+id/profile_imageView_photo"
-        app:layout_constraintTop_toTopOf="@+id/profile_imageView_photo" />
-
-    <ImageButton
-        android:id="@+id/profile_imageButton_changeName"
-        android:layout_width="30dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="8dp"
-        android:background="@null"
-        android:src="@drawable/ic_baseline_create_24"
-        app:layout_constraintBottom_toBottomOf="@+id/profile_textView_name"
-        app:layout_constraintStart_toEndOf="@+id/profile_textView_name"
-        app:layout_constraintTop_toTopOf="@+id/profile_textView_name"
-        app:layout_constraintVertical_bias="0.0" />
-
-    <ImageButton
-        android:id="@+id/profile_imageButton_logout"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="24dp"
-        android:background="@drawable/button_round"
-        android:src="@drawable/ic_baseline_logout_24"
-        app:layout_constraintStart_toStartOf="@+id/profile_textView_name"
-        app:layout_constraintTop_toBottomOf="@+id/profile_textView_name"
-        app:tint="@color/black" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
