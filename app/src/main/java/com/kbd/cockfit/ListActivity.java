@@ -110,7 +110,7 @@ public class ListActivity extends AppCompatActivity {
 
     public void loadCommonRecipeList() {
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicRecipe.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicRecipe.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -119,10 +119,10 @@ public class ListActivity extends AppCompatActivity {
                 String name = jo.getString("name");
                 String proof = jo.getString("proof");
                 String base = jo.getString("base");
-                String[] ingredient = RecipeActivity.jsonArrayToArray(jo.getJSONArray("ingredient"));
-                String[] equipment = RecipeActivity.jsonArrayToArray(jo.getJSONArray("equipment"));
+                String[] ingredient = UtilitySet.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = UtilitySet.jsonArrayToArray(jo.getJSONArray("equipment"));
                 String description = jo.getString("description");
-                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+                String[] tags = UtilitySet.jsonArrayToArray(jo.getJSONArray("tags"));
 
 
                 AssetManager assetManager = this.getResources().getAssets();

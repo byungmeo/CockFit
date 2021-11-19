@@ -45,7 +45,7 @@ public class TechniqueActivity extends AppCompatActivity {
 
         techniqueArrayList = new ArrayList<>();
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicTechnique.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicTechnique.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
 

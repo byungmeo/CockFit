@@ -224,7 +224,7 @@ public class RecipeActivity extends AppCompatActivity {
         Recipe recipe = null;
 
         try {
-            String jsonData = jsonToString(this, "jsons/basicRecipe.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicRecipe.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
             for(int i = 0; i < jsonArray.length(); i++) {
@@ -239,10 +239,10 @@ public class RecipeActivity extends AppCompatActivity {
                 String name = jo.getString("name");
                 String proof = jo.getString("proof");
                 String base = jo.getString("base");
-                String[] ingredient = jsonArrayToArray(jo.getJSONArray("ingredient"));
-                String[] equipment = jsonArrayToArray(jo.getJSONArray("equipment"));
+                String[] ingredient = UtilitySet.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = UtilitySet.jsonArrayToArray(jo.getJSONArray("equipment"));
                 String description = jo.getString("description");
-                String[] tags = RecipeActivity.jsonArrayToArray(jo.getJSONArray("tags"));
+                String[] tags = UtilitySet.jsonArrayToArray(jo.getJSONArray("tags"));
 
                 AssetManager assetManager = this.getResources().getAssets();
                 InputStream is = assetManager.open("image/recipe/" + name.replace(" ", "_") + ".png");
@@ -258,39 +258,5 @@ public class RecipeActivity extends AppCompatActivity {
         return recipe;
     }
 
-    public static String jsonToString(Context context, String filePath) {
-        String jsonData = null;
 
-        try {
-            AssetManager assetManager = context.getResources().getAssets();
-            InputStream is = assetManager.open(filePath);
-            InputStreamReader isr = new InputStreamReader(is);
-            BufferedReader reader = new BufferedReader(isr);
-
-            StringBuffer buffer = new StringBuffer();
-            String line = reader.readLine();
-            while(line != null) {
-                buffer.append(line + "\n");
-                line = reader.readLine();
-            }
-
-            jsonData = buffer.toString();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        return jsonData;
-    }
-
-    //다른 곳에서 쓸 수도 있으므로, static으로 우선 선언
-    public static String[] jsonArrayToArray(JSONArray array) {
-        if(array==null)
-            return null;
-
-        String[] arr=new String[array.length()];
-        for(int i=0; i<arr.length; i++) {
-            arr[i]=array.optString(i);
-        }
-        return arr;
-    }
 }

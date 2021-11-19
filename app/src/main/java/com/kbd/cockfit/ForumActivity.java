@@ -19,6 +19,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -138,7 +139,11 @@ public class ForumActivity extends AppCompatActivity {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
             postViewHolder.title.setText(postArrayList.get(position).getTitle());
             postViewHolder.writer.setText(postArrayList.get(position).getNickname());
-            postViewHolder.date.setText(postArrayList.get(position).getDate());
+            try {
+                postViewHolder.date.setText(UtilitySet.formatTimeString(postArrayList.get(position).getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
 
             HashMap<String, String> likeUidMap = postArrayList.get(position).getLikeUidMap();
             if(likeUidMap != null) {

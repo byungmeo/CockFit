@@ -35,6 +35,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
@@ -109,7 +110,11 @@ public class PostActivity extends AppCompatActivity {
                 if(post != null) {
                     textView_title.setText(post.getTitle());
                     textView_writer.setText(post.getNickname());
-                    textView_date.setText(post.getDate());
+                    try {
+                        textView_date.setText(UtilitySet.formatTimeString(post.getDate()));
+                    } catch (ParseException e) {
+                        e.printStackTrace();
+                    }
 
                     //FirebaseStorage에서 작성자의 프로필 사진을 불러옵니다.
                     StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");

@@ -45,7 +45,7 @@ public class BaseSpiritActivity extends AppCompatActivity {
 
         basespiritArrayList = new ArrayList<>();
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicBaseSpirit.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicBaseSpirit.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
 

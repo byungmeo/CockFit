@@ -45,7 +45,7 @@ public class EquipmentListActivity extends AppCompatActivity {
 
         equipmentArrayList = new ArrayList<>();
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicEquipment.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicEquipment.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
 

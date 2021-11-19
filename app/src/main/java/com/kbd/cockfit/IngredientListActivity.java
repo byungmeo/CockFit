@@ -46,7 +46,7 @@ public class IngredientListActivity extends AppCompatActivity {
 
         ingredientArrayList = new ArrayList<>();
         try {
-            String jsonData = RecipeActivity.jsonToString(this, "jsons/basicIngredient.json");
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicIngredient.json");
             JSONArray jsonArray = new JSONArray(jsonData);
 
 
