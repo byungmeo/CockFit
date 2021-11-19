@@ -89,7 +89,7 @@ public class RegisterActivity extends AppCompatActivity {
 
     private void uploadImageToFirebase(Uri file){
         storageRef = FirebaseStorage.getInstance().getReference();
-        StorageReference fileRef = storageRef.child("Users/"+uid+"/ProfileImage.jpg");
+        StorageReference fileRef = storageRef.child("Users/"+uid+"/profileImage.jpg");
         fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {

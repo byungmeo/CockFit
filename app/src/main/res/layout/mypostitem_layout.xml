@@ -4,7 +4,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/myPostItem_constraintLayout"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:background="@drawable/bottomborder">
 
     <TextView
         android:id="@+id/myPostItem_textView_postTitle"
@@ -34,4 +35,23 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="@+id/myPostItem_textView_writer"
         app:layout_constraintTop_toBottomOf="@+id/myPostItem_textView_writer" />
+
+    <ImageView
+        android:id="@+id/myPostItem_imageView_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:srcCompat="@drawable/ic_outline_thumb_up_24" />
+
+    <TextView
+        android:id="@+id/myPostItem_textView_like"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="5dp"
+        android:text="0"
+        app:layout_constraintBottom_toBottomOf="@+id/myPostItem_imageView_like"
+        app:layout_constraintEnd_toStartOf="@+id/myPostItem_imageView_like"
+        app:layout_constraintTop_toTopOf="@+id/myPostItem_imageView_like" />
 </androidx.constraintlayout.widget.ConstraintLayout>

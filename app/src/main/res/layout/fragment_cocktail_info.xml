@@ -30,7 +30,7 @@
         android:src="@drawable/ic_cocktail_ingredient"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:tint="@color/CockFitMainColor1" />
+        app:tint="@color/black" />
 
     <ImageButton
         android:id="@+id/cock_listButton"
@@ -42,7 +42,7 @@
         android:src="@drawable/ic_cocktail_list"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@+id/cock_ingrdButton"
-        app:tint="@color/CockFitMainColor1" />
+        app:tint="@color/black" />
 
     <ImageButton
         android:id="@+id/cock_equipButton"
@@ -55,7 +55,7 @@
         android:src="@drawable/ic_cocktail_equipment"
         app:layout_constraintBottom_toTopOf="@+id/textView2"
         app:layout_constraintStart_toStartOf="@+id/cock_ingrdButton"
-        app:tint="@color/CockFitMainColor1" />
+        app:tint="@color/black" />
 
     <ImageButton
         android:id="@+id/cock_receipButton"
@@ -66,7 +66,7 @@
         android:src="@drawable/ic_cocktail_basetip"
         app:layout_constraintBottom_toBottomOf="@+id/cock_equipButton"
         app:layout_constraintEnd_toEndOf="@+id/cock_listButton"
-        app:tint="@color/CockFitMainColor1" />
+        app:tint="@color/black" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

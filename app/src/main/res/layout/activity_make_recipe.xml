@@ -7,52 +7,32 @@
     android:layout_height="match_parent"
     tools:context=".MakeRecipeActivity">
 
-    <ImageView
-        android:id="@+id/user_button_backButton"
-        android:layout_width="35dp"
-        android:layout_height="35dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:onClick="clickButton"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/ic_baseline_arrow_back_24"
-        tools:ignore="TouchTargetSizeCheck,SpeakableTextPresentCheck" />
-
-    <TextView
-        android:id="@+id/make_textView_screenName"
-        android:layout_width="wrap_content"
+    <com.google.android.material.appbar.AppBarLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginStart="12dp"
-        android:text="나만의 칵테일 제조"
-        android:textAppearance="@style/TextAppearance.AppCompat.Large"
-        app:layout_constraintBottom_toBottomOf="@+id/user_button_backButton"
-        app:layout_constraintStart_toEndOf="@+id/user_button_backButton"
-        app:layout_constraintTop_toTopOf="@+id/user_button_backButton"
-        app:layout_constraintVertical_bias="0.0" />
-
-
-    <Button
-        android:id="@+id/make_button_store"
-        style="@style/Widget.MaterialComponents.Button.TextButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="5dp"
-        android:onClick="clickButton"
-        android:text="저장"
-        android:textStyle="bold"
-        app:icon="@drawable/ic_baseline_receipt_long_24"
-        app:iconGravity="textStart"
+        app:layout_constraintBottom_toTopOf="@+id/scrollView3"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="parent"></Button>
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent">
+
+        <com.google.android.material.appbar.MaterialToolbar
+            android:id="@+id/topAppBar"
+            style="@style/Widget.MaterialComponents.Toolbar.Primary"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            app:menu="@menu/top_app_bar"
+            app:navigationIcon="@drawable/ic_baseline_arrow_back_24"
+            app:title="나만의 레시피 제작" />
+    </com.google.android.material.appbar.AppBarLayout>
+
+
 
     <ScrollView
         android:id="@+id/scrollView3"
         android:layout_width="410dp"
-        android:layout_height="595dp"
+        android:layout_height="match_parent"
         android:layout_marginStart="15dp"
-        android:layout_marginTop="65dp"
+        android:layout_marginTop="50dp"
         android:layout_marginEnd="15dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -86,6 +66,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_name"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/white"
@@ -95,6 +76,7 @@
                     app:startIconDrawable="@drawable/ic_baseline_list_alt_24">
                     <com.google.android.material.textfield.TextInputEditText
                         android:hint="이름"
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -110,6 +92,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_proof"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="도수"
@@ -119,6 +102,7 @@
                     app:startIconContentDescription="CocktailProof"
                     app:startIconDrawable="@drawable/ic_baseline_proof_24">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:maxLines="1" />
@@ -133,6 +117,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_base"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="기주"
@@ -142,6 +127,7 @@
                     app:startIconContentDescription="email"
                     app:startIconDrawable="@drawable/ic_baseline_base_24">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -157,6 +143,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_ingredient"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="재료"
@@ -166,6 +153,7 @@
                     app:startIconContentDescription="email"
                     app:startIconDrawable="@drawable/ic_baseline_ingredient_24">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -181,6 +169,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_equipment"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint="장비"
@@ -190,6 +179,7 @@
                     app:startIconContentDescription="email"
                     app:startIconDrawable="@drawable/ic_shaker">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -205,6 +195,7 @@
                 >
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_tags"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:hint='태그 (", "구분)'
@@ -214,6 +205,7 @@
                     app:startIconContentDescription="email"
                     app:startIconDrawable="@drawable/ic_baseline_tag_24">
                     <com.google.android.material.textfield.TextInputEditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:inputType="textPersonName"
@@ -228,11 +220,13 @@
                 android:gravity="center">
                 <com.google.android.material.textfield.TextInputLayout
                     android:id="@+id/make_editText_description"
+                    android:fontFamily="@font/font_custom"
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     app:boxBackgroundColor="@color/white"
                     android:padding="5dp">
                     <EditText
+                        android:fontFamily="@font/font_custom"
                         android:layout_width="400dp"
                         android:layout_height="200dp"
                         android:ems="12"
