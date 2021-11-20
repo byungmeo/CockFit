@@ -36,6 +36,7 @@ import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 
 public class MyRecipeFragment extends Fragment {
     private Context context;
@@ -196,21 +197,29 @@ public class MyRecipeFragment extends Fragment {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 MyRecipe myRecipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
-                                String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-                                RecipePost post = new RecipePost(myRecipe.getName(), user.getDisplayName(), uid, date);
-                                post.setRecipeId(myRecipe.getMyRecipeId());
+                                if(myRecipe.getIsShare()) {
+                                    Toast.makeText(context, "이미 공유된 레시피입니다!", Toast.LENGTH_SHORT).show();
+                                    return;
+                                } else {
+                                    String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+                                    RecipePost post = new RecipePost(myRecipe.getName(), user.getDisplayName(), uid, date);
+                                    post.setRecipeId(myRecipe.getMyRecipeId());
 
-                                String postId = mDatabase.child("forum").child("share").push().getKey();
-                                mDatabase.child("forum").child("share").child(postId).setValue(post);
+                                    String postId = mDatabase.child("forum").child("share").push().getKey();
+                                    mDatabase.child("forum").child("share").child(postId).setValue(post);
 
-                                Intent intent = new Intent(context, PostActivity.class);
+                                    HashMap<String, Object> update = new HashMap<>();
+                                    update.put("isShare", new Boolean(true));
+                                    mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipe.getMyRecipeId()).updateChildren(update);
 
-                                intent.putExtra("forumT", "share");
-                                intent.putExtra("post", post);
-                                intent.putExtra("postId", postId);
+                                    Intent intent = new Intent(context, PostActivity.class);
 
+                                    intent.putExtra("forumT", "share");
+                                    intent.putExtra("post", post);
+                                    intent.putExtra("postId", postId);
 
-                                startActivity(intent);
+                                    startActivity(intent);
+                                }
                             }
                         });
                         builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
