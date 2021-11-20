@@ -6,68 +6,86 @@
     android:id="@+id/myReicipeItem_cardView"
 
     android:layout_width="match_parent"
-    android:layout_height="180dp"
+    android:layout_height="200dp"
 
     android:layout_marginHorizontal="15dp"
     android:layout_marginVertical="15dp"
     card_view:cardCornerRadius="4dp">
 
     <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardView_Recipe_Info"
         android:layout_width="match_parent"
-        android:layout_height="138dp"
-        android:background="@drawable/bottomborder"
-        android:layout_gravity="top">
-        <ImageView
-            android:id="@+id/cardView_Recipe_Photo"
-            android:src ="@drawable/ic_cocktail"
+        android:layout_height="match_parent">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardView_Recipe_Info"
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
-        </ImageView>
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            android:layout_height="160dp"
+            android:layout_gravity="top"
+            android:background="@drawable/bottomborder"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardView_Recipe_Setting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        >
-        <TextView
-            android:id="@+id/myRecipeItem_textView_name"
-            android:layout_width="wrap_content"
-            android:layout_height="26dp"
-            android:layout_marginStart="15dp"
-            android:layout_marginBottom="10dp"
-            android:text="테스트"
-            android:textColor="@color/black"
-            android:textSize="20sp"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            <ImageView
+                android:id="@+id/cardView_Recipe_Photo"
+                android:layout_width="120dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="10dp"
+                android:layout_marginBottom="10dp"
+                android:src="@drawable/ic_cocktail"
+                app:layout_constraintBottom_toTopOf="@+id/myRecipeItem_textView_name"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"></ImageView>
 
-        <ImageButton
-            android:id="@+id/delete_Recipe"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="right"
-            android:layout_marginEnd="15dp"
-            android:background="@null"
-            android:src="@drawable/ic_baseline_delete_24"
+            <TextView
+                android:id="@+id/myRecipeItem_textView_name"
+                android:layout_width="wrap_content"
+                android:layout_height="26dp"
+                android:text="테스트"
+                android:textColor="@color/black"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/cardView_Recipe_Setting"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_gravity="bottom"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:tint="@color/CockFitMainColor1" />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/cardView_Recipe_Info">
 
-        <ImageButton
-            android:id="@+id/myRecipeItem_imageButton_share"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginEnd="30dp"
-            android:background="@null"
-            android:tint="@color/CockFitMainColor1"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/delete_Recipe"
-            app:layout_constraintTop_toTopOf="parent"
-            card_view:srcCompat="@drawable/ic_baseline_share_24" />
+            <ImageButton
+                android:id="@+id/delete_Recipe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:layout_marginEnd="15dp"
+                android:background="@null"
+                android:src="@drawable/ic_baseline_delete_24"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/CockFitMainColor1" />
+
+            <ImageButton
+                android:id="@+id/myRecipeItem_imageButton_share"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginEnd="30dp"
+                android:background="@null"
+                app:tint="@color/CockFitMainColor1"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/delete_Recipe"
+                app:layout_constraintTop_toTopOf="parent"
+                card_view:srcCompat="@drawable/ic_baseline_share_24" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 
