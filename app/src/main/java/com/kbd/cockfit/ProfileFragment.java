@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.FrameLayout;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,11 +69,16 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private Button button_ok;
     private AlertDialog userCheckDialog;
 
+    private ProgressBar progressBar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_profile, container, false);
+
+        progressBar = v.findViewById(R.id.profile_progressBar);
+        progressBar.setVisibility(View.VISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
         DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
@@ -97,8 +103,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for(DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     String userRegisterDate = dataSnapshot.getValue(String.class);
-                    textView_userRegisterDate.setText(userRegisterDate);
+                    textView_userRegisterDate.setText("가입 일자 : " + userRegisterDate);
                 }
+                progressBar.setVisibility(View.GONE);
             }
 
             @Override
@@ -124,6 +131,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     }
 
     private void updateProfilePhoto(Uri devicePhotoUri){
+        progressBar.setVisibility(View.VISIBLE);
         StorageReference photoReference = mStorage.child("Users/"+uid+"/profileImage.jpg");
         photoReference.putFile(devicePhotoUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
 
@@ -142,6 +150,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()) {
                                             Log.d("test", "프로필 사진 업데이트 완료");
+                                            progressBar.setVisibility(View.GONE);
                                         }
                                     }
                                 });
