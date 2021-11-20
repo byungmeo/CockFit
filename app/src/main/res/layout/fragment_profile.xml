@@ -104,7 +104,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="5dp"
-                android:text="1999-09-01"
+                android:text="가입 일자 : 1999-09-01"
                 android:textColor="@color/black"
                 android:textSize="14sp" />
 
@@ -188,7 +188,7 @@
         android:layout_marginEnd="20dp"
         android:layout_marginBottom="10dp"
         android:fontFamily="@font/font_custom"
-        android:text="커뮤니티 활동 내역"
+        android:text="게시글 작성 내역"
         android:textColor="@color/black"
         android:textSize="28sp"
         app:icon="@drawable/ic_baseline_brush_24"
@@ -197,5 +197,15 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <ProgressBar
+        android:id="@+id/profile_progressBar"
+        style="?android:attr/progressBarStyle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

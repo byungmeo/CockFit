@@ -82,11 +82,16 @@ public class WritePostActivity extends AppCompatActivity {
                         mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
                     } else {
                         FirebaseUser user = mAuth.getCurrentUser();
+                        String uid = user.getUid();
                         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-                        Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), mAuth.getUid(), date);
+                        Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), uid, date);
                         post.setContent(editText_content.getText().toString());
 
-                        mDatabase.child("forum").child(forumType).push().setValue(post);
+                        String key = mDatabase.child("forum").child(forumType).push().getKey();
+                        HashMap<String, String> value = new HashMap<>();
+                        value.put("ForumType", forumType);
+                        mDatabase.child("forum").child(forumType).child(key).setValue(post);
+                        mDatabase.child("user").child(uid).child("community").child("posting").child(key).setValue(value);
                     }
                     onBackPressed();
 

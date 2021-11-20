@@ -88,6 +88,15 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                 long postNum = snapshot.getChildrenCount();
 
                 if(postNum == 0) {
+                    String _titleViewTag = "textView_" + finalType + 1;
+                    String _dateViewTag = _titleViewTag + "_date";
+
+                    TextView title = v.findViewWithTag(_titleViewTag);
+                    TextView date = v.findViewWithTag(_dateViewTag);
+
+                    title.setText("");
+                    date.setText("");
+
                     progressBar.setVisibility(View.GONE);
                     return;
                 }
