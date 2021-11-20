@@ -124,7 +124,7 @@ public class PostActivity extends AppCompatActivity {
                     mStorage.child("Users").child(post.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            Log.d("test", "프로필 사진이 있는 사용자");
+                            //프로필 사진이 있는 사용자
                             Activity activity = PostActivity.this;
                             if(activity.isFinishing())
                                 return;
@@ -139,7 +139,7 @@ public class PostActivity extends AppCompatActivity {
                     }).addOnFailureListener(new OnFailureListener() {
                         @Override
                         public void onFailure(@NonNull Exception e) {
-                            Log.d("test", "프로필 사진이 없는 사용자");
+                            //프로필 사진이 없는 사용자
                             progressBar.setVisibility(View.GONE);
                             scrollView.setVisibility(View.VISIBLE);
                         }
