@@ -22,7 +22,7 @@
         android:id="@+id/user_button_changeEmail"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="148dp"
+        android:layout_marginTop="200dp"
         android:onClick="clickButton"
         android:text="이메일 변경"
         app:layout_constraintEnd_toEndOf="parent"
@@ -42,26 +42,15 @@
         app:layout_constraintTop_toBottomOf="@+id/user_button_changeEmail" />
 
     <Button
-        android:id="@+id/user_button_logout"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="40dp"
-        android:onClick="clickButton"
-        android:text="로그아웃"
-        app:layout_constraintEnd_toEndOf="@+id/user_button_changePw"
-        app:layout_constraintStart_toStartOf="@+id/user_button_changePw"
-        app:layout_constraintTop_toBottomOf="@+id/user_button_changePw" />
-
-    <Button
         android:id="@+id/user_button_leave"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
         android:onClick="clickButton"
         android:text="계정 탈퇴"
-        app:layout_constraintEnd_toEndOf="@+id/user_button_logout"
-        app:layout_constraintStart_toStartOf="@+id/user_button_logout"
-        app:layout_constraintTop_toBottomOf="@+id/user_button_logout" />
+        app:layout_constraintEnd_toEndOf="@+id/user_button_changePw"
+        app:layout_constraintStart_toStartOf="@+id/user_button_changePw"
+        app:layout_constraintTop_toBottomOf="@+id/user_button_changePw" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
