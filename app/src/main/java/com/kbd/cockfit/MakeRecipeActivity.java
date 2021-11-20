@@ -94,7 +94,8 @@ public class MakeRecipeActivity extends AppCompatActivity {
             return;
         }
 
-        Recipe recipe = new Recipe(0, name,proof,base,ingredient,equipment,description,tags);
+        MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
+        recipe.setUid(uid);
 
         mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe);
         if(imageOn) {

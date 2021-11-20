@@ -7,6 +7,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -35,7 +36,7 @@ public class MyRecipeFragment extends Fragment {
     private RecyclerView myRecipeRecyclerView;
     private GridLayoutManager layoutManager;
     private MyRecipeAdapter adapter;
-    private ArrayList<Recipe> myRecipeArrayList;
+    private ArrayList<MyRecipe> myRecipeArrayList;
 
     private ProgressBar progressBar;
 
@@ -76,7 +77,9 @@ public class MyRecipeFragment extends Fragment {
                 myRecipeArrayList.clear();
                 
                 for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
-                    myRecipeArrayList.add(recipeSnapshot.getValue(Recipe.class));
+                    MyRecipe recipe = recipeSnapshot.getValue(MyRecipe.class);
+                    recipe.setMyRecipeId(recipeSnapshot.getKey());
+                    myRecipeArrayList.add(recipe);
                 }
 
                 adapter = new MyRecipeAdapter(myRecipeArrayList);
@@ -97,10 +100,10 @@ public class MyRecipeFragment extends Fragment {
         private static final int TYPE_FOOTER = 1;
         private static final int TYPE_ITEM = 2;
 
-        private ArrayList<Recipe> myRecipeArrayList;
+        private ArrayList<MyRecipe> myRecipeArrayList;
 
 
-        public MyRecipeAdapter(ArrayList<Recipe> myRecipeArrayList) {
+        public MyRecipeAdapter(ArrayList<MyRecipe> myRecipeArrayList) {
             this.myRecipeArrayList = myRecipeArrayList;
         }
 
@@ -111,9 +114,11 @@ public class MyRecipeFragment extends Fragment {
         public class ItemViewHolder extends RecyclerView.ViewHolder {
             private ConstraintLayout cardViewCocktailInfo;
             private TextView name;
+            private ImageButton deleteRecipe;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
+                deleteRecipe = itemView.findViewById(R.id.delete_Recipe);
                 cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
             }
@@ -131,6 +136,8 @@ public class MyRecipeFragment extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            FirebaseUser user = mAuth.getCurrentUser();
+            String uid = user.getUid();
             if(viewType == TYPE_ITEM) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myrecipeitem_layout, parent, false);
                 ItemViewHolder itemViewHolder = new ItemViewHolder(view);
@@ -141,6 +148,17 @@ public class MyRecipeFragment extends Fragment {
                         Intent intent = new Intent(context, RecipeActivity.class);
                         intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
                         context.startActivity(intent);
+                    }
+                });
+                itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Log.d("test", "onClick: delete");
+                        String myRecipeId = myRecipeArrayList.get(itemViewHolder.getAdapterPosition()).getMyRecipeId();
+                        myRecipeArrayList.remove(itemViewHolder.getAdapterPosition());
+                        notifyItemRemoved(itemViewHolder.getAdapterPosition());
+                        notifyItemRangeChanged(itemViewHolder.getAdapterPosition(), myRecipeArrayList.size());
+                        mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipeId).removeValue();
                     }
                 });
                 return itemViewHolder;
