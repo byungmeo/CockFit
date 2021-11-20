@@ -2,6 +2,7 @@ package com.kbd.cockfit;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.content.Context;
@@ -10,6 +11,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -42,21 +44,36 @@ public class UserAdminActivity extends AppCompatActivity {
     private Button button_cancel;
     private Button button_ok;
     private FirebaseUser user;
+    private Toolbar userAdminToolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_admin);
         user = FirebaseAuth.getInstance().getCurrentUser();
+        userAdminToolbar = findViewById(R.id.userAdmin_materialToolbar);
+        setSupportActionBar(userAdminToolbar);
     }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        userAdminToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                UserAdminActivity.this.onBackPressed();
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
+
 
     public void clickButton(View view) {
         LayoutInflater inflater = getLayoutInflater();
         AlertDialog.Builder builder = new AlertDialog.Builder(view.getContext());
 
-        if(view.getId() == R.id.user_button_backButton) {
-            this.onBackPressed();
-        } else if(view.getId() == R.id.user_button_changeEmail) {
+
+        if(view.getId() == R.id.user_button_changeEmail) {
             userAdminView = inflater.inflate(R.layout.changeemail, null);
 
             editText_changeEmail = userAdminView.findViewById(R.id.changeEmail_editText_changeEmail);

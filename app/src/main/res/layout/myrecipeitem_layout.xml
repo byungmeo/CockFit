@@ -18,7 +18,19 @@
         android:layout_height="138dp"
         android:background="@drawable/bottomborder"
         android:layout_gravity="top">
+        <ImageView
+            android:id="@+id/cardView_Recipe_Photo"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+        </ImageView>
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/cardView_Recipe_Setting"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_gravity="bottom"
+        >
         <TextView
             android:id="@+id/myRecipeItem_textView_name"
             android:layout_width="wrap_content"
@@ -30,14 +42,6 @@
             android:textSize="20sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:id="@+id/cardView_Recipe_Setting"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_gravity="bottom"
-        >
 
         <ImageButton
             android:id="@+id/delete_Recipe"
