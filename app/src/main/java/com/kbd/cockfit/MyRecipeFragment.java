@@ -1,10 +1,12 @@
 package com.kbd.cockfit;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.content.Intent;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -44,6 +46,9 @@ public class MyRecipeFragment extends Fragment {
 
     private ProgressBar progressBar;
 
+    private MyRecipe editRecipe;
+    private String editRecipeId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -56,6 +61,7 @@ public class MyRecipeFragment extends Fragment {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
+
         layoutManager = new GridLayoutManager(v.getContext(), 2);
         myRecipeRecyclerView = v.findViewById(R.id.myRecipe_recyclerView);
         myRecipeRecyclerView.setHasFixedSize(true);
@@ -65,6 +71,7 @@ public class MyRecipeFragment extends Fragment {
         myRecipeArrayList = new ArrayList<>();
         adapter = new MyRecipeAdapter(myRecipeArrayList);
         myRecipeRecyclerView.setAdapter(adapter);
+
 
         initMyRecipeList();
 
@@ -118,10 +125,12 @@ public class MyRecipeFragment extends Fragment {
         public class ItemViewHolder extends RecyclerView.ViewHolder {
             private ConstraintLayout cardViewCocktailInfo;
             private TextView name;
+            private ImageButton editRecipe;
             private ImageButton deleteRecipe;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
+                editRecipe = itemView.findViewById(R.id.edit_Recipe);
                 deleteRecipe = itemView.findViewById(R.id.delete_Recipe);
                 cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
@@ -152,6 +161,20 @@ public class MyRecipeFragment extends Fragment {
                         Intent intent = new Intent(context, RecipeActivity.class);
                         intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
                         context.startActivity(intent);
+                    }
+                });
+                itemViewHolder.editRecipe.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        MyRecipe recipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
+                        Context context = v.getContext();
+                        Toast.makeText(context, "수정", Toast.LENGTH_SHORT).show();
+
+                        //게시글 수정
+                        Intent intent = new Intent(context, MakeRecipeActivity.class);
+                        intent.putExtra("isEdit", true);
+                        intent.putExtra("recipe", recipe);
+                        intent.putExtra("recipeId", recipe.getMyRecipeId());
+                        startActivity(intent);
                     }
                 });
                 itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
@@ -194,6 +217,7 @@ public class MyRecipeFragment extends Fragment {
             if(holder instanceof ItemViewHolder) {
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
                 itemViewHolder.name.setText(myRecipeArrayList.get(holder.getAdapterPosition()).getName());
+
 
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;

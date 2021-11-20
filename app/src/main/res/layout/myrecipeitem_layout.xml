@@ -44,6 +44,18 @@
             app:layout_constraintStart_toStartOf="parent" />
 
         <ImageButton
+            android:id="@+id/edit_Recipe"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="left"
+            android:backgroundTint="@color/white"
+            android:src="@android:drawable/ic_menu_edit"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:tint="@color/CockFitMainColor1" />
+
+        <ImageButton
             android:id="@+id/delete_Recipe"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
