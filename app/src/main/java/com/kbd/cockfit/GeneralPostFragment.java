@@ -68,14 +68,13 @@ public class GeneralPostFragment extends Fragment {
         constraintLayout.setVisibility(View.INVISIBLE);
         progressBar.setVisibility(View.VISIBLE);
 
-
         //firebase initialize
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         //getBundle
         Bundle bundle = getArguments();
-        forumType = bundle.getString("forum");
+        forumType = bundle.getString("forumType");
         postId = bundle.getString("postId");
 
         //view initialize

@@ -54,7 +54,7 @@ public class WritePostActivity extends AppCompatActivity {
             editPostId = intent.getStringExtra("postId");
             initEditPost();
         }
-        forumType = intent.getStringExtra("forum");
+        forumType = intent.getStringExtra("forumType");
 
         toolbar = findViewById(R.id.write_materialToolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {

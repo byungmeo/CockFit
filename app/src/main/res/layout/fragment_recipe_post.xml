@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RecipePostFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="300dp"
+            android:layout_height="wrap_content"
+            android:src="@android:drawable/ic_menu_gallery"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_test"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/hello_blank_fragment"
+            app:layout_constraintEnd_toEndOf="@+id/imageView"
+            app:layout_constraintStart_toStartOf="@+id/imageView"
+            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_recipeName"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_test"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_test"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_test" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_tag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_recipeName"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_recipeName"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_recipeName" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_proof"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_tag"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_tag"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_tag" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_base"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_proof"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_proof"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_proof" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_ingredient"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_base"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_base"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_base" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_equipment"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_ingredient"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_ingredient"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_ingredient" />
+
+        <TextView
+            android:id="@+id/recipePost_textView_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="TextView"
+            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_equipment"
+            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_equipment"
+            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_equipment" />
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</FrameLayout>

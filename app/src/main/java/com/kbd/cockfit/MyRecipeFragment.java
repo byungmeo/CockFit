@@ -24,6 +24,8 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -33,9 +35,13 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.security.acl.Group;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 
 public class MyRecipeFragment extends Fragment {
+    private Context context;
+
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
@@ -54,6 +60,7 @@ public class MyRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
+        context = v.getContext();
 
         progressBar = v.findViewById(R.id.myRecipe_progressBar);
         progressBar.setVisibility(View.VISIBLE);
@@ -127,12 +134,14 @@ public class MyRecipeFragment extends Fragment {
             private TextView name;
             private ImageButton editRecipe;
             private ImageButton deleteRecipe;
+            private ImageButton button_share;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
                 editRecipe = itemView.findViewById(R.id.edit_Recipe);
                 deleteRecipe = itemView.findViewById(R.id.delete_Recipe);
                 cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
+                button_share = itemView.findViewById(R.id.myRecipeItem_imageButton_share);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
             }
         }
@@ -157,7 +166,6 @@ public class MyRecipeFragment extends Fragment {
                 itemViewHolder.cardViewCocktailInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context context = v.getContext();
                         Intent intent = new Intent(context, RecipeActivity.class);
                         intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
                         context.startActivity(intent);
@@ -180,7 +188,6 @@ public class MyRecipeFragment extends Fragment {
                 itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Context context = v.getContext();
                         AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
                         alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                             @Override
@@ -196,12 +203,48 @@ public class MyRecipeFragment extends Fragment {
                         alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                Toast.makeText(context, "취소하였습니다", Toast.LENGTH_SHORT).show();
+                                //
                             }
                         });
                         AlertDialog alert = alertdialog.create();
                         alert.setMessage("정말 레시피를 삭제하시겠습니까?");
                         alert.show();
+                    }
+                });
+                itemViewHolder.button_share.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                        builder.setPositiveButton("공유", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                MyRecipe myRecipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
+                                String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+                                RecipePost post = new RecipePost(myRecipe.getName(), user.getDisplayName(), uid, date);
+                                post.setRecipeId(myRecipe.getMyRecipeId());
+
+                                String postId = mDatabase.child("forum").child("share").push().getKey();
+                                mDatabase.child("forum").child("share").child(postId).setValue(post);
+
+                                Intent intent = new Intent(context, PostActivity.class);
+
+                                intent.putExtra("forumT", "share");
+                                intent.putExtra("post", post);
+                                intent.putExtra("postId", postId);
+
+
+                                startActivity(intent);
+                            }
+                        });
+                        builder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                //
+                            }
+                        });
+                        AlertDialog dialog = builder.create();
+                        dialog.setMessage("레시피 공유 게시판에 공유 하시겠습니까?");
+                        dialog.show();
                     }
                 });
                 return itemViewHolder;

@@ -62,7 +62,7 @@ public class ForumActivity extends AppCompatActivity {
             }
         });
 
-        forumType = getIntent().getStringExtra("forum");
+        forumType = getIntent().getStringExtra("forumType");
         switch (forumType) {
             case "share" : {
                 toolbar.setTitle("레시피 공유 게시판");
@@ -92,7 +92,7 @@ public class ForumActivity extends AppCompatActivity {
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.forum_menuItem_wirtePost) {
                     Intent intent = new Intent(context, WritePostActivity.class);
-                    intent.putExtra("forum", forumType);
+                    intent.putExtra("forumType", forumType);
                     startActivity(intent);
                 }
                 return false;
@@ -172,7 +172,13 @@ public class ForumActivity extends AppCompatActivity {
                 postArrayList.clear();
 
                 for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    Post post = postSnapshot.getValue(Post.class);
+                    Post post;
+                    if(forumType.equals("share")) {
+                        post = postSnapshot.getValue(RecipePost.class);
+                    } else {
+                        post = postSnapshot.getValue(Post.class);
+                    }
+
                     postArrayList.add(post);
                     postIdMap.put(post, postSnapshot.getKey());
                 }
@@ -224,9 +230,12 @@ public class ForumActivity extends AppCompatActivity {
                     Intent intent = new Intent(v.getContext(), PostActivity.class);
                     intent.putExtra("postId", postIdMap.get(post));
                     if(forumType.equals("myPost")) {
-                        intent.putExtra("forum", myActivityPostMap.get(postIdMap.get(post)));
+                        intent.putExtra("forumType", myActivityPostMap.get(postIdMap.get(post)));
+                    } else if(forumType.equals("share")) {
+                        intent.putExtra("forumT", "share");
+                        intent.putExtra("post", post);
                     } else {
-                        intent.putExtra("forum", forumType);
+                        intent.putExtra("forumType", forumType);
                     }
 
                     startActivity(intent);
