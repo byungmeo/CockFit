@@ -21,8 +21,10 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -48,7 +50,7 @@ public class RecipePostFragment extends Fragment {
     private String writerUid;
     private HashMap<String, String> likeUidMap;
 
-    private TextView textView_test;
+    private ImageView imageView_picture;
     private TextView textView_recipeName;
     private TextView textView_tags;
     private TextView textView_proof;
@@ -86,9 +88,9 @@ public class RecipePostFragment extends Fragment {
         writerUid = bundle.getString("writerUid");
 
         //view initialize
-        textView_test = v.findViewById(R.id.share_textView_test);
+        imageView_picture = v.findViewById(R.id.share_imageView_picture);
         textView_recipeName = v.findViewById(R.id.share_textView_recipeName);
-        textView_tags = v.findViewById(R.id.share_recipePost_textView_tag);
+        textView_tags = v.findViewById(R.id.share_textView_tag);
         textView_proof = v.findViewById(R.id.share_textView_proof);
         textView_base = v.findViewById(R.id.share_textView_base);
         textView_ingredient = v.findViewById(R.id.share_textView_ingredient);
@@ -161,9 +163,18 @@ public class RecipePostFragment extends Fragment {
 
             @Override public void onCancelled(@NonNull DatabaseError error) { }
         });
-        //
 
-        textView_test.setText(recipeId);
+        //
+        StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+        mStorage.child("Users").child(writerUid).child("CocktailImage").child(recipeId).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+            @Override
+            public void onComplete(@NonNull Task<Uri> task) {
+                Glide.with(v)
+                    .load(task.getResult())
+                    .into(imageView_picture);
+            }
+        });
+
         mDatabase.child("user").child(writerUid).child("MyRecipe").child(recipeId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
