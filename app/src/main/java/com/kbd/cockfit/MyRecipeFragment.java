@@ -4,13 +4,14 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,8 +33,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
-import java.security.acl.Group;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
@@ -43,12 +46,14 @@ public class MyRecipeFragment extends Fragment {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-
+    private FirebaseUser user;
+    private StorageReference storageRef;
+    private StorageReference dateRef;
     private RecyclerView myRecipeRecyclerView;
     private GridLayoutManager layoutManager;
     private MyRecipeAdapter adapter;
     private ArrayList<MyRecipe> myRecipeArrayList;
-
+    private String uid;
     private ProgressBar progressBar;
 
     @Override
@@ -60,10 +65,10 @@ public class MyRecipeFragment extends Fragment {
 
         progressBar = v.findViewById(R.id.myRecipe_progressBar);
         progressBar.setVisibility(View.VISIBLE);
-
         mAuth = FirebaseAuth.getInstance();
+        user = mAuth.getCurrentUser();
+        uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
-
         layoutManager = new GridLayoutManager(v.getContext(), 2);
         myRecipeRecyclerView = v.findViewById(R.id.myRecipe_recyclerView);
         myRecipeRecyclerView.setHasFixedSize(true);
@@ -94,11 +99,14 @@ public class MyRecipeFragment extends Fragment {
                     myRecipeArrayList.add(recipe);
                 }
 
+                if(myRecipeArrayList.size() == 0){
+                    progressBar.setVisibility(View.GONE);
+                    myRecipeRecyclerView.setVisibility(View.VISIBLE);
+                }
+
                 adapter = new MyRecipeAdapter(myRecipeArrayList);
                 myRecipeRecyclerView.setAdapter(adapter);
-                myRecipeRecyclerView.setVisibility(View.VISIBLE);
-
-                progressBar.setVisibility(View.GONE);
+                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -128,6 +136,7 @@ public class MyRecipeFragment extends Fragment {
             private TextView name;
             private ImageButton deleteRecipe;
             private ImageButton button_share;
+            private ImageView cocktailPhoto;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -135,6 +144,7 @@ public class MyRecipeFragment extends Fragment {
                 cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
                 button_share = itemView.findViewById(R.id.myRecipeItem_imageButton_share);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
+                cocktailPhoto = itemView.findViewById(R.id.cardView_Recipe_Photo);
             }
         }
 
@@ -155,6 +165,7 @@ public class MyRecipeFragment extends Fragment {
             if(viewType == TYPE_ITEM) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myrecipeitem_layout, parent, false);
                 ItemViewHolder itemViewHolder = new ItemViewHolder(view);
+
                 itemViewHolder.cardViewCocktailInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
@@ -253,6 +264,26 @@ public class MyRecipeFragment extends Fragment {
             if(holder instanceof ItemViewHolder) {
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
                 itemViewHolder.name.setText(myRecipeArrayList.get(holder.getAdapterPosition()).getName());
+                storageRef =  FirebaseStorage.getInstance().getReference();
+                dateRef = storageRef.child("Users/"+uid+"/CocktailImage/"+myRecipeArrayList.get(holder.getAdapterPosition()).getMyRecipeId()+".jpg");
+
+                dateRef.getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Log.d("test0", task.getResult().toString());
+                            // Glide 이용하여 이미지뷰에 로딩
+                            Glide.with(MyRecipeFragment.this)
+                                    .load(task.getResult())
+                                    .into(itemViewHolder.cocktailPhoto);
+                            progressBar.setVisibility(View.GONE);
+                            myRecipeRecyclerView.setVisibility(View.VISIBLE);
+                        } else {
+                        }
+                    }
+                });
+
+
 
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;

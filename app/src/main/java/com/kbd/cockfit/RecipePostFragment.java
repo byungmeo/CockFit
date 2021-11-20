@@ -10,6 +10,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -166,7 +167,7 @@ public class RecipePostFragment extends Fragment {
 
         //
         StorageReference mStorage = FirebaseStorage.getInstance().getReference();
-        mStorage.child("Users").child(writerUid).child("CocktailImage").child(recipeId).getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+        mStorage.child("Users").child(writerUid).child("CocktailImage").child(recipeId + ".jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
                 Glide.with(v)

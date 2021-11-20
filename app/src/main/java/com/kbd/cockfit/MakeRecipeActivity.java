@@ -1,7 +1,12 @@
 package com.kbd.cockfit;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.drawable.BitmapDrawable;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -36,11 +41,14 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.io.ByteArrayOutputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public class MakeRecipeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
-    private String[] imagePath;
     private String uid;
     private ImageView imageView_addImage;
     private static final int PICK_FROM_ALBUM =1;
@@ -48,11 +56,15 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private Uri file;
     private boolean imageOn;
     private Toolbar appBar;
+    private String imageKey;
+    private DatabaseReference forSnapshot;
+    private Context context;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
+        context = this;
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -66,6 +78,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+
                 storeRecipe();
                 return false;
             }
@@ -78,7 +91,23 @@ public class MakeRecipeActivity extends AppCompatActivity {
             }
         });
 
+        forSnapshot = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+        forSnapshot.child("user").child(uid).child("MyRecipe").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
+                    imageKey = recipeSnapshot.getKey();
+                }
+                Log.d("test2", imageKey+"테스트입니다");
+            }
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                Log.w("MyRecipeLoad", "loadPost:onCancelled", error.toException());
+            }
+        });
+
     }
+
 
     public void storeRecipe(){
         String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
@@ -93,50 +122,30 @@ public class MakeRecipeActivity extends AppCompatActivity {
             Toast.makeText(this , "모든 항목을 입력해주세요.",Toast.LENGTH_SHORT).show();
             return;
         }
+        if(imageOn==false){
+            Toast.makeText(this , "사진을 넣어주세요.",Toast.LENGTH_SHORT).show();
+            return;
+        }
 
-        MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
+        MyRecipe recipe = new MyRecipe(0, name, proof, base, ingredient, equipment, description, tags);
         recipe.setUid(uid);
 
-        mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe);
-        if(imageOn) {
-            uploadImageToFirebase(file);
-        }
+
+        mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void unused) {
+                uploadImageToFirebase(file);
+            }
+        });
+
         this.onBackPressed();
     }
 
 
-    public void onStart(){
-        super.onStart();
-        mDatabase.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-            }
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-            }
-        });
-    }
-
-
     private void uploadImageToFirebase(Uri file){
-        imagePath = file.toString().split("/");
-        StorageReference fileRef = storageRef.child("Users/"+uid+"/CocktailImage/"+imagePath[imagePath.length-1]);
-        fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-            @Override
-            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-                fileRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
-                    @Override
-                    public void onSuccess(Uri uri) {
-                        //Picasso.get().load(uri).into(imageView_addImage);
-                    }
-                });
-            }
-        }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        });
-
+        Log.d("test3", imageKey+"업로드 전");
+        StorageReference fileRef = storageRef.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
+        fileRef.putFile(file);
     }
 
     @Override
