@@ -75,7 +75,7 @@ public class GeneralPostFragment extends Fragment {
 
         //getBundle
         Bundle bundle = getArguments();
-        forumType = bundle.getString("forum");
+        forumType = bundle.getString("forumType");
         postId = bundle.getString("postId");
 
         //view initialize

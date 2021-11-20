@@ -126,7 +126,13 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                     TextView date = v.findViewWithTag(dateViewTag);
                     ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
 
-                    Post post = postSnapshot.getValue(Post.class);
+                    Post post;
+                    if(finalType.equals("share")) {
+                        post = postSnapshot.getValue(RecipePost.class);
+                    } else {
+                        post = postSnapshot.getValue(Post.class);
+                    }
+
                     title.setText(post.getTitle());
                     try {
                         date.setText(UtilitySet.formatTimeString(post.getDate()));
@@ -140,7 +146,7 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
                             Intent intent = new Intent(v.getContext(), PostActivity.class);
                             intent.putExtra("post", post);
                             intent.putExtra("postId", postSnapshot.getKey());
-                            intent.putExtra("forum", finalType);
+                            intent.putExtra("forumType", finalType);
                             startActivity(intent);
                         }
                     });
@@ -164,15 +170,15 @@ public class CommunityFragment extends Fragment implements View.OnClickListener 
         switch (v.getId()) {
             case R.id.community_textView_qaMore: {
                 //더보기 버튼
-                intent.putExtra("forum", "qa");
+                intent.putExtra("forumType", "qa");
                 break;
             }
             case R.id.community_textView_shareMore: {
-                intent.putExtra("forum", "share");
+                intent.putExtra("forumType", "share");
                 break;
             }
             case R.id.community_textView_generalMore: {
-                intent.putExtra("forum", "general");
+                intent.putExtra("forumType", "general");
                 break;
             }
             default: {

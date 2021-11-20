@@ -43,10 +43,9 @@ public class PostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-    private FragmentManager fragmentManager;
-    private GeneralPostFragment generalPostFragment;
-
     private Post post;
+    //private RecipePost recipePost;
+
     private String postId;
     private String forumType;
 
@@ -76,21 +75,6 @@ public class PostActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
-        //getIntent
-        post = getIntent().getParcelableExtra("post");
-        postId = getIntent().getStringExtra("postId");
-        forumType = getIntent().getStringExtra("forum");
-
-        //fragment
-        fragmentManager = getSupportFragmentManager();
-        generalPostFragment = new GeneralPostFragment();
-        FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.post_frameLayout, generalPostFragment).commitAllowingStateLoss();
-        Bundle bundle = new Bundle();
-        bundle.putString("postId", postId);
-        bundle.putString("forum", forumType);
-        generalPostFragment.setArguments(bundle);
-
         //view initialize
         imageView_writerProfile = findViewById(R.id.post_imageView_writerProfile);
         textView_writer = findViewById(R.id.post_textView_writer);
@@ -98,16 +82,52 @@ public class PostActivity extends AppCompatActivity {
         editText_comment = findViewById(R.id.post_editText_comment);
         toolbar = findViewById(R.id.post_materialToolbar);
         setSupportActionBar(toolbar);
-
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) { onBackPressed(); }
         });
+
+        //getIntent
+        Intent getIntent = getIntent();
+        if((forumType = getIntent.getStringExtra("forumT")) == null) {
+            forumType = getIntent.getStringExtra("forumType");
+            post = getIntent.getParcelableExtra("post");
+        } else {
+            post = getIntent.getParcelableExtra("post");
+        }
+        postId = getIntent.getStringExtra("postId");
+
+        //fragment setting
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        FragmentTransaction transaction = fragmentManager.beginTransaction();
+        GeneralPostFragment generalPostFragment;
+        RecipePostFragment recipePostFragment;
+        if(forumType.equals("share")) {
+            recipePostFragment = new RecipePostFragment();
+            transaction.replace(R.id.post_frameLayout, recipePostFragment).commitAllowingStateLoss();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            bundle.putString("forumType", forumType);
+            RecipePost recipePost = (RecipePost) post;
+            bundle.putString("recipeId", recipePost.getRecipeId());
+            recipePostFragment.setArguments(bundle);
+        } else {
+            generalPostFragment = new GeneralPostFragment();
+            transaction.replace(R.id.post_frameLayout, generalPostFragment).commitAllowingStateLoss();
+            Bundle bundle = new Bundle();
+            bundle.putString("postId", postId);
+            bundle.putString("forumType", forumType);
+            generalPostFragment.setArguments(bundle);
+        }
 
         //Intent로부터 전달받은 postId를 Firebase에서 탐색한 후 해당 Post객체를 받아옵니다.
         mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                post = snapshot.getValue(Post.class);
+                if(forumType.equals("share")) {
+                    post = snapshot.getValue(Post.class);
+                } else {
+                    post = snapshot.getValue(RecipePost.class);
+                }
                 
                 //postId에 해당하는 게시글이 있는 경우
                 if(post != null) {
@@ -161,6 +181,9 @@ public class PostActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar_post, menu);
+        if(forumType.equals("share")) {
+            menu.getItem(0).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -179,8 +202,6 @@ public class PostActivity extends AppCompatActivity {
                     });
                 }
             });
-
-
         } else if(item.getItemId() == R.id.post_menuItem_edit) {
             //게시글 수정
             Intent intent = new Intent(context, WritePostActivity.class);
