@@ -20,6 +20,7 @@
         android:layout_gravity="top">
         <ImageView
             android:id="@+id/cardView_Recipe_Photo"
+            android:src ="@drawable/ic_cocktail"
             android:layout_width="match_parent"
             android:layout_height="match_parent">
         </ImageView>
