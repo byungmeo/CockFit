@@ -36,6 +36,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
+import java.util.HashMap;
+import java.util.Map;
+
 public class MakeRecipeActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
@@ -49,15 +52,27 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private boolean imageOn;
     private Toolbar appBar;
 
+    private MyRecipe editRecipe;
+    private String editRecipeId;
+    private boolean isEdit;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
 
+
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+
+        //getIntent
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        //recipe = getIntent().getParcelableExtra("recipe");
+        editRecipeId = getIntent().getStringExtra("recipeId");
+
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
         storageRef = FirebaseStorage.getInstance().getReference();
         imageOn=false;
@@ -66,7 +81,26 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                storeRecipe();
+                if(isEdit) {
+                    String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
+                    String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
+                    String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
+                    String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
+                    String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
+                    String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
+                    String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();
+
+                    editRecipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
+                    editRecipe.setUid(uid);
+
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put(editRecipeId, editRecipe);
+                    mDatabase.child("user").child(uid).child("MyRecipe").updateChildren(childUpdates);
+                }
+                else {
+                    storeRecipe();
+                }
                 return false;
             }
         });
