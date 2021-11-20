@@ -109,6 +109,7 @@ public class PostActivity extends AppCompatActivity {
             bundle.putString("forumType", forumType);
             RecipePost recipePost = (RecipePost) post;
             bundle.putString("recipeId", recipePost.getRecipeId());
+            bundle.putString("writerUid", recipePost.getUid());
             recipePostFragment.setArguments(bundle);
         } else {
             generalPostFragment = new GeneralPostFragment();
