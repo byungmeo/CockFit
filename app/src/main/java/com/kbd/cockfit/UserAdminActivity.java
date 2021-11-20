@@ -149,11 +149,6 @@ public class UserAdminActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-        } else if(view.getId() == R.id.user_button_logout) {
-            FirebaseAuth.getInstance().signOut();
-            Intent intent = new Intent(view.getContext(), LoginActivity.class);
-            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-            view.getContext().startActivity(intent);
         } else if(view.getId() == R.id.user_button_leave) {
             DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
             user = FirebaseAuth.getInstance().getCurrentUser();

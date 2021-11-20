@@ -54,12 +54,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
     private static final int PICK_FROM_ALBUM =1;
 
     private String uid;
-    private TextView editText_nickname;
+    private TextView textView_nickname;
     private TextView textView_userEmail;
     private TextView textView_userRegisterDate;
     private ImageView imageview_profileImage;
     private ImageButton imageButton_changeName;
-    private Button imageButton_userInfo;
+    private Button button_logout;
+    private Button button_userInfo;
 
     private Button button_myFavorite;
     private Button button_myCommunityActivity;
@@ -87,12 +88,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
 
-        editText_nickname = v.findViewById(R.id.profile_textView_name);
+        textView_nickname = v.findViewById(R.id.profile_textView_name);
         textView_userEmail = v.findViewById(R.id.profile_textView_userEmail);
         textView_userRegisterDate = v.findViewById(R.id.profile_textView_userRegisterDate);
         imageview_profileImage = v.findViewById(R.id.profile_imageView_photo);
         imageButton_changeName = v.findViewById(R.id.profile_imageButton_changeName);
-        imageButton_userInfo = v.findViewById(R.id.profile_imageButton_userInfo);
+        button_userInfo = v.findViewById(R.id.profile_imageButton_userInfo);
+        button_logout = v.findViewById(R.id.profile_imageButton_logout);
         button_myFavorite = v.findViewById(R.id.profile_button_recipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
 
@@ -119,10 +121,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 .thumbnail(0.1f)
                 .into(imageview_profileImage);
 
-        editText_nickname.setText(user.getDisplayName()); //닉네임 표시
+        textView_nickname.setText(user.getDisplayName()); //닉네임 표시
 
         imageButton_changeName.setOnClickListener(this);
-        imageButton_userInfo.setOnClickListener(this);
+        button_userInfo.setOnClickListener(this);
+        button_logout.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
         button_myCommunityActivity.setOnClickListener(this);
         imageview_profileImage.setOnClickListener(this);
@@ -181,7 +184,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         }
     }
 
-
     @Override
     public void onClick(View v) {
         Context context = v.getContext();
@@ -217,7 +219,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                                     public void onComplete(@NonNull Task<Void> task) {
                                         if(task.isSuccessful()) {
                                             Toast.makeText(context, "닉네임이 변경되었습니다", Toast.LENGTH_SHORT).show();
-                                            editText_nickname.setText(userChangeNic);
+                                            textView_nickname.setText(userChangeNic);
                                         }
                                     }
                                 });
@@ -247,6 +249,13 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 Intent intent = new Intent(context, ForumActivity.class);
                 intent.putExtra("forum", "myPost");
                 context.startActivity(intent);
+                break;
+            }
+            case R.id.profile_imageButton_logout: {
+                FirebaseAuth.getInstance().signOut();
+                Intent intent = new Intent(getContext(), LoginActivity.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                getContext().startActivity(intent);
                 break;
             }
             case R.id.profile_imageButton_userInfo: {
