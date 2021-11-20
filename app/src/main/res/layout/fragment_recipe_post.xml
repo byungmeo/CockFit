@@ -7,90 +7,139 @@
     tools:context=".RecipePostFragment">
 
     <!-- TODO: Update blank fragment layout -->
-    <androidx.constraintlayout.widget.ConstraintLayout
+    <LinearLayout
+        android:id="@+id/share_linearLayout"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
 
-        <ImageView
-            android:id="@+id/imageView"
-            android:layout_width="300dp"
-            android:layout_height="wrap_content"
-            android:src="@android:drawable/ic_menu_gallery"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/share_constraintLayout_recipeInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
 
-        <TextView
-            android:id="@+id/recipePost_textView_test"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/hello_blank_fragment"
-            app:layout_constraintEnd_toEndOf="@+id/imageView"
-            app:layout_constraintStart_toStartOf="@+id/imageView"
-            app:layout_constraintTop_toBottomOf="@+id/imageView" />
+            <ImageView
+                android:id="@+id/share_imageView_pciture"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:src="@android:drawable/ic_menu_gallery"
+                app:layout_constraintBottom_toTopOf="@+id/share_textView_test"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_test"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_test" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_recipeName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_test"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_test"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_test" />
+            <TextView
+                android:id="@+id/share_textView_test"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/hello_blank_fragment"
+                app:layout_constraintBottom_toTopOf="@+id/share_textView_recipeName"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_recipeName"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_recipeName" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_tag"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_recipeName"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_recipeName"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_recipeName" />
+            <TextView
+                android:id="@+id/share_textView_recipeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/share_recipePost_textView_tag"
+                app:layout_constraintStart_toStartOf="@+id/share_recipePost_textView_tag"
+                tools:layout_editor_absoluteY="66dp" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_proof"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_tag"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_tag"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_tag" />
+            <TextView
+                android:id="@+id/share_recipePost_textView_tag"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_proof"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_proof"
+                app:layout_constraintTop_toBottomOf="@+id/share_textView_recipeName" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_base"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_proof"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_proof"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_proof" />
+            <TextView
+                android:id="@+id/share_textView_proof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_base"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_base"
+                app:layout_constraintTop_toBottomOf="@+id/share_recipePost_textView_tag" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_ingredient"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_base"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_base"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_base" />
+            <TextView
+                android:id="@+id/share_textView_base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/share_textView_ingredient"
+                app:layout_constraintEnd_toEndOf="@+id/share_button_like"
+                app:layout_constraintStart_toStartOf="@+id/share_button_like"
+                app:layout_constraintTop_toBottomOf="@+id/share_textView_proof" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_equipment"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_ingredient"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_ingredient"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_ingredient" />
+            <TextView
+                android:id="@+id/share_textView_ingredient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/share_textView_equipment"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_equipment"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_description" />
 
-        <TextView
-            android:id="@+id/recipePost_textView_description"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="TextView"
-            app:layout_constraintEnd_toEndOf="@+id/recipePost_textView_equipment"
-            app:layout_constraintStart_toStartOf="@+id/recipePost_textView_equipment"
-            app:layout_constraintTop_toBottomOf="@+id/recipePost_textView_equipment" />
-    </androidx.constraintlayout.widget.ConstraintLayout>
+            <TextView
+                android:id="@+id/share_textView_equipment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/share_textView_description"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_description"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_description" />
+
+            <TextView
+                android:id="@+id/share_textView_description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="5dp"
+                android:text="TextView"
+                app:layout_constraintBottom_toTopOf="@+id/share_button_like"
+                app:layout_constraintEnd_toEndOf="@+id/share_button_like"
+                app:layout_constraintStart_toStartOf="@+id/share_button_like" />
+
+            <Button
+                android:id="@+id/share_button_like"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="15dp"
+                android:text="0"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/share_constraintLayout_comments"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/share_recyclerView_comments"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <ProgressBar
+                android:id="@+id/share_progressBar"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:layout_constraintBottom_toBottomOf="@+id/share_recyclerView_comments"
+                app:layout_constraintEnd_toEndOf="@+id/share_recyclerView_comments"
+                app:layout_constraintStart_toStartOf="@+id/share_recyclerView_comments"
+                app:layout_constraintTop_toTopOf="@+id/share_recyclerView_comments" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </LinearLayout>
 
 </FrameLayout>
