@@ -1,15 +1,19 @@
 package com.kbd.cockfit;
 
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
@@ -153,12 +157,28 @@ public class MyRecipeFragment extends Fragment {
                 itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        Log.d("test", "onClick: delete");
-                        String myRecipeId = myRecipeArrayList.get(itemViewHolder.getAdapterPosition()).getMyRecipeId();
-                        myRecipeArrayList.remove(itemViewHolder.getAdapterPosition());
-                        notifyItemRemoved(itemViewHolder.getAdapterPosition());
-                        notifyItemRangeChanged(itemViewHolder.getAdapterPosition(), myRecipeArrayList.size());
-                        mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipeId).removeValue();
+                        Context context = v.getContext();
+                        AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
+                        alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener(){
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                String myRecipeId = myRecipeArrayList.get(itemViewHolder.getAdapterPosition()).getMyRecipeId();
+                                myRecipeArrayList.remove(itemViewHolder.getAdapterPosition());
+                                notifyItemRemoved(itemViewHolder.getAdapterPosition());
+                                notifyItemRangeChanged(itemViewHolder.getAdapterPosition(), myRecipeArrayList.size());
+                                mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipeId).removeValue();
+                                Toast.makeText(context, "삭제하였습니다", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        alertdialog.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Toast.makeText(context, "취소하였습니다", Toast.LENGTH_SHORT).show();
+                            }
+                        });
+                        AlertDialog alert = alertdialog.create();
+                        alert.setMessage("정말 레시피를 삭제하시겠습니까?");
+                        alert.show();
                     }
                 });
                 return itemViewHolder;
