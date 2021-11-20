@@ -7,9 +7,21 @@ import android.os.Parcelable;
 
 import java.util.List;
 
-public class MyRecipe extends Recipe implements Parcelable {
+public class MyRecipe extends Recipe {
     private String uid;
     private String myRecipeId;
+
+    public static final Creator<MyRecipe> CREATOR = new Creator<MyRecipe>() {
+        @Override
+        public MyRecipe createFromParcel(Parcel in) {
+            return new MyRecipe(in);
+        }
+
+        @Override
+        public MyRecipe[] newArray(int size) {
+            return new MyRecipe[size];
+        }
+    };
 
     public String getUid() {
         return uid;
