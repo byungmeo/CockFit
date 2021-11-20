@@ -3,33 +3,21 @@ package com.kbd.cockfit;
 import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.VectorDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ImageView;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.fragment.app.FragmentTransaction;
 
-import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
-import com.google.android.material.appbar.AppBarLayout;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.navigation.NavigationBarView;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -40,7 +28,6 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -88,21 +75,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editText_equipment = findViewById(R.id.make_editText_equipment);
         editText_ingredient = findViewById(R.id.make_editText_tags);
         editText_description = findViewById(R.id.make_editText_description);
-        /*String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
-        String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
-        String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
-        String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
-        String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
-        String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
-        String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();*/
-        /*editText_name = (EditText);
-        editText_proof.setText(" ");
-        editText_base.setText(" ");
-        editText_tags.setText(" ");
-        editText_equipment.setText(" ");
-        editText_ingredient.setText(" ");
-        editText_description.setText(" ");*/
-
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
@@ -112,10 +84,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         //getIntent
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         if(isEdit) {
-            Log.d("test", getIntent().getParcelableExtra("recipe").getClass().toString());
             editRecipe = getIntent().getParcelableExtra("recipe");
-
-            Log.d("test", editRecipe.getName());
 
             editText_name.getEditText().setText(editRecipe.getName());
             List<String> list = editRecipe.getTags();
@@ -200,7 +169,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
                     imageKey = recipeSnapshot.getKey();
                 }
-                Log.d("test2", imageKey+"테스트입니다");
             }
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -212,15 +180,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
 
     public void storeRecipe(){
-        /*String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
-        String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
-        String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
-        String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
-        String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
-        String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
-        String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();*/
-
-
         String name = editText_name.getEditText().getText().toString();
         String proof = editText_proof.getEditText().getText().toString();
         String base = editText_base.getEditText().getText().toString();
@@ -254,7 +213,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
 
     private void uploadImageToFirebase(Uri file){
-        Log.d("test3", imageKey+"업로드 전");
         StorageReference fileRef = storageRef.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
         fileRef.putFile(file);
     }

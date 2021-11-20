@@ -56,9 +56,6 @@ public class MyRecipeFragment extends Fragment {
     private String uid;
     private ProgressBar progressBar;
 
-    private MyRecipe editRecipe;
-    private String editRecipeId;
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -111,7 +108,6 @@ public class MyRecipeFragment extends Fragment {
 
                 adapter = new MyRecipeAdapter(myRecipeArrayList);
                 myRecipeRecyclerView.setAdapter(adapter);
-                adapter.notifyDataSetChanged();
             }
 
             @Override
@@ -130,10 +126,6 @@ public class MyRecipeFragment extends Fragment {
 
         public MyRecipeAdapter(ArrayList<MyRecipe> myRecipeArrayList) {
             this.myRecipeArrayList = myRecipeArrayList;
-        }
-
-
-        public void onItemClick(int position) {
         }
 
         public class ItemViewHolder extends RecyclerView.ViewHolder {
