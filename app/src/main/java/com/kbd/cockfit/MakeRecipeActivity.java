@@ -14,7 +14,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -41,9 +43,9 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
-import java.io.ByteArrayOutputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class MakeRecipeActivity extends AppCompatActivity {
 
@@ -60,16 +62,89 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private DatabaseReference forSnapshot;
     private Context context;
 
+    private MyRecipe editRecipe;
+    private String editRecipeId;
+    private boolean isEdit;
+
+    private TextInputLayout editText_name;
+    private TextInputLayout editText_proof;
+    private TextInputLayout editText_base;
+    private TextInputLayout editText_tags;
+    private TextInputLayout editText_equipment;
+    private TextInputLayout editText_ingredient;
+    private TextInputLayout editText_description;
+
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
         context = this;
 
+        editText_name = findViewById(R.id.make_editText_name);
+        editText_proof = findViewById(R.id.make_editText_proof);
+        editText_base = findViewById(R.id.make_editText_base);
+        editText_tags = findViewById(R.id.make_editText_ingredient);
+        editText_equipment = findViewById(R.id.make_editText_equipment);
+        editText_ingredient = findViewById(R.id.make_editText_tags);
+        editText_description = findViewById(R.id.make_editText_description);
+        /*String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
+        String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
+        String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
+        String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
+        String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
+        String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
+        String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();*/
+        /*editText_name = (EditText);
+        editText_proof.setText(" ");
+        editText_base.setText(" ");
+        editText_tags.setText(" ");
+        editText_equipment.setText(" ");
+        editText_ingredient.setText(" ");
+        editText_description.setText(" ");*/
+
+
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+
+        //getIntent
+        isEdit = getIntent().getBooleanExtra("isEdit", false);
+        if(isEdit) {
+            Log.d("test", getIntent().getParcelableExtra("recipe").getClass().toString());
+            editRecipe = getIntent().getParcelableExtra("recipe");
+
+            Log.d("test", editRecipe.getName());
+
+            editText_name.getEditText().setText(editRecipe.getName());
+            List<String> list = editRecipe.getTags();
+
+            String totalText = "";
+            for (String tag : list) {
+                totalText += tag + ", ";
+            }
+            editText_tags.getEditText().setText(totalText);
+            editText_proof.getEditText().setText(editRecipe.getProof());
+            editText_base.getEditText().setText(editRecipe.getBase());
+
+            list = editRecipe.getIngredient();
+            totalText = "";
+            for (String ingredient : list) {
+                totalText += ingredient + ", ";
+            }
+            editText_ingredient.getEditText().setText(totalText);
+
+            list = editRecipe.getEquipment();
+            totalText = "";
+            for (String equipment : list) {
+                totalText += equipment + ", ";
+            }
+            editText_equipment.getEditText().setText(totalText);
+            editText_description.getEditText().setText(editRecipe.getDescription());
+        }
+        editRecipeId = getIntent().getStringExtra("recipeId");
+
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
         storageRef = FirebaseStorage.getInstance().getReference();
         imageOn=false;
@@ -78,8 +153,35 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                if(isEdit) {
+                    String name = editText_name.getEditText().getText().toString();
+                    String proof = editText_proof.getEditText().getText().toString();
+                    String base = editText_base.getEditText().getText().toString();
+                    String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
+                    String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
+                    String[] tags = editText_tags.getEditText().getText().toString().split(", ");
+                    String description = editText_description.getEditText().getText().toString();
 
-                storeRecipe();
+                    if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
+
+                        Toast.makeText(MakeRecipeActivity.this, "모든 텍스트를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                        return false;
+                    }
+
+                    MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
+                    recipe.setUid(uid);
+
+
+                    Map<String, Object> childUpdates = new HashMap<>();
+                    childUpdates.put(editRecipeId, recipe);
+                    mDatabase.child("user").child(uid).child("MyRecipe").updateChildren(childUpdates);
+
+                    onBackPressed();
+
+                }
+                else {
+                    storeRecipe();
+                }
                 return false;
             }
         });
@@ -110,13 +212,22 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
 
     public void storeRecipe(){
-        String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
+        /*String name = ((TextInputLayout) findViewById(R.id.make_editText_name)).getEditText().getText().toString();
         String proof = ((TextInputLayout) findViewById(R.id.make_editText_proof)).getEditText().getText().toString();
         String base = ((TextInputLayout) findViewById(R.id.make_editText_base)).getEditText().getText().toString();
         String[] ingredient = ((TextInputLayout) findViewById(R.id.make_editText_ingredient)).getEditText().getText().toString().split(", ");
         String[] equipment = ((TextInputLayout) findViewById(R.id.make_editText_equipment)).getEditText().getText().toString().split(", ");
         String[] tags = ((TextInputLayout) findViewById(R.id.make_editText_tags)).getEditText().getText().toString().split(", ");
-        String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();
+        String description = ((TextInputLayout) findViewById(R.id.make_editText_description)).getEditText().getText().toString();*/
+
+
+        String name = editText_name.getEditText().getText().toString();
+        String proof = editText_proof.getEditText().getText().toString();
+        String base = editText_base.getEditText().getText().toString();
+        String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
+        String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
+        String[] tags = editText_tags.getEditText().getText().toString().split(", ");
+        String description = editText_description.getEditText().getText().toString();
 
         if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
             Toast.makeText(this , "모든 항목을 입력해주세요.",Toast.LENGTH_SHORT).show();

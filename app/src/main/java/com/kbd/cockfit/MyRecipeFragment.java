@@ -56,6 +56,9 @@ public class MyRecipeFragment extends Fragment {
     private String uid;
     private ProgressBar progressBar;
 
+    private MyRecipe editRecipe;
+    private String editRecipeId;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -69,6 +72,7 @@ public class MyRecipeFragment extends Fragment {
         user = mAuth.getCurrentUser();
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+
         layoutManager = new GridLayoutManager(v.getContext(), 2);
         myRecipeRecyclerView = v.findViewById(R.id.myRecipe_recyclerView);
         myRecipeRecyclerView.setHasFixedSize(true);
@@ -78,6 +82,7 @@ public class MyRecipeFragment extends Fragment {
         myRecipeArrayList = new ArrayList<>();
         adapter = new MyRecipeAdapter(myRecipeArrayList);
         myRecipeRecyclerView.setAdapter(adapter);
+
 
         initMyRecipeList();
 
@@ -134,17 +139,19 @@ public class MyRecipeFragment extends Fragment {
         public class ItemViewHolder extends RecyclerView.ViewHolder {
             private ConstraintLayout cardViewCocktailInfo;
             private TextView name;
+            private ImageButton editRecipe;
             private ImageButton deleteRecipe;
             private ImageButton button_share;
             private ImageView cocktailPhoto;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
-                deleteRecipe = itemView.findViewById(R.id.delete_Recipe);
+                editRecipe = itemView.findViewById(R.id.myRecipeItem_button_edit);
+                deleteRecipe = itemView.findViewById(R.id.myRecipeItem_button_delete);
                 cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
                 button_share = itemView.findViewById(R.id.myRecipeItem_imageButton_share);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
-                cocktailPhoto = itemView.findViewById(R.id.cardView_Recipe_Photo);
+                cocktailPhoto = itemView.findViewById(R.id.myRecipeItem_imageView_picture);
             }
         }
 
@@ -172,6 +179,20 @@ public class MyRecipeFragment extends Fragment {
                         Intent intent = new Intent(context, RecipeActivity.class);
                         intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
                         context.startActivity(intent);
+                    }
+                });
+                itemViewHolder.editRecipe.setOnClickListener(new View.OnClickListener() {
+                    public void onClick(View v) {
+                        MyRecipe recipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
+                        Context context = v.getContext();
+                        Toast.makeText(context, "수정", Toast.LENGTH_SHORT).show();
+
+                        //게시글 수정
+                        Intent intent = new Intent(context, MakeRecipeActivity.class);
+                        intent.putExtra("isEdit", true);
+                        intent.putExtra("recipe", recipe);
+                        intent.putExtra("recipeId", recipe.getMyRecipeId());
+                        startActivity(intent);
                     }
                 });
                 itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
@@ -282,6 +303,7 @@ public class MyRecipeFragment extends Fragment {
                         }
                     }
                 });
+
 
 
 

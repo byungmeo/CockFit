@@ -19,19 +19,20 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView_Recipe_Info"
             android:layout_width="match_parent"
-            android:layout_height="160dp"
+            android:layout_height="0dp"
             android:layout_gravity="top"
             android:background="@drawable/bottomborder"
+            app:layout_constraintBottom_toTopOf="@+id/cardView_Recipe_Setting"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
             <ImageView
-                android:id="@+id/cardView_Recipe_Photo"
+                android:id="@+id/myRecipeItem_imageView_picture"
                 android:layout_width="120dp"
                 android:layout_height="0dp"
                 android:layout_marginTop="10dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginBottom="5dp"
                 android:src="@drawable/ic_cocktail"
                 app:layout_constraintBottom_toTopOf="@+id/myRecipeItem_textView_name"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -42,6 +43,7 @@
                 android:id="@+id/myRecipeItem_textView_name"
                 android:layout_width="wrap_content"
                 android:layout_height="26dp"
+                android:layout_marginBottom="5dp"
                 android:text="테스트"
                 android:textColor="@color/black"
                 android:textSize="20sp"
@@ -54,39 +56,48 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:id="@+id/cardView_Recipe_Setting"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
+            android:layout_height="wrap_content"
             android:layout_gravity="bottom"
+            android:padding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/cardView_Recipe_Info">
-
-            <ImageButton
-                android:id="@+id/delete_Recipe"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="right"
-                android:layout_marginEnd="15dp"
-                android:background="@null"
-                android:src="@drawable/ic_baseline_delete_24"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="parent"
-                app:tint="@color/CockFitMainColor1" />
+            app:layout_constraintStart_toStartOf="parent">
 
             <ImageButton
                 android:id="@+id/myRecipeItem_imageButton_share"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="30dp"
                 android:background="@null"
-                app:tint="@color/CockFitMainColor1"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/delete_Recipe"
+                app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/CockFitMainColor1"
                 card_view:srcCompat="@drawable/ic_baseline_share_24" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-    </androidx.constraintlayout.widget.ConstraintLayout>
 
+            <ImageButton
+                android:id="@+id/myRecipeItem_button_edit"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:background="@null"
+                android:src="@drawable/ic_baseline_create_24"
+                app:layout_constraintEnd_toStartOf="@+id/myRecipeItem_button_delete"
+                app:layout_constraintStart_toEndOf="@+id/myRecipeItem_imageButton_share"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/CockFitMainColor1" />
+
+            <ImageButton
+                android:id="@+id/myRecipeItem_button_delete"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="right"
+                android:background="@null"
+                android:src="@drawable/ic_baseline_delete_24"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:tint="@color/CockFitMainColor1" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
 
 </androidx.cardview.widget.CardView>
