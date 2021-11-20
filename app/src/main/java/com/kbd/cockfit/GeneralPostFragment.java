@@ -82,8 +82,8 @@ public class GeneralPostFragment extends Fragment {
         textView_contents = v.findViewById(R.id.general_textView_contents);
         button_like = v.findViewById(R.id.general_button_like);
 
-        drawable_alreadyLike = getResources().getDrawable(R.drawable.ic_baseline_thumb_up_24);
-        drawable_waitLike = getResources().getDrawable(R.drawable.ic_outline_thumb_up_24);
+        drawable_alreadyLike = getResources().getDrawable(R.drawable.ic_baseline_thumb_up_24, getActivity().getTheme());
+        drawable_waitLike = getResources().getDrawable(R.drawable.ic_outline_thumb_up_24, getActivity().getTheme());
 
         //
         recycler_comments = v.findViewById(R.id.general_recycler_comments);
@@ -244,7 +244,7 @@ public class GeneralPostFragment extends Fragment {
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
                 public void onSuccess(Uri uri) {
-                    Log.d("test", "프로필 사진이 있는 사용자");
+                    //프로필 사진이 있는 댓글사용자
 
                     Glide.with(getContext())
                             .load(uri)
@@ -258,7 +258,7 @@ public class GeneralPostFragment extends Fragment {
             }).addOnFailureListener(new OnFailureListener() {
                 @Override
                 public void onFailure(@NonNull Exception e) {
-                    Log.d("test", "프로필 사진이 없는 사용자");
+                    //프로필 사진이 없는 댓글사용자
                     progressBar.setVisibility(View.GONE);
                     constraintLayout.setVisibility(View.VISIBLE);
                 }
