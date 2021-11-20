@@ -112,6 +112,9 @@ public class PostActivity extends AppCompatActivity {
                 //postId에 해당하는 게시글이 있는 경우
                 if(post != null) {
                     toolbar.setTitle(post.getTitle());
+                    if(!mAuth.getUid().equals(post.getUid())) {
+                        toolbar.getMenu().setGroupVisible(0, false);
+                    }
                     textView_writer.setText(post.getNickname());
                     try {
                         textView_date.setText(UtilitySet.formatTimeString(post.getDate()));
@@ -157,11 +160,7 @@ public class PostActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        if(!mAuth.getUid().equals(post.getUid())) {
-            menu.setGroupVisible(0, false);
-        } else {
-            getMenuInflater().inflate(R.menu.top_app_bar_post, menu);
-        }
+        getMenuInflater().inflate(R.menu.top_app_bar_post, menu);
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -169,8 +168,19 @@ public class PostActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
         if(item.getItemId() == R.id.post_menuItem_delete) {
             //게시글 삭제
-            mDatabase.child("forum").child(forumType).child(postId).setValue(null);
-            onBackPressed();
+            mDatabase.child("forum").child(forumType).child(postId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    mDatabase.child("user").child(mAuth.getUid()).child("community").child("posting").child(postId).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            onBackPressed();
+                        }
+                    });
+                }
+            });
+
+
         } else if(item.getItemId() == R.id.post_menuItem_edit) {
             //게시글 수정
             Intent intent = new Intent(context, WritePostActivity.class);

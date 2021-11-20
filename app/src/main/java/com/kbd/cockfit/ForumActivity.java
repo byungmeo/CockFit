@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -20,6 +21,7 @@ import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -30,6 +32,7 @@ import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
+import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
@@ -40,6 +43,7 @@ public class ForumActivity extends AppCompatActivity {
     private ArrayList<Post> postArrayList;
     private HashMap<Post, String> postIdMap;
     private Toolbar toolbar;
+    private HashMap<String, String> myActivityPostMap; //<PostId, ForumType>
 
     private String forumType;
 
@@ -52,6 +56,12 @@ public class ForumActivity extends AppCompatActivity {
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         toolbar = findViewById(R.id.forum_materialToolbar);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+
         forumType = getIntent().getStringExtra("forum");
         switch (forumType) {
             case "share" : {
@@ -60,28 +70,23 @@ public class ForumActivity extends AppCompatActivity {
             }
             case "qa" : {
                 toolbar.setTitle("질문 게시판");
-                //screenName.setText("질문 게시판");
                 break;
             }
             case "general" : {
                 toolbar.setTitle("자유 게시판");
-                //screenName.setText("자유 게시판");
                 break;
             }
             case "myPost" : {
                 toolbar.setTitle("내 게시글 목록");
-                //screenName.setText("내 게시글 목록");
+                toolbar.getMenu().setGroupVisible(0, false);
+                myActivityPostMap = new HashMap<>();
                 break;
             }
             default: {
                 break;
             }
         }
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onBackPressed();
-            }
-        });
+
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -105,9 +110,61 @@ public class ForumActivity extends AppCompatActivity {
         postAdapter = new PostAdapter(postArrayList);
         postRecycler.setAdapter(postAdapter);
 
-        initPostList();
+        if(forumType.equals("myPost")) {
+            initMyActivityPostList();
+        } else {
+            initPostList();
+        }
     }
 
+    public void initMyActivityPostList() {
+        FirebaseAuth mAuth = FirebaseAuth.getInstance();
+        mDatabase.child("user").child(mAuth.getUid()).child("community").child("posting").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postArrayList.clear();
+                myActivityPostMap.clear();
+
+                for(DataSnapshot postInfoSnapshot : snapshot.getChildren()) {
+                    HashMap<String, String> value = (HashMap<String, String>) postInfoSnapshot.getValue();
+                    myActivityPostMap.put(postInfoSnapshot.getKey(),value.get("ForumType"));
+                }
+
+                Log.d("test", "myActivityPostMap.size : " + myActivityPostMap.size());
+                if(myActivityPostMap.size() == 0) {
+                    postAdapter.notifyDataSetChanged();
+                    return;
+                }
+
+                for(Map.Entry<String, String> postInfo : myActivityPostMap.entrySet()) {
+                    mDatabase.child("forum").child(postInfo.getValue()).child(postInfo.getKey()).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Log.d("test", "OnDataChange");
+                            Post post = snapshot.getValue(Post.class);
+                            postArrayList.add(post);
+                            postIdMap.put(post, snapshot.getKey());
+
+                            if(postArrayList.size() == myActivityPostMap.size()) {
+                                Collections.reverse(postArrayList);
+                                postAdapter = new PostAdapter(postArrayList);
+                                postRecycler.setAdapter(postAdapter);
+                            }
+                        }
+
+                        @Override public void onCancelled(@NonNull DatabaseError error) { }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
+    //해당 게시판의 모든 게시글을 불러옵니다
     public void initPostList() {
         mDatabase.child("forum").child(forumType).addValueEventListener(new ValueEventListener() {
             @Override
@@ -146,6 +203,7 @@ public class ForumActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             PostViewHolder postViewHolder = (PostViewHolder) holder;
+            Log.d("test", String.valueOf(getItemCount()));
             postViewHolder.title.setText(postArrayList.get(position).getTitle());
             postViewHolder.writer.setText(postArrayList.get(position).getNickname());
             try {
@@ -165,7 +223,12 @@ public class ForumActivity extends AppCompatActivity {
                     Post post = postArrayList.get(holder.getAdapterPosition());
                     Intent intent = new Intent(v.getContext(), PostActivity.class);
                     intent.putExtra("postId", postIdMap.get(post));
-                    intent.putExtra("forum", forumType);
+                    if(forumType.equals("myPost")) {
+                        intent.putExtra("forum", myActivityPostMap.get(postIdMap.get(post)));
+                    } else {
+                        intent.putExtra("forum", forumType);
+                    }
+
                     startActivity(intent);
                 }
             });
