@@ -10,6 +10,7 @@ public class MyRecipe extends Recipe {
     private String uid;
     private String myRecipeId;
     private boolean isShare;
+    private String sharePostId;
 
     public String getUid() {
         return uid;
@@ -18,6 +19,9 @@ public class MyRecipe extends Recipe {
         return myRecipeId;
     }
     public boolean getIsShare() { return isShare; }
+    public String getSharePostId() {
+        return sharePostId;
+    }
 
     public void setUid(String uid) {
         this.uid = uid;
@@ -26,6 +30,7 @@ public class MyRecipe extends Recipe {
         this.myRecipeId = myRecipeId;
     }
     public void setIsShare(boolean isShare) { this.isShare = isShare; }
+    public void setSharePostId(String sharePostId) { this.sharePostId = sharePostId; }
 
     public MyRecipe(){
 
@@ -36,6 +41,7 @@ public class MyRecipe extends Recipe {
         this.uid = null;
         this.myRecipeId = null;
         this.isShare = false;
+        this.sharePostId = null;
     }
 
     public MyRecipe(int number, Bitmap src, String name, String proof, String base, String[] ingredient, String[] equipment, String description, String[] tags) {
@@ -43,6 +49,7 @@ public class MyRecipe extends Recipe {
         this.uid = null;
         this.myRecipeId = null;
         this.isShare = false;
+        this.sharePostId = null;
     }
 
     public MyRecipe(int number, String name, String proof, String base, String[] ingredient, String[] equipment, String description, String[] tags) {
@@ -50,6 +57,7 @@ public class MyRecipe extends Recipe {
         this.uid = null;
         this.myRecipeId = null;
         this.isShare = false;
+        this.sharePostId = null;
     }
 
     protected MyRecipe(Parcel in) {
@@ -57,6 +65,7 @@ public class MyRecipe extends Recipe {
         uid = in.readString();
         myRecipeId = in.readString();
         isShare = in.readByte() != 0; //min sdk버전때문에 in.readBoolean()을 사용 불가
+        sharePostId = in.readString();
     }
 
     @Override
@@ -65,5 +74,6 @@ public class MyRecipe extends Recipe {
         dest.writeString(uid);
         dest.writeString(myRecipeId);
         dest.writeByte((byte) (isShare ? 1 : 0)); //min sdk버전때문에 dest.writeBoolean()을 사용 불가
+        dest.writeString(sharePostId);
     }
 }

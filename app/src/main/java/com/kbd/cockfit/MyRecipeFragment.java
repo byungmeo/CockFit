@@ -166,11 +166,17 @@ public class MyRecipeFragment extends Fragment {
                 itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
+                        MyRecipe myRecipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
+
                         AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
                         alertdialog.setPositiveButton("확인", new DialogInterface.OnClickListener(){
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
-                                String myRecipeId = myRecipeArrayList.get(itemViewHolder.getAdapterPosition()).getMyRecipeId();
+                                if(myRecipe.getIsShare()) {
+                                    //공유된 레시피일 경우 게시판에서도 삭제된다.
+                                    mDatabase.child("forum").child("share").child(myRecipe.getSharePostId()).removeValue();
+                                }
+                                String myRecipeId = myRecipe.getMyRecipeId();
                                 myRecipeArrayList.remove(itemViewHolder.getAdapterPosition());
                                 notifyItemRemoved(itemViewHolder.getAdapterPosition());
                                 notifyItemRangeChanged(itemViewHolder.getAdapterPosition(), myRecipeArrayList.size());
@@ -210,6 +216,7 @@ public class MyRecipeFragment extends Fragment {
 
                                     HashMap<String, Object> update = new HashMap<>();
                                     update.put("isShare", new Boolean(true));
+                                    update.put("sharePostId", postId);
                                     mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipe.getMyRecipeId()).updateChildren(update);
 
                                     Intent intent = new Intent(context, PostActivity.class);
