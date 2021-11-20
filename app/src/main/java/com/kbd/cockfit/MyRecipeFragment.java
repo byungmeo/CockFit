@@ -12,6 +12,7 @@ import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -24,6 +25,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.security.acl.Group;
 import java.util.ArrayList;
 
 public class MyRecipeFragment extends Fragment {
@@ -107,22 +109,22 @@ public class MyRecipeFragment extends Fragment {
         }
 
         public class ItemViewHolder extends RecyclerView.ViewHolder {
-            private CardView cardView;
+            private ConstraintLayout cardViewCocktailInfo;
             private TextView name;
 
             public ItemViewHolder(@NonNull View itemView) {
                 super(itemView);
-                cardView = itemView.findViewById(R.id.myReicipeItem_cardView);
+                cardViewCocktailInfo = itemView.findViewById(R.id.cardView_Recipe_Info);
                 name = itemView.findViewById(R.id.myRecipeItem_textView_name);
             }
         }
 
         public class FooterViewHolder extends RecyclerView.ViewHolder {
-            private CardView cardView;
+            private CardView addCardView;
 
             public FooterViewHolder(@NonNull View itemView) {
                 super(itemView);
-                cardView = itemView.findViewById(R.id.addMyRecipe_cardView);
+                addCardView = itemView.findViewById(R.id.addMyRecipe_cardView);
             }
         }
 
@@ -132,7 +134,7 @@ public class MyRecipeFragment extends Fragment {
             if(viewType == TYPE_ITEM) {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myrecipeitem_layout, parent, false);
                 ItemViewHolder itemViewHolder = new ItemViewHolder(view);
-                itemViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                itemViewHolder.cardViewCocktailInfo.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Context context = v.getContext();
@@ -157,7 +159,7 @@ public class MyRecipeFragment extends Fragment {
 
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;
-                footViewHolder.cardView.setOnClickListener(new View.OnClickListener() {
+                footViewHolder.addCardView.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
                         Context context = v.getContext();
