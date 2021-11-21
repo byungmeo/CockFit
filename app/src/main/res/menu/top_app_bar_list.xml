@@ -3,9 +3,10 @@
     xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
         android:id="@+id/list_button_search"
-        android:icon="@drawable/ic_baseline_search_24"
-        android:title="Search"
         android:contentDescription="Search recipes"
+        android:icon="@drawable/ic_baseline_search_24"
+        android:title="search"
+        android:visible="false"
         app:showAsAction="ifRoom" />
 
     <item
