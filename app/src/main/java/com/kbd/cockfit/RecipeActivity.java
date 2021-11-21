@@ -1,44 +1,41 @@
 package com.kbd.cockfit;
 
-import android.content.Context;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.graphics.Color;
-import android.graphics.PorterDuff;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.Menu;
-import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
-import androidx.core.content.ContextCompat;
 
+import com.bumptech.glide.Glide;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.StorageReference;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -52,7 +49,7 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView textView_equipment;
     private TextView textView_description;
     private TextView textView_tags;
-    private ImageView image;
+    private ImageView imageView_picture;
     private Toolbar appBarRecipe;
     private Recipe recipe;
     private boolean isFavorite = false;
@@ -68,7 +65,7 @@ public class RecipeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_recipe);
 
         setSupportActionBar(findViewById(R.id.topAppBarRecipe));
-        image = findViewById(R.id.recipe_imageView);
+        imageView_picture = findViewById(R.id.recipe_imageView);
         textView_name = findViewById(R.id.recipe_textview_name);
         textView_proof = findViewById(R.id.recipe_textview_proof);
         textView_base = findViewById(R.id.recipe_textview_base);
@@ -94,7 +91,17 @@ public class RecipeActivity extends AppCompatActivity {
 
         if(recipeNumber == 0) {
             Log.d("test", "나만의 레시피임");
-            recipe = getIntent().getParcelableExtra("recipe");
+            MyRecipe myRecipe = getIntent().getParcelableExtra("recipe");
+            recipe = myRecipe;
+            StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+            mStorage.child("Users").child(uid).child("CocktailImage").child(myRecipe.getMyRecipeId() + ".jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
+                @Override
+                public void onComplete(@NonNull Task<Uri> task) {
+                    Glide.with(RecipeActivity.this)
+                            .load(task.getResult())
+                            .into(imageView_picture);
+                }
+            });
         } else {
             recipe = getRecipe(recipeNumber);
 
@@ -114,7 +121,6 @@ public class RecipeActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    Log.d("테스트1", String.valueOf(favoriteRecipeList.size()));
                 }
 
                 @Override
@@ -122,12 +128,12 @@ public class RecipeActivity extends AppCompatActivity {
 
                 }
             });
+            imageView_picture.setImageBitmap(recipe.getImage());
         }
 
         textView_name.setText(recipe.getName());
         textView_proof.setText(recipe.getProof()+"%");
         textView_base.setText(recipe.getBase());
-        image.setImageBitmap(recipe.getImage());
 
         List<String> ingredientList = recipe.getIngredient();
         String text_ingredient = "";

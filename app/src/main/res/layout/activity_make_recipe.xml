@@ -48,10 +48,10 @@
 
                 <ImageView
                     android:id="@+id/make_imageView_addImage"
-                    android:layout_width="380dp"
-                    android:layout_height="300dp"
+                    android:layout_width="250dp"
+                    android:layout_height="250dp"
                     android:onClick="clickButton"
-                    app:srcCompat="@drawable/ic_baseline_wine_bar_24" />
+                    app:srcCompat="@drawable/ic_baseline_image_search_24" />
             </LinearLayout>
 
 
