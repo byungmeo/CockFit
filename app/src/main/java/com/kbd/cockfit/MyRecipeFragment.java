@@ -290,6 +290,9 @@ public class MyRecipeFragment extends Fragment {
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
                             // Glide 이용하여 이미지뷰에 로딩
+                            if(getActivity() == null) {
+                                return;
+                            }
                             Glide.with(MyRecipeFragment.this)
                                     .load(task.getResult())
                                     .into(itemViewHolder.cocktailPhoto);
