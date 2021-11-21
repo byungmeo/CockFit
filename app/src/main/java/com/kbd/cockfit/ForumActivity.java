@@ -35,6 +35,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class ForumActivity extends AppCompatActivity {
+    private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
     private RecyclerView postRecycler;
@@ -42,6 +43,7 @@ public class ForumActivity extends AppCompatActivity {
     private PostAdapter postAdapter;
     private ArrayList<Post> postArrayList;
     private HashMap<Post, String> postIdMap;
+    private ArrayList<String> bookmarkedPostIdList;
     private Toolbar toolbar;
     private HashMap<String, String> myActivityPostMap; //<PostId, ForumType>
 
@@ -53,6 +55,7 @@ public class ForumActivity extends AppCompatActivity {
         setContentView(R.layout.activity_forum);
         Context context = this;
 
+        mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
         toolbar = findViewById(R.id.forum_materialToolbar);
@@ -61,11 +64,23 @@ public class ForumActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.forum_menuItem_wirtePost) {
+                    Intent intent = new Intent(context, WritePostActivity.class);
+                    intent.putExtra("forumType", forumType);
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
 
         forumType = getIntent().getStringExtra("forumType");
         switch (forumType) {
             case "share" : {
                 toolbar.setTitle("레시피 공유 게시판");
+                toolbar.getMenu().setGroupVisible(0, false);
                 break;
             }
             case "qa" : {
@@ -82,22 +97,12 @@ public class ForumActivity extends AppCompatActivity {
                 myActivityPostMap = new HashMap<>();
                 break;
             }
-            default: {
+            case "bookmarkSharePost" : {
+                toolbar.setTitle("즐겨찾기한 공유 레시피");
+                toolbar.getMenu().setGroupVisible(0, false);
                 break;
             }
         }
-
-        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
-            @Override
-            public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.forum_menuItem_wirtePost) {
-                    Intent intent = new Intent(context, WritePostActivity.class);
-                    intent.putExtra("forumType", forumType);
-                    startActivity(intent);
-                }
-                return false;
-            }
-        });
 
         layoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
 
@@ -112,13 +117,59 @@ public class ForumActivity extends AppCompatActivity {
 
         if(forumType.equals("myPost")) {
             initMyActivityPostList();
+        } else if(forumType.equals("bookmarkSharePost")) {
+            initBookmarkSharePostList();
         } else {
             initPostList();
         }
     }
 
+    public void initBookmarkSharePostList() {
+        bookmarkedPostIdList = new ArrayList<>();
+        mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                postArrayList.clear();
+                bookmarkedPostIdList.clear();
+
+                for(DataSnapshot idSnapshot : snapshot.getChildren()) {
+                    bookmarkedPostIdList.add(idSnapshot.getKey());
+                }
+
+                Log.d("test", "bookmarkedPostIdList.size : " + bookmarkedPostIdList.size());
+                if(bookmarkedPostIdList.size() == 0) {
+                    postAdapter.notifyDataSetChanged();
+                    return;
+                }
+
+                for(String postId : bookmarkedPostIdList) {
+                    mDatabase.child("forum").child("share").child(postId).addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            Post post = snapshot.getValue(RecipePost.class);
+                            postArrayList.add(post);
+
+                            if(postArrayList.size() == bookmarkedPostIdList.size()) {
+                                Collections.reverse(postArrayList);
+                                postAdapter = new PostAdapter(postArrayList);
+                                postRecycler.setAdapter(postAdapter);
+                            }
+                        }
+
+                        @Override public void onCancelled(@NonNull DatabaseError error) { }
+                    });
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+    }
+
     public void initMyActivityPostList() {
-        FirebaseAuth mAuth = FirebaseAuth.getInstance();
         mDatabase.child("user").child(mAuth.getUid()).child("community").child("posting").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
@@ -141,7 +192,7 @@ public class ForumActivity extends AppCompatActivity {
                         @Override
                         public void onDataChange(@NonNull DataSnapshot snapshot) {
                             Log.d("test", "OnDataChange");
-                            Post post = snapshot.getValue(Post.class);
+                            Post post = snapshot.getValue(RecipePost.class);
                             postArrayList.add(post);
                             postIdMap.put(post, snapshot.getKey());
 
@@ -228,13 +279,21 @@ public class ForumActivity extends AppCompatActivity {
                 public void onClick(View v) {
                     Post post = postArrayList.get(holder.getAdapterPosition());
                     Intent intent = new Intent(v.getContext(), PostActivity.class);
-                    intent.putExtra("postId", postIdMap.get(post));
+
                     if(forumType.equals("myPost")) {
+                        intent.putExtra("postId", postIdMap.get(post));
                         intent.putExtra("forumType", myActivityPostMap.get(postIdMap.get(post)));
+                        intent.putExtra("post", post);
                     } else if(forumType.equals("share")) {
+                        intent.putExtra("postId", postIdMap.get(post));
                         intent.putExtra("forumT", "share");
                         intent.putExtra("post", post);
+                    } else if(forumType.equals("bookmarkSharePost")) {
+                        intent.putExtra("postId", bookmarkedPostIdList.get(holder.getAdapterPosition()));
+                        intent.putExtra("forumType", "share");
+                        intent.putExtra("post", post);
                     } else {
+                        intent.putExtra("postId", postIdMap.get(post));
                         intent.putExtra("forumType", forumType);
                     }
 

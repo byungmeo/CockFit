@@ -245,8 +245,11 @@ public class MyRecipeFragment extends Fragment {
                                     update.put("sharePostId", postId);
                                     mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipe.getMyRecipeId()).updateChildren(update);
 
-                                    Intent intent = new Intent(context, PostActivity.class);
+                                    HashMap<String, String> value = new HashMap<>();
+                                    value.put("ForumType", "share");
+                                    mDatabase.child("user").child(uid).child("community").child("posting").child(postId).setValue(value);
 
+                                    Intent intent = new Intent(context, PostActivity.class);
                                     intent.putExtra("forumT", "share");
                                     intent.putExtra("post", post);
                                     intent.putExtra("postId", postId);

@@ -91,10 +91,9 @@ public class PostActivity extends AppCompatActivity {
         Intent getIntent = getIntent();
         if((forumType = getIntent.getStringExtra("forumT")) == null) {
             forumType = getIntent.getStringExtra("forumType");
-            post = getIntent.getParcelableExtra("post");
-        } else {
-            post = getIntent.getParcelableExtra("post");
         }
+
+        post = getIntent.getParcelableExtra("post");
         postId = getIntent.getStringExtra("postId");
 
         //fragment setting
@@ -125,6 +124,7 @@ public class PostActivity extends AppCompatActivity {
         mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("test", "오류나는 onDataChange");
                 if(forumType.equals("share")) {
                     post = snapshot.getValue(RecipePost.class);
                 } else {

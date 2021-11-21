@@ -64,6 +64,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private Button button_myFavorite;
     private Button button_myCommunityActivity;
+    private Button button_bookmarkRecipePost;
 
     private EditText editText_currentPw;
     private Button button_cancel;
@@ -95,8 +96,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         imageButton_changeName = v.findViewById(R.id.profile_imageButton_changeName);
         button_userInfo = v.findViewById(R.id.profile_imageButton_userInfo);
         button_logout = v.findViewById(R.id.profile_imageButton_logout);
-        button_myFavorite = v.findViewById(R.id.profile_button_recipe);
+        button_myFavorite = v.findViewById(R.id.profile_button_bookmarkBasicRecipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
+        button_bookmarkRecipePost = v.findViewById(R.id.profile_button_bookmarkSharePost);
 
         textView_userEmail.setText(user.getEmail());
 
@@ -128,6 +130,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         button_logout.setOnClickListener(this);
         button_myFavorite.setOnClickListener(this);
         button_myCommunityActivity.setOnClickListener(this);
+        button_bookmarkRecipePost.setOnClickListener(this);
         imageview_profileImage.setOnClickListener(this);
 
         return v;
@@ -238,22 +241,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
                 break;
             }
-
-            case R.id.profile_button_recipe: {
+            case R.id.profile_button_communityActivity: {
+                Intent intent = new Intent(context, ForumActivity.class);
+                intent.putExtra("forumType", "myPost");
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.profile_button_bookmarkBasicRecipe: {
                 Intent intent = new Intent(context, ListActivity.class);
                 intent.putExtra("keyword", "favorite");
                 context.startActivity(intent);
                 break;
             }
-            case R.id.profile_button_communityActivity: {
+            case R.id.profile_button_bookmarkSharePost: {
                 Intent intent = new Intent(context, ForumActivity.class);
-                intent.putExtra("forum", "myPost");
+                intent.putExtra("forumType", "bookmarkSharePost");
                 context.startActivity(intent);
                 break;
             }
             case R.id.profile_imageButton_logout: {
                 FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(getContext(), LoginActivity.class);
+                Intent intent = new Intent(context, LoginActivity.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 getContext().startActivity(intent);
                 break;

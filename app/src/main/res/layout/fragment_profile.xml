@@ -159,44 +159,55 @@
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
-        android:id="@+id/profile_button_recipe"
-        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
-        android:layout_width="350dp"
-        android:layout_height="55dp"
-        android:layout_marginStart="20dp"
-        android:layout_marginTop="10dp"
-        android:layout_marginEnd="20dp"
-        android:layout_marginBottom="195dp"
-        android:fontFamily="@font/font_custom"
-        android:text="즐겨찾기한 레시피"
-        android:textColor="@color/black"
-        android:textSize="28sp"
-        app:icon="@drawable/ic_baseline_bookmarks_24"
-        app:iconGravity="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/textView5"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/profile_button_communityActivity" />
-
-    <Button
         android:id="@+id/profile_button_communityActivity"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
         android:layout_width="350dp"
         android:layout_height="55dp"
         android:layout_marginStart="20dp"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="15dp"
         android:layout_marginEnd="20dp"
-        android:layout_marginBottom="10dp"
         android:fontFamily="@font/font_custom"
+        android:paddingLeft="30dp"
         android:text="게시글 작성 내역"
         android:textColor="@color/black"
-        android:textSize="28sp"
+        android:textSize="24sp"
         app:icon="@drawable/ic_baseline_brush_24"
-        app:iconGravity="textStart"
-        app:layout_constraintBottom_toTopOf="@+id/profile_button_recipe"
+        app:iconGravity="start"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
+
+    <Button
+        android:id="@+id/profile_button_bookmarkBasicRecipe"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/font_custom"
+        android:paddingLeft="30dp"
+        android:text="즐겨찾기한 기본 레시피"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:icon="@drawable/ic_baseline_bookmarks_24"
+        app:iconGravity="start"
+        app:layout_constraintEnd_toEndOf="@+id/profile_button_communityActivity"
+        app:layout_constraintTop_toBottomOf="@+id/profile_button_communityActivity" />
+
+    <Button
+        android:id="@+id/profile_button_bookmarkSharePost"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton.Icon"
+        android:layout_width="350dp"
+        android:layout_height="55dp"
+        android:layout_marginTop="15dp"
+        android:fontFamily="@font/font_custom"
+        android:paddingLeft="30dp"
+        android:text="즐겨찾기한 공유 레시피"
+        android:textColor="@color/black"
+        android:textSize="24sp"
+        app:icon="@drawable/ic_baseline_bookmarks_24"
+        app:iconGravity="start"
+        app:layout_constraintEnd_toEndOf="@+id/profile_button_bookmarkBasicRecipe"
+        app:layout_constraintTop_toBottomOf="@+id/profile_button_bookmarkBasicRecipe" />
 
     <ProgressBar
         android:id="@+id/profile_progressBar"
