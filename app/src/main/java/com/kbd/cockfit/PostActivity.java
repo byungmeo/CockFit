@@ -222,7 +222,7 @@ public class PostActivity extends AppCompatActivity {
             intent.putExtra("isEdit", true);
             intent.putExtra("post", post);
             intent.putExtra("postId", postId);
-            intent.putExtra("forum", forumType);
+            intent.putExtra("forumType", forumType);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
@@ -242,6 +242,8 @@ public class PostActivity extends AppCompatActivity {
 
             Comment comment = new Comment(commentText, nickname, uid, date);
             mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
+
+            editText_comment.setText("");
         }
     }
 }
