@@ -116,7 +116,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editRecipeId = getIntent().getStringExtra("recipeId");
 
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
-        storageRef = FirebaseStorage.getInstance().getReference();
+        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
         imageOn=false;
         appBar = findViewById(R.id.topAppBar);
 

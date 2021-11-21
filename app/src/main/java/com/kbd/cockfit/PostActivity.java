@@ -37,6 +37,7 @@ import com.google.firebase.storage.StorageReference;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.HashMap;
 
 public class PostActivity extends AppCompatActivity {
     private Context context;
@@ -125,9 +126,9 @@ public class PostActivity extends AppCompatActivity {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 if(forumType.equals("share")) {
-                    post = snapshot.getValue(Post.class);
-                } else {
                     post = snapshot.getValue(RecipePost.class);
+                } else {
+                    post = snapshot.getValue(Post.class);
                 }
                 
                 //postId에 해당하는 게시글이 있는 경우
@@ -203,6 +204,14 @@ public class PostActivity extends AppCompatActivity {
                     });
                 }
             });
+
+            if(forumType.equals("share")) {
+                RecipePost recipePost = (RecipePost) post;
+                HashMap<String, Object> update = new HashMap<>();
+                update.put("isShare", new Boolean(false));
+                update.put("sharePostId", null);
+                mDatabase.child("user").child(post.getUid()).child("MyRecipe").child(recipePost.getRecipeId()).updateChildren(update);
+            }
         } else if(item.getItemId() == R.id.post_menuItem_edit) {
             //게시글 수정
             Intent intent = new Intent(context, WritePostActivity.class);

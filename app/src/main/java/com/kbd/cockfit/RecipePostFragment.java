@@ -166,7 +166,7 @@ public class RecipePostFragment extends Fragment {
         });
 
         //
-        StorageReference mStorage = FirebaseStorage.getInstance().getReference();
+        StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
         mStorage.child("Users").child(writerUid).child("CocktailImage").child(recipeId + ".jpg").getDownloadUrl().addOnCompleteListener(new OnCompleteListener<Uri>() {
             @Override
             public void onComplete(@NonNull Task<Uri> task) {
