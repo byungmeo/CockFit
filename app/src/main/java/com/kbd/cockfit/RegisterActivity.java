@@ -2,12 +2,15 @@ package com.kbd.cockfit;
 
 import android.app.Activity;
 import android.content.Intent;
+import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -20,6 +23,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -76,14 +80,12 @@ public class RegisterActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.register_materialToolbar);
         setSupportActionBar(toolbar);
-        getSupportActionBar().setIcon(R.drawable.ic_baseline_how_to_reg_24);
 
 
         editText_email = (TextInputLayout)findViewById(R.id.register_editText_email);
         editText_pwd = (TextInputLayout)findViewById(R.id.register_editText_pw);
         editText_checkPwd = (TextInputLayout)findViewById(R.id.register_editText_pw2);
         editText_nickname = (TextInputLayout)findViewById(R.id.register_editText_nic);
-        button_register = findViewById(R.id.register_button_register);
         profile_image = findViewById(R.id.register_imageview_profileimage);
     }
 
@@ -120,6 +122,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.top_app_bar_register, menu);
 
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,14 +133,10 @@ public class RegisterActivity extends AppCompatActivity {
         });
         return super.onCreateOptionsMenu(menu);
     }
-    public void clickButton(View view) {
-        if(view.getId() == this.profile_image.getId()){
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-            startActivityForResult(intent, PICK_FROM_ALBUM);
-            imageOn=true;
-        }
-        if(view.getId() == this.button_register.getId()) {
+
+    @Override
+    public boolean onOptionsItemSelected (MenuItem item) {
+        if(item.getItemId() == R.id.register_icon) {
             String e_mail = this.editText_email.getEditText().getText().toString();
             String pwd = this.editText_pwd.getEditText().getText().toString();
             String checkPwd = this.editText_checkPwd.getEditText().getText().toString();
@@ -145,22 +145,22 @@ public class RegisterActivity extends AppCompatActivity {
             String e_mailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$"; // 이메일 형식 패턴
             if(!Pattern.matches(e_mailPattern , e_mail)){
                 Toast.makeText(RegisterActivity.this , "이메일 형식을 확인해주세요" , Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             if(pwd.equals("") || checkPwd.equals("")) {
                 Toast.makeText(RegisterActivity.this , "비밀번호를 입력해주세요" , Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             if(nickname.equals("")) {
                 Toast.makeText(RegisterActivity.this , "닉네임을 입력해주세요" , Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             if(!pwd.equals(checkPwd)) {
                 Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
-                return;
+                return false;
             }
 
             mAuth.createUserWithEmailAndPassword(e_mail, pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -204,10 +204,21 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
                         Log.d("test", task.getException().getMessage());
-                        HideKeyboard(view);
+                        HideKeyboard((View)item);
                     }
                 }
             });
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+    public void clickButton(View view) {
+        if(view.getId() == this.profile_image.getId()){
+            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+            startActivityForResult(intent, PICK_FROM_ALBUM);
+            imageOn=true;
         }
     }
 
