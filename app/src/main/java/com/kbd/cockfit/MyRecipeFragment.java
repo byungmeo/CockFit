@@ -76,9 +76,9 @@ public class MyRecipeFragment extends Fragment {
         myRecipeRecyclerView.setLayoutManager(layoutManager);
         myRecipeRecyclerView.setVisibility(View.INVISIBLE);
 
-        myRecipeArrayList = new ArrayList<>();
-        adapter = new MyRecipeAdapter(myRecipeArrayList);
-        myRecipeRecyclerView.setAdapter(adapter);
+        //myRecipeArrayList = new ArrayList<>();
+        //adapter = new MyRecipeAdapter(myRecipeArrayList);
+        //myRecipeRecyclerView.setAdapter(adapter);
 
 
         initMyRecipeList();
@@ -89,7 +89,11 @@ public class MyRecipeFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        adapter.notifyDataSetChanged();
+        if(adapter != null) {
+            adapter.notifyDataSetChanged();
+            progressBar.setVisibility(View.VISIBLE);
+            myRecipeRecyclerView.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void initMyRecipeList() {
@@ -100,7 +104,11 @@ public class MyRecipeFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 Log.d("test", "MyRecipeFragment : RealtimeDB 나만의레시피 onDataChange");
-                myRecipeArrayList.clear();
+                if(myRecipeArrayList != null) {
+                    myRecipeArrayList.clear();
+                } else {
+                    myRecipeArrayList = new ArrayList<>();
+                }
                 
                 for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
                     MyRecipe recipe = recipeSnapshot.getValue(MyRecipe.class);
