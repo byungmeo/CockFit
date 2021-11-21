@@ -186,6 +186,10 @@ public class PostActivity extends AppCompatActivity {
         if(forumType.equals("share")) {
             menu.getItem(0).setVisible(false);
         }
+
+        if(!FirebaseAuth.getInstance().getUid().equals(post.getUid())) {
+            menu.getItem(1).setVisible(false);
+        }
         return super.onCreateOptionsMenu(menu);
     }
 

@@ -58,6 +58,7 @@ public class RecipeActivity extends AppCompatActivity {
     private String uid;
     private FirebaseAuth mAuth;
     private ArrayList<Recipe> favoriteRecipeList;
+    private boolean isMyRecipe;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -91,6 +92,7 @@ public class RecipeActivity extends AppCompatActivity {
 
         if(recipeNumber == 0) {
             Log.d("test", "나만의 레시피임");
+            isMyRecipe = true;
             MyRecipe myRecipe = getIntent().getParcelableExtra("recipe");
             recipe = myRecipe;
             StorageReference mStorage = FirebaseStorage.getInstance().getReference();
@@ -103,6 +105,7 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             });
         } else {
+            isMyRecipe = false;
             recipe = getRecipe(recipeNumber);
 
             favoriteRecipeList = new ArrayList<>();
@@ -161,6 +164,9 @@ public class RecipeActivity extends AppCompatActivity {
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar_recipe, menu);
+        if(isMyRecipe) {
+            menu.setGroupVisible(0, false);
+        }
         appBarRecipe.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
