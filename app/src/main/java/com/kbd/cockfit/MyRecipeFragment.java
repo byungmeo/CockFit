@@ -179,7 +179,6 @@ public class MyRecipeFragment extends Fragment {
                     public void onClick(View v) {
                         MyRecipe recipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
                         Context context = v.getContext();
-                        Toast.makeText(context, "수정", Toast.LENGTH_SHORT).show();
 
                         //게시글 수정
                         Intent intent = new Intent(context, MakeRecipeActivity.class);
