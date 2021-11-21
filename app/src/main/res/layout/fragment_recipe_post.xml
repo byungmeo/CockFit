@@ -114,16 +114,20 @@
                 android:layout_marginStart="50dp"
                 android:layout_marginTop="15dp"
                 android:text="0"
+                app:iconPadding="0dp"
                 app:layout_constraintEnd_toEndOf="@+id/share_textView_description"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_description" />
 
             <Button
-                android:id="@+id/button"
+                android:id="@+id/share_button_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="50dp"
+                android:drawableLeft="@drawable/ic_baseline_bookmark_false_24"
+                android:text="즐찾"
+                app:iconPadding="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/share_textView_description"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_description" />

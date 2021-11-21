@@ -60,9 +60,12 @@ public class RecipePostFragment extends Fragment {
     private TextView textView_equipment;
     private TextView textView_description;
     private Button button_like;
+    private Button button_bookmark;
 
     private Drawable drawable_alreadyLike;
     private Drawable drawable_waitLike;
+    private Drawable drawable_alreadyBookmark;
+    private Drawable drawable_waitBookmark;
 
     private ProgressBar progressBar;
     private LinearLayout linearLayout;
@@ -98,11 +101,14 @@ public class RecipePostFragment extends Fragment {
         textView_equipment = v.findViewById(R.id.share_textView_equipment);
         textView_description = v.findViewById(R.id.share_textView_description);
         button_like = v.findViewById(R.id.share_button_like);
+        button_bookmark = v.findViewById(R.id.share_button_bookmark);
         progressBar = v.findViewById(R.id.share_progressBar);
         linearLayout = v.findViewById(R.id.share_linearLayout);
 
         drawable_alreadyLike = getResources().getDrawable(R.drawable.ic_baseline_thumb_up_24, getActivity().getTheme());
         drawable_waitLike = getResources().getDrawable(R.drawable.ic_outline_thumb_up_24, getActivity().getTheme());
+        drawable_alreadyBookmark = getResources().getDrawable(R.drawable.ic_baseline_bookmark_true_24, getActivity().getTheme());
+        drawable_waitBookmark = getResources().getDrawable(R.drawable.ic_baseline_bookmark_false_24, getActivity().getTheme());
 
         //
         recycler_comments = v.findViewById(R.id.share_recyclerView_comments);
@@ -139,6 +145,35 @@ public class RecipePostFragment extends Fragment {
                 }
             }
             @Override public void onCancelled(@NonNull DatabaseError error) { }
+        });
+
+        mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String checkText = snapshot.getValue(String.class);
+                if(checkText != null) {
+                    button_bookmark.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_alreadyBookmark, null, null, null);
+                    button_bookmark.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).removeValue();
+                        }
+                    });
+                } else {
+                    button_bookmark.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_waitBookmark, null, null, null);
+                    button_bookmark.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).setValue("true");
+                        }
+                    });
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
         });
 
         mDatabase.child("forum").child(forumType).child(postId).child("comments").addValueEventListener(new ValueEventListener() {
