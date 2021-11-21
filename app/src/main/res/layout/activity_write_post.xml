@@ -24,51 +24,56 @@
             app:title="게시글 작성" />
     </com.google.android.material.appbar.AppBarLayout>
 
-    <EditText
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/write_editText_title"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="0dp"
-        android:layout_height="30dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginEnd="15dp"
-        android:background="@drawable/border"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="제목"
-        android:inputType="textMultiLine"
-        app:layout_constraintBottom_toBottomOf="@+id/write_textView_title"
+        android:layout_width="380dp"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_custom"
+        android:inputType="textPersonName"
+        android:padding="5dp"
+        app:boxBackgroundColor="@color/white"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@+id/write_textView_title"
-        app:layout_constraintTop_toTopOf="@+id/write_textView_title" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/write_appBarLayout"
+        android:layout_marginTop="15dp"
+        app:startIconContentDescription="PostlName"
+        app:startIconDrawable="@drawable/ic_baseline_list_alt_24">
 
-    <EditText
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/write_editText_title_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/font_custom"
+            android:textSize="23sp"
+            android:hint="제목"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+    <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/write_editText_content"
-        style="@style/Widget.AppCompat.EditText"
-        android:layout_width="0dp"
-        android:layout_height="0dp"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="5dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginBottom="15dp"
-        android:background="@drawable/border"
-        android:ems="10"
-        android:gravity="top"
-        android:hint="게시글 본문 작성"
-        android:inputType="textMultiLine"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:fontFamily="@font/font_custom"
+        android:padding="5dp"
+        android:layout_marginTop="10dp"
+        app:boxBackgroundColor="@color/white"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/write_editText_title" />
+        app:layout_constraintTop_toBottomOf="@+id/write_editText_title">
 
-    <TextView
-        android:id="@+id/write_textView_title"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="15dp"
-        android:layout_marginTop="15dp"
-        android:text="제목"
-        android:textSize="20sp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/write_appBarLayout" />
+        <EditText
+            android:id="@+id/write_editText_content_text"
+            android:layout_width="400dp"
+            android:layout_height="500dp"
+            android:fontFamily="@font/font_custom"
+            android:textSize="18sp"
+            android:gravity="start|top"
+            android:hint="본문을 작성해주세요"
+            android:inputType="textMultiLine" />
+    </com.google.android.material.textfield.TextInputLayout>
+
+
+
 
 </androidx.constraintlayout.widget.ConstraintLayout>
