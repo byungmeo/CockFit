@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -45,10 +47,11 @@ public class RegisterActivity extends AppCompatActivity {
     private StorageReference storageRef;
     private String uid;
     private ConstraintLayout con;
-    private ImageView button_back;
     private ImageView profile_image;
     private static final int PICK_FROM_ALBUM = 1;
     boolean imageOn;
+
+    private Toolbar toolbar;
 
     private TextInputLayout editText_email, editText_pwd, editText_checkPwd, editText_nickname;
     private Button button_register;
@@ -60,17 +63,9 @@ public class RegisterActivity extends AppCompatActivity {
 
         mAuth = FirebaseAuth.getInstance();
         con = findViewById(R.id.register_layout_const);
-        button_back = findViewById(R.id.register_button_backButton);
         imageOn = false;
 
         final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
-
-        button_back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         con.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -78,6 +73,11 @@ public class RegisterActivity extends AppCompatActivity {
                 manager.hideSoftInputFromWindow(con.getWindowToken(),0);
             }
         });
+
+        toolbar = findViewById(R.id.register_materialToolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setIcon(R.drawable.ic_baseline_how_to_reg_24);
+
 
         editText_email = (TextInputLayout)findViewById(R.id.register_editText_email);
         editText_pwd = (TextInputLayout)findViewById(R.id.register_editText_pw);
@@ -118,6 +118,17 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                RegisterActivity.this.onBackPressed();
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
     public void clickButton(View view) {
         if(view.getId() == this.profile_image.getId()){
             Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
