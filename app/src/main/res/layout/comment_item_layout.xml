@@ -43,6 +43,7 @@
         android:layout_marginStart="10dp"
         android:text="TextView"
         android:textColor="@color/black"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="@+id/comment_textView_date"
         app:layout_constraintStart_toEndOf="@+id/comment_textView_date"
         app:layout_constraintTop_toTopOf="@+id/comment_textView_date" />

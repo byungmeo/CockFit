@@ -46,53 +46,99 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
-                android:text="TextView"
+                android:text="#태그 #태그"
                 android:textColor="@color/black"
                 app:layout_constraintEnd_toEndOf="@+id/share_textView_recipeName"
                 app:layout_constraintStart_toStartOf="@+id/share_textView_recipeName"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_recipeName" />
 
             <TextView
+                android:id="@+id/proof"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:text="도수 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="@+id/share_textView_proof" />
+
+            <TextView
                 android:id="@+id/share_textView_proof"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_tag"
-                app:layout_constraintStart_toStartOf="@+id/share_textView_tag"
+                android:textSize="16sp"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_base"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_tag" />
+
+            <TextView
+                android:id="@+id/base"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="베이스 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/proof"
+                app:layout_constraintTop_toTopOf="@+id/share_textView_base" />
 
             <TextView
                 android:id="@+id/share_textView_base"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginStart="15dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_proof"
-                app:layout_constraintStart_toStartOf="@+id/share_textView_proof"
+                android:textSize="16sp"
+                app:layout_constraintStart_toEndOf="@+id/base"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_proof" />
+
+            <TextView
+                android:id="@+id/ingredient"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="재료 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/base"
+                app:layout_constraintTop_toTopOf="@+id/share_textView_ingredient" />
 
             <TextView
                 android:id="@+id/share_textView_ingredient"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_base"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/share_textView_base"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_base" />
+
+            <TextView
+                android:id="@+id/equipment"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="장비 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/ingredient"
+                app:layout_constraintTop_toTopOf="@+id/share_textView_equipment" />
 
             <TextView
                 android:id="@+id/share_textView_equipment"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_ingredient"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/share_textView_ingredient"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_ingredient" />
 
@@ -100,10 +146,10 @@
                 android:id="@+id/share_textView_description"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="10dp"
+                android:layout_marginTop="15dp"
                 android:text="TextView"
                 android:textColor="@color/black"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_equipment"
+                android:textSize="16sp"
                 app:layout_constraintStart_toStartOf="@+id/share_textView_equipment"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_equipment" />
 
@@ -112,10 +158,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="50dp"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:text="0"
                 app:iconPadding="0dp"
-                app:layout_constraintEnd_toEndOf="@+id/share_textView_description"
+                app:layout_constraintEnd_toEndOf="@+id/share_textView_recipeName"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_description" />
 
@@ -123,14 +169,25 @@
                 android:id="@+id/share_button_bookmark"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="15dp"
+                android:layout_marginTop="20dp"
                 android:layout_marginEnd="50dp"
                 android:drawableLeft="@drawable/ic_baseline_bookmark_false_24"
                 android:text="즐찾"
                 app:iconPadding="0dp"
                 app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@+id/share_textView_description"
+                app:layout_constraintStart_toStartOf="@+id/share_textView_recipeName"
                 app:layout_constraintTop_toBottomOf="@+id/share_textView_description" />
+
+            <TextView
+                android:id="@+id/description"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="설명 : "
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:textStyle="bold"
+                app:layout_constraintStart_toStartOf="@+id/equipment"
+                app:layout_constraintTop_toTopOf="@+id/share_textView_description" />
 
         </androidx.constraintlayout.widget.ConstraintLayout>
 
