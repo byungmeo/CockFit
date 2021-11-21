@@ -61,7 +61,6 @@ public class MyRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
-        Log.d("test", "MyRecipeFragment : onCreateView");
         context = v.getContext();
 
         progressBar = v.findViewById(R.id.myRecipe_progressBar);

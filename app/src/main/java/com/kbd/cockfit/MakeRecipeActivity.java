@@ -123,7 +123,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                Log.d("test", "MakeRecipeActivity : + 버튼 누름");
                 if(isEdit) {
                     String name = editText_name.getEditText().getText().toString();
                     String proof = editText_proof.getEditText().getText().toString();
@@ -179,7 +178,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         });
 
     }
-
 
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
