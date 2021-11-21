@@ -94,6 +94,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
             for (String tag : list) {
                 totalText += tag + ", ";
             }
+            totalText = totalText.substring(0, totalText.length() - 2);
             editText_tags.getEditText().setText(totalText);
             editText_proof.getEditText().setText(editRecipe.getProof());
             editText_base.getEditText().setText(editRecipe.getBase());
@@ -103,6 +104,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
             for (String ingredient : list) {
                 totalText += ingredient + ", ";
             }
+            totalText = totalText.substring(0, totalText.length() - 2);
             editText_ingredient.getEditText().setText(totalText);
 
             list = editRecipe.getEquipment();
@@ -110,6 +112,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
             for (String equipment : list) {
                 totalText += equipment + ", ";
             }
+            totalText = totalText.substring(0, totalText.length() - 2);
             editText_equipment.getEditText().setText(totalText);
             editText_description.getEditText().setText(editRecipe.getDescription());
         }
