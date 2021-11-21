@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
@@ -122,6 +123,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
+                Log.d("test", "MakeRecipeActivity : + 버튼 누름");
                 if(isEdit) {
                     String name = editText_name.getEditText().getText().toString();
                     String proof = editText_proof.getEditText().getText().toString();
@@ -207,14 +209,17 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 uploadImageToFirebase(file);
             }
         });
-
-        this.onBackPressed();
     }
 
 
     private void uploadImageToFirebase(Uri file){
         StorageReference fileRef = storageRef.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
-        fileRef.putFile(file);
+        fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                onBackPressed();
+            }
+        });
     }
 
     @Override

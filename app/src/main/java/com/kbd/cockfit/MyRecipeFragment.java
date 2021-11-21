@@ -61,6 +61,7 @@ public class MyRecipeFragment extends Fragment {
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         View v = inflater.inflate(R.layout.fragment_my_recipe, container, false);
+        Log.d("test", "MyRecipeFragment : onCreateView");
         context = v.getContext();
 
         progressBar = v.findViewById(R.id.myRecipe_progressBar);
@@ -93,6 +94,7 @@ public class MyRecipeFragment extends Fragment {
         mDatabase.child("user").child(uid).child("MyRecipe").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("test", "MyRecipeFragment : RealtimeDB 나만의레시피 onDataChange");
                 myRecipeArrayList.clear();
                 
                 for (DataSnapshot recipeSnapshot: snapshot.getChildren()) {
@@ -159,6 +161,7 @@ public class MyRecipeFragment extends Fragment {
 
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            Log.d("test", "MyRecipeFragment : onCreateViewHolder");
             FirebaseUser user = mAuth.getCurrentUser();
             String uid = user.getUid();
             if(viewType == TYPE_ITEM) {
@@ -274,6 +277,7 @@ public class MyRecipeFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(RecyclerView.ViewHolder holder, int position) {
+            Log.d("test", "MyRecipeFragment : onBindViewHolder");
             if(holder instanceof ItemViewHolder) {
                 ItemViewHolder itemViewHolder = (ItemViewHolder) holder;
                 itemViewHolder.name.setText(myRecipeArrayList.get(holder.getAdapterPosition()).getName());
@@ -284,7 +288,6 @@ public class MyRecipeFragment extends Fragment {
                     @Override
                     public void onComplete(@NonNull Task<Uri> task) {
                         if (task.isSuccessful()) {
-                            Log.d("test0", task.getResult().toString());
                             // Glide 이용하여 이미지뷰에 로딩
                             Glide.with(MyRecipeFragment.this)
                                     .load(task.getResult())
@@ -292,13 +295,10 @@ public class MyRecipeFragment extends Fragment {
                             progressBar.setVisibility(View.GONE);
                             myRecipeRecyclerView.setVisibility(View.VISIBLE);
                         } else {
+                            Log.d("test", "MyRecipeFragment -> onBindViewHolder -> getDownloadUrl : " + task.getException().getMessage());
                         }
                     }
                 });
-
-
-
-
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;
                 footViewHolder.addCardView.setOnClickListener(new View.OnClickListener() {
