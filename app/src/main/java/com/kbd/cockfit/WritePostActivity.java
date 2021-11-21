@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -27,8 +28,10 @@ public class WritePostActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private DatabaseReference mDatabase;
 
-    private EditText editText_title;
-    private EditText editText_content;
+    private TextInputLayout editText_title;
+    private TextInputLayout editText_content;
+    private EditText editText_title_text;
+    private EditText editText_content_text;
     private Boolean isEdit;
     private Post editPost;
     private String editPostId;
@@ -47,6 +50,8 @@ public class WritePostActivity extends AppCompatActivity {
 
         editText_title = findViewById(R.id.write_editText_title);
         editText_content = findViewById(R.id.write_editText_content);
+        editText_title_text = findViewById(R.id.write_editText_title_text);
+        editText_content_text = findViewById(R.id.write_editText_content_text);
 
         Intent intent = getIntent();
         if(isEdit = intent.getBooleanExtra("isEdit", false)) {
@@ -64,19 +69,19 @@ public class WritePostActivity extends AppCompatActivity {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
                 if(item.getItemId() == R.id.write_menuItem_write) {
-                    if(editText_title.getText().toString().equals("")) {
+                    if(editText_title.getEditText().getText().toString().equals("")) {
                         Toast.makeText(context, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
                         return true;
                     }
 
-                    if(editText_content.getText().toString().equals("")) {
+                    if(editText_content.getEditText().getText().toString().equals("")) {
                         Toast.makeText(context, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
                         return true;
                     }
 
                     if(isEdit) {
-                        editPost.setTitle(editText_title.getText().toString());
-                        editPost.setContent(editText_content.getText().toString());
+                        editPost.setTitle(editText_title.getEditText().getText().toString());
+                        editPost.setContent(editText_content.getEditText().getText().toString());
                         Map<String, Object> childUpdates = new HashMap<>();
                         childUpdates.put(editPostId, editPost);
                         mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
@@ -84,8 +89,8 @@ public class WritePostActivity extends AppCompatActivity {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String uid = user.getUid();
                         String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-                        Post post = new Post(editText_title.getText().toString(), user.getDisplayName(), uid, date);
-                        post.setContent(editText_content.getText().toString());
+                        Post post = new Post(editText_title.getEditText().getText().toString(), user.getDisplayName(), uid, date);
+                        post.setContent(editText_content.getEditText().getText().toString());
 
                         String key = mDatabase.child("forum").child(forumType).push().getKey();
                         HashMap<String, String> value = new HashMap<>();
@@ -103,7 +108,7 @@ public class WritePostActivity extends AppCompatActivity {
     }
 
     public void initEditPost() {
-        editText_title.setText(editPost.getTitle());
-        editText_content.setText(editPost.getContent());
+        editText_title_text.setText(editPost.getTitle());
+        editText_content_text.setText(editPost.getContent());
     }
 }
