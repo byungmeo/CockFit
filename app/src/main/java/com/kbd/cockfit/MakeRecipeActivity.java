@@ -10,6 +10,8 @@ import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -17,6 +19,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
+import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,7 +32,6 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
-import com.squareup.picasso.Picasso;
 
 import java.util.HashMap;
 import java.util.List;
@@ -42,8 +44,8 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private String uid;
     private ImageView imageView_addImage;
     private static final int PICK_FROM_ALBUM =1;
-    private StorageReference storageRef;
-    private Uri file;
+    private StorageReference mStorage;
+    private Uri imageUrl;
     private boolean imageOn;
     private Toolbar appBar;
     private String imageKey;
@@ -62,6 +64,9 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private TextInputLayout editText_ingredient;
     private TextInputLayout editText_description;
 
+    private ProgressBar progressBar;
+    private ScrollView scrollView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -76,15 +81,22 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editText_equipment = findViewById(R.id.make_editText_equipment);
         editText_ingredient = findViewById(R.id.make_editText_ingredient);
         editText_description = findViewById(R.id.make_editText_description);
+        progressBar = findViewById(R.id.make_progressBar);
+        scrollView = findViewById(R.id.scrollView3);
 
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+        mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
 
         //getIntent
+        editRecipeId = getIntent().getStringExtra("recipeId");
         isEdit = getIntent().getBooleanExtra("isEdit", false);
         if(isEdit) {
+            progressBar.setVisibility(View.VISIBLE);
+            scrollView.setVisibility(View.INVISIBLE);
+
             editRecipe = getIntent().getParcelableExtra("recipe");
 
             editText_name.getEditText().setText(editRecipe.getName());
@@ -115,11 +127,20 @@ public class MakeRecipeActivity extends AppCompatActivity {
             totalText = totalText.substring(0, totalText.length() - 2);
             editText_equipment.getEditText().setText(totalText);
             editText_description.getEditText().setText(editRecipe.getDescription());
+
+            mStorage.child("Users/"+uid+"/CocktailImage/"+editRecipeId+".jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    Glide.with(MakeRecipeActivity.this)
+                            .load(uri)
+                            .into(imageView_addImage);
+                    progressBar.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
+                }
+            });
         }
-        editRecipeId = getIntent().getStringExtra("recipeId");
 
         imageView_addImage = findViewById(R.id.make_imageView_addImage);
-        storageRef = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
         imageOn=false;
         appBar = findViewById(R.id.topAppBar);
 
@@ -144,13 +165,15 @@ public class MakeRecipeActivity extends AppCompatActivity {
                     MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
                     recipe.setUid(uid);
 
-
                     Map<String, Object> childUpdates = new HashMap<>();
                     childUpdates.put(editRecipeId, recipe);
                     mDatabase.child("user").child(uid).child("MyRecipe").updateChildren(childUpdates);
 
-                    onBackPressed();
-
+                    if(imageOn) {
+                        uploadImageToFirebase(imageUrl);
+                    } else {
+                        onBackPressed();
+                    }
                 }
                 else {
                     storeRecipe();
@@ -207,14 +230,14 @@ public class MakeRecipeActivity extends AppCompatActivity {
         mDatabase.child("user").child(uid).child("MyRecipe").push().setValue(recipe).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void unused) {
-                uploadImageToFirebase(file);
+                uploadImageToFirebase(imageUrl);
             }
         });
     }
 
 
     private void uploadImageToFirebase(Uri file){
-        StorageReference fileRef = storageRef.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
+        StorageReference fileRef = mStorage.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
         fileRef.putFile(file).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
@@ -228,8 +251,10 @@ public class MakeRecipeActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if(PICK_FROM_ALBUM == 1){
             if(resultCode == Activity.RESULT_OK){
-                file = data.getData();
-                Picasso.get().load(file).into(imageView_addImage);
+                imageUrl = data.getData();
+                Glide.with(MakeRecipeActivity.this)
+                        .load(imageUrl)
+                        .into(imageView_addImage);
             }
         }
     }

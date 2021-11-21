@@ -86,6 +86,12 @@ public class MyRecipeFragment extends Fragment {
         return v;
     }
 
+    @Override
+    public void onResume() {
+        super.onResume();
+        adapter.notifyDataSetChanged();
+    }
+
     public void initMyRecipeList() {
         FirebaseUser user = mAuth.getCurrentUser();
         String uid = user.getUid();
