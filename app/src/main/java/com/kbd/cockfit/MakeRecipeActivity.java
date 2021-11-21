@@ -72,9 +72,9 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editText_name = findViewById(R.id.make_editText_name);
         editText_proof = findViewById(R.id.make_editText_proof);
         editText_base = findViewById(R.id.make_editText_base);
-        editText_tags = findViewById(R.id.make_editText_ingredient);
+        editText_tags = findViewById(R.id.make_editText_tags);
         editText_equipment = findViewById(R.id.make_editText_equipment);
-        editText_ingredient = findViewById(R.id.make_editText_tags);
+        editText_ingredient = findViewById(R.id.make_editText_ingredient);
         editText_description = findViewById(R.id.make_editText_description);
 
         mAuth = FirebaseAuth.getInstance();
