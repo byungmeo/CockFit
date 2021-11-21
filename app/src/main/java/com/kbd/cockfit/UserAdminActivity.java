@@ -166,30 +166,29 @@ public class UserAdminActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-        } else if(view.getId() == R.id.user_button_leave) {
-            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
-            user = FirebaseAuth.getInstance().getCurrentUser();
-            String uId = user.getUid();
-            Log.d("테스트", uId);
-
-            StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
-            StorageReference photoReference = mStorage.child("Users/").child(uId + "/");
-
-            user.delete()
-                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                        @Override
-                        public void onComplete(@NonNull Task<Void> task) {
-                            if(task.isSuccessful()) {
-                                mDatabase.child("user").child(uId).removeValue();
-//                                photoReference.listAll().then((listResults) => )
-                                Toast.makeText(view.getContext(), "계정이 탈퇴 되었습니다", Toast.LENGTH_LONG).show();
-                                FirebaseAuth.getInstance().signOut();
-                                Intent intent = new Intent(view.getContext(), LoginActivity.class);
-                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                                view.getContext().startActivity(intent);
-                            }
-                        }
-                    });
+        } else if(view.getId() == R.id.user_button_leave) { //향후 개발 예정인 계정 탈퇴 기능
+//            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference(); //실시간 Firebase 경로
+//            user = FirebaseAuth.getInstance().getCurrentUser();
+//            String uId = user.getUid();
+//            Log.d("테스트", uId);
+//
+//            StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+//            StorageReference photoReference = mStorage.child("Users/").child(uId + "/"); //Firebase Storage 경로
+//
+//            user.delete() //Firebase에서 계정 제거
+//                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+//                        @Override
+//                        public void onComplete(@NonNull Task<Void> task) {
+//                            if(task.isSuccessful()) {
+//                                mDatabase.child("user").child(uId).removeValue(); //실시간 Firebase 데이터 삭제
+//                                Toast.makeText(view.getContext(), "계정이 탈퇴 되었습니다", Toast.LENGTH_LONG).show();
+//                                FirebaseAuth.getInstance().signOut();
+//                                Intent intent = new Intent(view.getContext(), LoginActivity.class);
+//                                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+//                                view.getContext().startActivity(intent);
+//                            }
+//                        }
+//                    });
         }
     }
 }
