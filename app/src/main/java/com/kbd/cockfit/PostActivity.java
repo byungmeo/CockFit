@@ -222,7 +222,7 @@ public class PostActivity extends AppCompatActivity {
             intent.putExtra("isEdit", true);
             intent.putExtra("post", post);
             intent.putExtra("postId", postId);
-            intent.putExtra("forum", forumType);
+            intent.putExtra("forumType", forumType);
             startActivity(intent);
         }
         return super.onOptionsItemSelected(item);
