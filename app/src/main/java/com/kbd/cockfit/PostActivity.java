@@ -242,6 +242,8 @@ public class PostActivity extends AppCompatActivity {
 
             Comment comment = new Comment(commentText, nickname, uid, date);
             mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
+
+            editText_comment.setText("");
         }
     }
 }
