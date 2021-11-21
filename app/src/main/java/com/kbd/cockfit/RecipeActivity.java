@@ -11,6 +11,8 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
+import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -51,6 +53,8 @@ public class RecipeActivity extends AppCompatActivity {
     private TextView textView_tags;
     private ImageView imageView_picture;
     private Toolbar appBarRecipe;
+    private ProgressBar progressBar;
+    private ScrollView scrollView;
     private Recipe recipe;
     private boolean isFavorite = false;
     private MenuItem menuItem_bookmark;
@@ -76,6 +80,10 @@ public class RecipeActivity extends AppCompatActivity {
         textView_tags = findViewById(R.id.recipe_textView_tags);
         appBarRecipe = findViewById(R.id.topAppBarRecipe);
         setSupportActionBar(appBarRecipe);
+        progressBar = findViewById(R.id.recipe_progressBar);
+        scrollView = findViewById(R.id.scrollView2);
+        progressBar.setVisibility(View.VISIBLE);
+        scrollView.setVisibility(View.INVISIBLE);
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         uid = mAuth.getUid();
@@ -102,6 +110,8 @@ public class RecipeActivity extends AppCompatActivity {
                     Glide.with(RecipeActivity.this)
                             .load(task.getResult())
                             .into(imageView_picture);
+                    progressBar.setVisibility(View.GONE);
+                    scrollView.setVisibility(View.VISIBLE);
                 }
             });
         } else {
@@ -132,6 +142,8 @@ public class RecipeActivity extends AppCompatActivity {
                 }
             });
             imageView_picture.setImageBitmap(recipe.getImage());
+            progressBar.setVisibility(View.GONE);
+            scrollView.setVisibility(View.VISIBLE);
         }
 
         textView_name.setText(recipe.getName());
