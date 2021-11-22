@@ -178,13 +178,10 @@ public class ListActivity extends AppCompatActivity {
                     public int compare(Recipe o1, Recipe o2) {
                         int proof1 = Integer.parseInt(o1.getProof());
                         int proof2 = Integer.parseInt(o2.getProof());
-                        if (proof1 < proof2) {
-                            return 1;
-                        } else if (proof1 == proof2) {
-                            return 0;
-                        } else {
-                            return -1;
-                        }
+
+                        if (proof1 < proof2) { return 1; }
+                        else if (proof1 == proof2) { return 0; }
+                        else { return -1; }
                     }
                 });
                 recipeAdapter.notifyDataSetChanged();
