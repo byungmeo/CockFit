@@ -169,6 +169,11 @@ public class RegisterActivity extends AppCompatActivity {
                 Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
                 return false;
             }
+            
+            if(pwd.length() < 6) {
+                Toast.makeText(RegisterActivity.this , "비밀번호는 최소 6자리 이상으로 입력해주세요." , Toast.LENGTH_LONG).show();
+                return false;
+            }
 
             mAuth.createUserWithEmailAndPassword(e_mail, pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                 @Override
@@ -211,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
                         Log.d("test", task.getException().getMessage());
-                        HideKeyboard((View)item);
+                        HideKeyboard();
                     }
                 }
             });
@@ -229,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void HideKeyboard(View view){
+    public void HideKeyboard(){
         InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText_email.getWindowToken(), 0);
     }
