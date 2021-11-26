@@ -1,8 +1,5 @@
 package com.kbd.cockfit;
 
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,6 +7,9 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.FirebaseAuth;
@@ -80,11 +80,10 @@ public class WritePostActivity extends AppCompatActivity {
                     }
 
                     if(isEdit) {
-                        editPost.setTitle(editText_title.getEditText().getText().toString());
-                        editPost.setContent(editText_content.getEditText().getText().toString());
                         Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put(editPostId, editPost);
-                        mDatabase.child("forum").child(forumType).updateChildren(childUpdates);
+                        childUpdates.put("title", editText_title.getEditText().getText().toString());
+                        childUpdates.put("content", editText_content.getEditText().getText().toString());
+                        mDatabase.child("forum").child(forumType).child(editPostId).updateChildren(childUpdates);
                     } else {
                         FirebaseUser user = mAuth.getCurrentUser();
                         String uid = user.getUid();
