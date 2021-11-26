@@ -41,20 +41,13 @@ public class LoginActivity extends AppCompatActivity {
 
 
         if(user != null){
-            Toast.makeText(LoginActivity.this,  user.getDisplayName()+"님 안녕하세요", Toast.LENGTH_SHORT).show();
-            Intent i = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(i);
-            finish();
-        }
-
-        //회원가입 버튼에 리스너를 부착합니다.
-        button_register.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+            if(user.isEmailVerified()) {
+                Toast.makeText(LoginActivity.this, user.getDisplayName() + "님 안녕하세요", Toast.LENGTH_SHORT).show();
+                Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                startActivity(i);
+                finish();
             }
-        });
+        }
     }
 
         public void clickButton (View view){
@@ -86,11 +79,14 @@ public class LoginActivity extends AppCompatActivity {
                                 return;
                             }
                         } else {
-                            Log.d("login", "signInWithEmail:failure", task.getException());
-                            Toast.makeText(LoginActivity.this, "Authentication failed.", Toast.LENGTH_SHORT).show();
+                            Log.d("login", task.getException().getMessage());
+                            Toast.makeText(LoginActivity.this, task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
+            } else if(view.getId() == this.button_register.getId()) {
+                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                startActivity(intent);
             }
         }
     }

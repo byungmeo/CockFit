@@ -29,8 +29,8 @@
 
     <Button
         android:id="@+id/commonsense_technique_button"
-        android:layout_width="237dp"
-        android:layout_height="165dp"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:backgroundTint="@color/white"
@@ -52,8 +52,8 @@
 
     <Button
         android:id="@+id/commonsense_basespirit_button"
-        android:layout_width="233dp"
-        android:layout_height="175dp"
+        android:layout_width="250dp"
+        android:layout_height="180dp"
         android:layout_alignParentLeft="true"
         android:layout_alignParentBottom="true"
         android:backgroundTint="@color/white"

@@ -58,35 +58,37 @@ public class RegisterActivity extends AppCompatActivity {
     private Toolbar toolbar;
 
     private TextInputLayout editText_email, editText_pwd, editText_checkPwd, editText_nickname;
-    private Button button_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_register);
+        try {
+            mAuth = FirebaseAuth.getInstance();
+            con = findViewById(R.id.register_layout_const);
+            imageOn = false;
 
-        mAuth = FirebaseAuth.getInstance();
-        con = findViewById(R.id.register_layout_const);
-        imageOn = false;
+            final InputMethodManager manager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
 
-        final InputMethodManager manager=(InputMethodManager)getSystemService(INPUT_METHOD_SERVICE);
+            con.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    manager.hideSoftInputFromWindow(con.getWindowToken(), 0);
+                }
+            });
 
-        con.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                manager.hideSoftInputFromWindow(con.getWindowToken(),0);
-            }
-        });
-
-        toolbar = findViewById(R.id.register_materialToolbar);
-        setSupportActionBar(toolbar);
+            toolbar = findViewById(R.id.register_materialToolbar);
+            setSupportActionBar(toolbar);
 
 
-        editText_email = (TextInputLayout)findViewById(R.id.register_editText_email);
-        editText_pwd = (TextInputLayout)findViewById(R.id.register_editText_pw);
-        editText_checkPwd = (TextInputLayout)findViewById(R.id.register_editText_pw2);
-        editText_nickname = (TextInputLayout)findViewById(R.id.register_editText_nic);
-        profile_image = findViewById(R.id.register_imageview_profileimage);
+            editText_email = (TextInputLayout) findViewById(R.id.register_editText_email);
+            editText_pwd = (TextInputLayout) findViewById(R.id.register_editText_pw);
+            editText_checkPwd = (TextInputLayout) findViewById(R.id.register_editText_pw2);
+            editText_nickname = (TextInputLayout) findViewById(R.id.register_editText_nic);
+            profile_image = findViewById(R.id.register_imageview_profileimage);
+        } catch (Exception e1) {
+            Toast.makeText(this, "onCreate : " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void uploadImageToFirebase(Uri file){
@@ -122,15 +124,20 @@ public class RegisterActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        MenuInflater inflater = getMenuInflater();
-        inflater.inflate(R.menu.top_app_bar_register, menu);
+        try {
+            MenuInflater inflater = getMenuInflater();
+            inflater.inflate(R.menu.top_app_bar_register, menu);
 
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                RegisterActivity.this.onBackPressed();
-            }
-        });
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+            return super.onCreateOptionsMenu(menu);
+        } catch (Exception e1) {
+            Toast.makeText(this, "옵션메뉴생성 : " + e1.getMessage(), Toast.LENGTH_SHORT).show();
+        }
         return super.onCreateOptionsMenu(menu);
     }
 
@@ -160,6 +167,11 @@ public class RegisterActivity extends AppCompatActivity {
 
             if(!pwd.equals(checkPwd)) {
                 Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
+                return false;
+            }
+            
+            if(pwd.length() < 6) {
+                Toast.makeText(RegisterActivity.this , "비밀번호는 최소 6자리 이상으로 입력해주세요." , Toast.LENGTH_LONG).show();
                 return false;
             }
 
@@ -204,7 +216,7 @@ public class RegisterActivity extends AppCompatActivity {
                     } else {
                         Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
                         Log.d("test", task.getException().getMessage());
-                        HideKeyboard((View)item);
+                        HideKeyboard();
                     }
                 }
             });
@@ -222,7 +234,7 @@ public class RegisterActivity extends AppCompatActivity {
         }
     }
 
-    public void HideKeyboard(View view){
+    public void HideKeyboard(){
         InputMethodManager imm = (InputMethodManager)getSystemService(this.INPUT_METHOD_SERVICE);
         imm.hideSoftInputFromWindow(editText_email.getWindowToken(), 0);
     }
