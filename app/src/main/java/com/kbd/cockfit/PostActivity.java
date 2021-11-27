@@ -188,6 +188,7 @@ public class PostActivity extends AppCompatActivity {
         }
 
         if(!FirebaseAuth.getInstance().getUid().equals(post.getUid())) {
+            menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
         }
         return super.onCreateOptionsMenu(menu);

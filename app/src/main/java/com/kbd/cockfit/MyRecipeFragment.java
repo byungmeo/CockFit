@@ -214,7 +214,23 @@ public class MyRecipeFragment extends Fragment {
                             public void onClick(DialogInterface dialog, int which) {
                                 if(myRecipe.getIsShare()) {
                                     //공유된 레시피일 경우 게시판에서도 삭제된다.
-                                    mDatabase.child("forum").child("share").child(myRecipe.getSharePostId()).removeValue();
+                                    mDatabase.child("forum").child("share").child(myRecipe.getSharePostId()).child("bookmarkUidMap").addValueEventListener(new ValueEventListener() {
+                                        HashMap<String, String> bookmarkUidMap;
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                            bookmarkUidMap = (HashMap<String, String>) snapshot.getValue();
+                                            if(bookmarkUidMap != null) {
+                                                for(String anotherUid : bookmarkUidMap.keySet()) {
+                                                    mDatabase.child("user").child(anotherUid).child("bookmarkedPost").child(myRecipe.getSharePostId()).removeValue();
+                                                }
+                                            }
+                                            mDatabase.child("user").child(uid).child("community").child("posting").child(myRecipe.getSharePostId()).removeValue();
+                                            mDatabase.child("forum").child("share").child(myRecipe.getSharePostId()).removeValue();
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError error) { }
+                                    });
                                 }
                                 //realtime에서 레시피 정보 삭제
                                 String myRecipeId = myRecipe.getMyRecipeId();
