@@ -15,6 +15,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
@@ -63,9 +64,6 @@ public class LoginActivity extends AppCompatActivity {
                     return;
                 }
 
-                //로그인 로직 시작
-                Log.d("login", "start_e_mail_login");
-
                 mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -81,29 +79,26 @@ public class LoginActivity extends AppCompatActivity {
                                 return;
                             }
                         } else {
-                            Exception e = task.getException();
-                            if(e instanceof FirebaseAuthInvalidCredentialsException) {
-                                FirebaseAuthInvalidCredentialsException exception = (FirebaseAuthInvalidCredentialsException) e;
-                                if(exception.getErrorCode().equals("ERROR_INVALID_EMAIL")) {
-                                    Toast.makeText(LoginActivity.this, "이메일 입력이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.d("login", "미식별 에러코드 발생 : " + exception.getErrorCode());
-                                    Toast.makeText(LoginActivity.this, "로그인 실패 코드 101\n 관리자에게 제보 부탁드립니다..", Toast.LENGTH_SHORT).show();
+                            try {
+                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                                switch (errorCode) {
+                                    case "ERROR_INVALID_EMAIL" :
+                                        Toast.makeText(LoginActivity.this, "이메일 입력이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "ERROR_USER_NOT_FOUND" :
+                                        Toast.makeText(LoginActivity.this, "사용자가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    case "ERROR_WRONG_PASSWORD" :
+                                        Toast.makeText(LoginActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                        break;
+                                    default :
+                                        Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
+                                        break;
                                 }
-                            } else if(e instanceof FirebaseAuthInvalidUserException) {
-                                FirebaseAuthInvalidUserException exception = (FirebaseAuthInvalidUserException) e;
-                                if(exception.getErrorCode().equals("ERROR_USER_NOT_FOUND")) {
-                                    Toast.makeText(LoginActivity.this, "해당 이메일이 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                } else {
-                                    Log.d("login", "미식별 에러코드 발생 : " + exception.getErrorCode());
-                                    Toast.makeText(LoginActivity.this, "로그인 실패 코드 102\n 관리자에게 제보 부탁드립니다..", Toast.LENGTH_SHORT).show();
-                                }
-                            } else {
-                                Log.d("login", "미식별 예외 발생 toString : " + e.toString());
-                                Log.d("login", "미식별 예외 발생 getMessage : " + e.getMessage());
-                                Toast.makeText(LoginActivity.this, "로그인 실패 코드 103\n 관리자에게 제보 부탁드립니다..", Toast.LENGTH_SHORT).show();
+                            } catch (Exception e) {
+                                Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
                             }
-                            Log.d("login", task.getException().toString());
                         }
                     }
                 });
