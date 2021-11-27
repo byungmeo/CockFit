@@ -25,6 +25,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -215,11 +216,22 @@ public class MyRecipeFragment extends Fragment {
                                     //공유된 레시피일 경우 게시판에서도 삭제된다.
                                     mDatabase.child("forum").child("share").child(myRecipe.getSharePostId()).removeValue();
                                 }
+                                //realtime에서 레시피 정보 삭제
                                 String myRecipeId = myRecipe.getMyRecipeId();
                                 myRecipeArrayList.remove(itemViewHolder.getAdapterPosition());
                                 notifyItemRemoved(itemViewHolder.getAdapterPosition());
                                 notifyItemRangeChanged(itemViewHolder.getAdapterPosition(), myRecipeArrayList.size());
                                 mDatabase.child("user").child(uid).child("MyRecipe").child(myRecipeId).removeValue();
+
+                                //storage에서 레시피 이미지 삭제
+                                storageRef =  FirebaseStorage.getInstance().getReference();
+                                dateRef = storageRef.child("Users/"+uid+"/CocktailImage/"+myRecipeId+".jpg");
+                                dateRef.delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void unused) {
+                                        Log.d("delete", "사진삭제");
+                                    }
+                                });
                                 Toast.makeText(context, "삭제하였습니다", Toast.LENGTH_SHORT).show();
                             }
                         });
