@@ -32,6 +32,10 @@ import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseAuthException;
+import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
+import com.google.firebase.auth.FirebaseAuthUserCollisionException;
+import com.google.firebase.auth.FirebaseAuthWeakPasswordException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.UserProfileChangeRequest;
 import com.google.firebase.database.DatabaseReference;
@@ -214,8 +218,27 @@ public class RegisterActivity extends AppCompatActivity {
                         }
                         onBackPressed(); //로그인 화면으로 돌아갑니다.
                     } else {
-                        Toast.makeText(RegisterActivity.this, "이메일 등록에 실패하였습니다", Toast.LENGTH_SHORT).show();
-                        Log.d("test", task.getException().getMessage());
+                        try {
+                            String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                            switch (errorCode) {
+                                case "ERROR_INVALID_EMAIL" :
+                                    Toast.makeText(RegisterActivity.this, "잘못된 형식의 이메일입니다.", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case "ERROR_EMAIL_ALREADY_IN_USE" :
+                                    Toast.makeText(RegisterActivity.this, "이미 사용중인 이메일입니다.", Toast.LENGTH_SHORT).show();
+                                    break;
+                                case "ERROR_WEAK_PASSWORD" :
+                                    Toast.makeText(RegisterActivity.this, "취약한 비밀번호입니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                    break;
+                                default :
+                                    Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
+                                    break;
+                            }
+                        } catch (Exception e){
+                            Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                        }
+
                         HideKeyboard();
                     }
                 }

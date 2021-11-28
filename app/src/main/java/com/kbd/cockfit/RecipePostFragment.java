@@ -153,20 +153,10 @@ public class RecipePostFragment extends Fragment {
                 String checkText = snapshot.getValue(String.class);
                 if(checkText != null) {
                     button_bookmark.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_alreadyBookmark, null, null, null);
-                    button_bookmark.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).removeValue();
-                        }
-                    });
+                    button_bookmark.setOnClickListener(new UnBookmarkListener());
                 } else {
                     button_bookmark.setCompoundDrawablesRelativeWithIntrinsicBounds(drawable_waitBookmark, null, null, null);
-                    button_bookmark.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).setValue("true");
-                        }
-                    });
+                    button_bookmark.setOnClickListener(new BookmarkListener());
                 }
             }
 
@@ -266,6 +256,24 @@ public class RecipePostFragment extends Fragment {
         @Override
         public void onClick(View v) {
             mDatabase.child("forum").child(forumType).child(postId).child("likeUidMap").child(mAuth.getUid()).removeValue();
+        }
+    }
+
+    private class BookmarkListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).setValue("true");
+            Map<String, Object> childUpdates = new HashMap<>();
+            childUpdates.put(mAuth.getUid(), mAuth.getCurrentUser().getDisplayName());
+            mDatabase.child("forum").child(forumType).child(postId).child("bookmarkUidMap").updateChildren(childUpdates);
+        }
+    }
+
+    private class UnBookmarkListener implements View.OnClickListener {
+        @Override
+        public void onClick(View v) {
+            mDatabase.child("user").child(mAuth.getUid()).child("bookmarkedPost").child(postId).removeValue();
+            mDatabase.child("forum").child(forumType).child(postId).child("bookmarkUidMap").child(mAuth.getUid()).removeValue();
         }
     }
 
