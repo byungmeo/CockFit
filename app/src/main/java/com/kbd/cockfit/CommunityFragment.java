@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -21,6 +22,7 @@ import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 
 public class CommunityFragment extends Fragment {
     private View v;
@@ -30,6 +32,7 @@ public class CommunityFragment extends Fragment {
     private RecyclerView recentForumRecycler;
     private LinearLayoutManager layoutManager;
     private RecentAdapter recentAdapter;
+    private HashMap<Post, String> postIdMap;
 
     //private ProgressBar progressBar;
 
@@ -47,23 +50,11 @@ public class CommunityFragment extends Fragment {
 
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
 
-        /*
-        TextView shareMore = v.findViewById(R.id.community_textView_shareMore);
-        TextView qaMore = v.findViewById(R.id.community_textView_qaMore);
-        TextView generalMore = v.findViewById(R.id.community_textView_generalMore);
-
-        shareMore.setOnClickListener(this);
-        qaMore.setOnClickListener(this);
-        generalMore.setOnClickListener(this);
-
-        loadRecentPost(ForumType.Share);
-        loadRecentPost(ForumType.QA);
-        loadRecentPost(ForumType.General);
-        */
         layoutManager = new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false);
         recentForumRecycler.setHasFixedSize(true);
         recentForumRecycler.setLayoutManager(layoutManager);
 
+        postIdMap = new HashMap<>();
         recentForumArrayList = new ArrayList<RecentForum>();
         recentAdapter = new RecentAdapter(recentForumArrayList);
         recentForumRecycler.setAdapter(recentAdapter);
@@ -95,8 +86,11 @@ public class CommunityFragment extends Fragment {
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     ArrayList<Post> recentPostArrayList = new ArrayList<>();
                     for(DataSnapshot postSnapshot : snapshot.getChildren()) {
-                        if(forumType.equals(ForumType.share)) recentPostArrayList.add(postSnapshot.getValue(RecipePost.class));
-                        else recentPostArrayList.add(postSnapshot.getValue(Post.class));
+                        Post post = null;
+                        if(forumType.equals(ForumType.share)) { post = postSnapshot.getValue(RecipePost.class); }
+                        else { post = postSnapshot.getValue(Post.class); }
+                        recentPostArrayList.add(post);
+                        postIdMap.put(post, postSnapshot.getKey());
                     }
 
                     Collections.reverse(recentPostArrayList);
@@ -152,12 +146,12 @@ public class CommunityFragment extends Fragment {
             }
             holder.forumTitle.setText(forumTitle);
 
-            Intent intent = new Intent(context, ForumActivity.class);
-            intent.putExtra("forumType", forumType);
+            Intent moreIntent = new Intent(context, ForumActivity.class);
+            moreIntent.putExtra("forumType", forumType);
             holder.textButton_more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    context.startActivity(intent);
+                    context.startActivity(moreIntent);
                 }
             });
 
@@ -165,6 +159,16 @@ public class CommunityFragment extends Fragment {
                 Post recentPost = recentPostArrayList.get(i);
                 holder.title_post[i].setText(recentPost.getTitle());
                 holder.date_post[i].setText(recentPost.getDate());
+                holder.constraintLayouts[i].setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        Intent constraintIntent = new Intent(context, PostActivity.class);
+                        constraintIntent.putExtra("post", recentPost);
+                        constraintIntent.putExtra("postId", postIdMap.get(recentPost));
+                        constraintIntent.putExtra("forumType", forumType);
+                        startActivity(constraintIntent);
+                    }
+                });
             }
         }
 
@@ -178,6 +182,7 @@ public class CommunityFragment extends Fragment {
             private TextView textButton_more;
             private TextView[] title_post;
             private TextView[] date_post;
+            private ConstraintLayout[] constraintLayouts;
 
             public RecentPostViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -195,137 +200,13 @@ public class CommunityFragment extends Fragment {
                 date_post[1] = itemView.findViewById(R.id.textView_date_post2);
                 date_post[2] = itemView.findViewById(R.id.textView_date_post3);
                 date_post[3] = itemView.findViewById(R.id.textView_date_post4);
+
+                constraintLayouts = new ConstraintLayout[4];
+                constraintLayouts[0] = itemView.findViewById(R.id.constraintLayout_post1);
+                constraintLayouts[1] = itemView.findViewById(R.id.constraintLayout_post2);
+                constraintLayouts[2] = itemView.findViewById(R.id.constraintLayout_post3);
+                constraintLayouts[3] = itemView.findViewById(R.id.constraintLayout_post4);
             }
         }
     }
-
-    /*
-    public void loadRecentPost(ForumType forumType) {
-        String type = null;
-        switch (forumType) {
-            case Share:
-                type = "share";
-                break;
-            case QA:
-                type = "qa";
-                break;
-            case General:
-                type = "general";
-                break;
-            default:
-                break;
-        }
-        if(type == null) {
-            Log.d("error", "게시판유형 식별 실패");
-            return;
-        }
-
-        String finalType = type; //익명클래스 참조 문제
-        mDatabase.child("forum").child(type).limitToLast(4).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                long i = 4;
-                long postNum = snapshot.getChildrenCount();
-
-                if(postNum == 0) {
-                    String _titleViewTag = "textView_" + finalType + 1;
-                    String _dateViewTag = _titleViewTag + "_date";
-
-                    TextView title = v.findViewWithTag(_titleViewTag);
-                    TextView date = v.findViewWithTag(_dateViewTag);
-
-                    title.setText("");
-                    date.setText("");
-
-                    progressBar.setVisibility(View.GONE);
-                    return;
-                }
-
-                //최근 표시 게시물을 표시할 때, 실시간으로 최근 게시물이 삭제될 경우
-                //똑같은 게시판이 2개 표시되는 현상을 방지합니다.
-                if(postNum < 4) {
-                    for(long index = 4; index > postNum; index--) {
-                        String _titleViewTag = "textView_" + finalType + String.valueOf(index);
-                        String _dateViewTag = _titleViewTag + "_date";
-
-                        TextView title = v.findViewWithTag(_titleViewTag);
-                        TextView date = v.findViewWithTag(_dateViewTag);
-
-                        title.setText("");
-                        date.setText("");
-                    }
-                    i = postNum;
-                }
-
-                for (DataSnapshot postSnapshot : snapshot.getChildren()) {
-                    String titleViewTag = "textView_" + finalType + String.valueOf(i);
-                    String dateViewTag = titleViewTag + "_date";
-                    String constraintTag = "constraintLayout_" + finalType + String.valueOf(i);
-
-                    TextView title = v.findViewWithTag(titleViewTag);
-                    TextView date = v.findViewWithTag(dateViewTag);
-                    ConstraintLayout constraintLayout = v.findViewWithTag(constraintTag);
-
-                    Post post;
-                    if(finalType.equals("share")) {
-                        post = postSnapshot.getValue(RecipePost.class);
-                    } else {
-                        post = postSnapshot.getValue(Post.class);
-                    }
-
-                    title.setText(post.getTitle());
-                    try {
-                        date.setText(UtilitySet.formatTimeString(post.getDate()));
-                    } catch (ParseException e) {
-                        e.printStackTrace();
-                    }
-
-                    constraintLayout.setOnClickListener(new View.OnClickListener() {
-                        @Override
-                        public void onClick(View v) {
-                            Intent intent = new Intent(v.getContext(), PostActivity.class);
-                            intent.putExtra("post", post);
-                            intent.putExtra("postId", postSnapshot.getKey());
-                            intent.putExtra("forumType", finalType);
-                            startActivity(intent);
-                        }
-                    });
-                    i--;
-                }
-
-                progressBar.setVisibility(View.GONE);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
-    }
-
-    @Override
-    public void onClick(View v) {
-        Context context = v.getContext();
-        Intent intent = new Intent(context, ForumActivity.class);
-        switch (v.getId()) {
-            case R.id.community_textView_qaMore: {
-                //더보기 버튼
-                intent.putExtra("forumType", "qa");
-                break;
-            }
-            case R.id.community_textView_shareMore: {
-                intent.putExtra("forumType", "share");
-                break;
-            }
-            case R.id.community_textView_generalMore: {
-                intent.putExtra("forumType", "general");
-                break;
-            }
-            default: {
-                break;
-            }
-        }
-        context.startActivity(intent);
-    }
-    */
 }
