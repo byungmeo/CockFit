@@ -3,6 +3,7 @@ package com.kbd.cockfit;
 import android.Manifest;
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -91,8 +92,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
         context = this;
-
-        int permssionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA);
 
         editText_name = findViewById(R.id.make_editText_name);
         editText_proof = findViewById(R.id.make_editText_proof);
@@ -225,6 +224,20 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
+    @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "승인이 허가되어 있습니다.", Toast.LENGTH_LONG).show();
+                } else {
+                    Toast.makeText(this, "아직 승인받지 않았습니다.", Toast.LENGTH_LONG).show();
+                }
+                return;
+        }
+    }
+
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
         String proof = editText_proof.getEditText().getText().toString();
@@ -266,19 +279,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         });
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "승인이 허가되어 있습니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "아직 승인받지 않았습니다.", Toast.LENGTH_LONG).show();
-                }
-                return;
-        }
-    }
 
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -340,17 +340,15 @@ public class MakeRecipeActivity extends AppCompatActivity {
             alertdialog.setPositiveButton("사진촬영", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+                    int permssionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
 
-                    if (ContextCompat.checkSelfPermission(MakeRecipeActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)) {
-                        } else {
-                            ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-                        }
+                    if(permssionCheck==PackageManager.PERMISSION_DENIED){
+                        ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                    } else {
+                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                        startActivityForResult(intent, PICK_FROM_CAMERA);
+                        imageOn = true;
                     }
-
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, PICK_FROM_CAMERA);
-                    imageOn = true;
                 }
             });
             AlertDialog alert = alertdialog.create();
