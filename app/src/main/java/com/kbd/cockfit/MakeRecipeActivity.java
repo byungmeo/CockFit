@@ -224,19 +224,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
-    @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
-
-        switch (requestCode) {
-            case MY_PERMISSIONS_REQUEST_CAMERA:
-                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    Toast.makeText(this, "승인이 허가되어 있습니다.", Toast.LENGTH_LONG).show();
-                } else {
-                    Toast.makeText(this, "아직 승인받지 않았습니다.", Toast.LENGTH_LONG).show();
-                }
-                return;
-        }
-    }
 
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
@@ -316,6 +303,23 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
+    @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "카메라 사용이 승인되었습니다.", Toast.LENGTH_LONG).show();
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+                    startActivityForResult(intent, PICK_FROM_CAMERA);
+                    imageOn = true;
+                } else {
+                    Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
+                }
+                return;
+        }
+    }
+
     public void clickButton(View view) {
         if(view.getId() == R.id.make_imageView_addImage) {
             AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
@@ -342,7 +346,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     int permssionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
 
-                    if(permssionCheck==PackageManager.PERMISSION_DENIED){
+                    if(permssionCheck == PackageManager.PERMISSION_DENIED){
                         ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     } else {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
