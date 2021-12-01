@@ -67,6 +67,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private String imageKey;
     private DatabaseReference forSnapshot;
     private Context context;
+    private String currentPhotoPath;
 
     private MyRecipe editRecipe;
     private String editRecipeId;
@@ -224,6 +225,22 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
+    private File createImageFile() throws IOException {
+        // Create an image file name
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(
+                imageFileName,  /* prefix */
+                ".jpg",         /* suffix */
+                storageDir      /* directory */
+        );
+
+        // Save a file: path for use with ACTION_VIEW intents
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
 
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
@@ -280,6 +297,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                             .load(imageUrl)
                             .into(imageView_addImage);
                 }
+                break;
             }
             case PICK_FROM_CAMERA:
             {
@@ -296,9 +314,10 @@ public class MakeRecipeActivity extends AppCompatActivity {
                             .load(imageUrl)
                             .into(imageView_addImage);
                 }
-
+                break;
             }
-
+            default:
+                break;
         }
 
     }
@@ -344,14 +363,29 @@ public class MakeRecipeActivity extends AppCompatActivity {
             alertdialog.setPositiveButton("사진촬영", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
-                    int permssionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
+                    int permissionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
 
-                    if(permssionCheck == PackageManager.PERMISSION_DENIED){
+                    if(permissionCheck == PackageManager.PERMISSION_DENIED){
                         ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     } else {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                        imageOn = true;
+                        File photoFile = null;
+                        try {
+                            photoFile = createImageFile();
+                        } catch (IOException ex) {
+                            // Error occurred while creating the File
+                        }
+                        // Continue only if the File was successfully created
+                        if (photoFile != null) {
+                            Uri photoURI = FileProvider.getUriForFile(MakeRecipeActivity.this,
+                                    "com.kbd.cockfit",
+                                    photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            startActivityForResult(intent, PICK_FROM_CAMERA);
+                            imageOn = true;
+                        }
+                        //startActivityForResult(intent, PICK_FROM_CAMERA);
+                        //imageOn = true;
                     }
                 }
             });
