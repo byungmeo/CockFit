@@ -42,6 +42,7 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
@@ -58,12 +59,8 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private ImageView imageView_addImage;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private static final int CROP_FROM_IMAGE = 2;
     private StorageReference mStorage;
     private Uri imageUrl;
-    private Uri mImageCaptureUri;
-    private String imageFilePath;
-    private File captureImage;
     private boolean imageOn;
     private Toolbar appBar;
     private String imageKey;
@@ -94,6 +91,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_recipe);
         context = this;
+
         int permssionCheck = ContextCompat.checkSelfPermission(this,Manifest.permission.CAMERA);
 
         editText_name = findViewById(R.id.make_editText_name);
@@ -227,22 +225,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
-
-    private File createImageFile() throws IOException {
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "TEST_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,      /* prefix */
-                ".jpg",         /* suffix */
-                storageDir          /* directory */
-        );
-        imageFilePath = image.getAbsolutePath();
-        return image;
-    }
-
-
-
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
         String proof = editText_proof.getEditText().getText().toString();
@@ -298,7 +280,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         }
     }
 
-
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -316,10 +297,17 @@ public class MakeRecipeActivity extends AppCompatActivity {
             case PICK_FROM_CAMERA:
             {
                 if(resultCode == Activity.RESULT_OK){
+                    //bitmap으로 받은 result를 uri로 바꿔줌
                     Bundle extras = data.getExtras();
                     Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    imageView_addImage.setImageBitmap(imageBitmap);
+                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
+                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
+                    String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), imageBitmap, "Title", null);
+                    imageUrl = Uri.parse(path);
 
+                    Glide.with(MakeRecipeActivity.this)
+                            .load(imageUrl)
+                            .into(imageView_addImage);
                 }
 
             }
@@ -352,12 +340,14 @@ public class MakeRecipeActivity extends AppCompatActivity {
             alertdialog.setPositiveButton("사진촬영", new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
+
                     if (ContextCompat.checkSelfPermission(MakeRecipeActivity.this, Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
                         if (ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)) {
                         } else {
                             ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                         }
                     }
+
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
                     startActivityForResult(intent, PICK_FROM_CAMERA);
                     imageOn = true;
