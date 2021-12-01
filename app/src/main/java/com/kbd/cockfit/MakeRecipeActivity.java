@@ -60,6 +60,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private ImageView imageView_addImage;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
     private StorageReference mStorage;
     private Uri imageUrl;
     private boolean imageOn;
@@ -83,10 +84,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private ScrollView scrollView;
-
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
-
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -225,21 +223,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
-    private File createImageFile() throws IOException {
-        // Create an image file name
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(
-                imageFileName,  /* prefix */
-                ".jpg",         /* suffix */
-                storageDir      /* directory */
-        );
-
-        // Save a file: path for use with ACTION_VIEW intents
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
 
 
     public void storeRecipe(){
@@ -272,6 +255,16 @@ public class MakeRecipeActivity extends AppCompatActivity {
         });
     }
 
+    private File createImageFile() throws IOException {
+        // bitmap -> jpg변환을 위한 임시 이미지 파일생성
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
 
     private void uploadImageToFirebase(Uri file){
         StorageReference fileRef = mStorage.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
@@ -288,38 +281,15 @@ public class MakeRecipeActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch (requestCode){
-            case PICK_FROM_ALBUM :
-            {
-                if(resultCode == Activity.RESULT_OK){
-                    imageUrl = data.getData();
-                    Glide.with(MakeRecipeActivity.this)
-                            .load(imageUrl)
-                            .into(imageView_addImage);
-                }
-                break;
-            }
-            case PICK_FROM_CAMERA:
-            {
-                if(resultCode == Activity.RESULT_OK){
-                    //bitmap으로 받은 result를 uri로 바꿔줌
-                    Bundle extras = data.getExtras();
-                    Bitmap imageBitmap = (Bitmap) extras.get("data");
-                    ByteArrayOutputStream bytes = new ByteArrayOutputStream();
-                    imageBitmap.compress(Bitmap.CompressFormat.JPEG, 100, bytes);
-                    String path = MediaStore.Images.Media.insertImage(context.getContentResolver(), imageBitmap, "Title", null);
-                    imageUrl = Uri.parse(path);
+        if (requestCode == PICK_FROM_ALBUM)
+            imageUrl = data.getData();
 
-                    Glide.with(MakeRecipeActivity.this)
-                            .load(imageUrl)
-                            .into(imageView_addImage);
-                }
-                break;
-            }
-            default:
-                break;
+        if (resultCode == Activity.RESULT_OK) {
+            Glide.with(MakeRecipeActivity.this)
+                    .load(imageUrl)
+                    .into(imageView_addImage);
+
         }
-
     }
 
     @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
@@ -338,6 +308,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 return;
         }
     }
+
 
     public void clickButton(View view) {
         if(view.getId() == R.id.make_imageView_addImage) {
@@ -373,19 +344,13 @@ public class MakeRecipeActivity extends AppCompatActivity {
                         try {
                             photoFile = createImageFile();
                         } catch (IOException ex) {
-                            // Error occurred while creating the File
                         }
-                        // Continue only if the File was successfully created
                         if (photoFile != null) {
-                            Uri photoURI = FileProvider.getUriForFile(MakeRecipeActivity.this,
-                                    "com.kbd.cockfit",
-                                    photoFile);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI);
+                            imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
+                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
                             startActivityForResult(intent, PICK_FROM_CAMERA);
                             imageOn = true;
                         }
-                        //startActivityForResult(intent, PICK_FROM_CAMERA);
-                        //imageOn = true;
                     }
                 }
             });
