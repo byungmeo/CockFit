@@ -1,6 +1,7 @@
 package com.kbd.cockfit;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -8,17 +9,29 @@ import android.widget.Button;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.ApiException;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.textfield.TextInputLayout;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseAuthException;
 import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -28,6 +41,49 @@ public class LoginActivity extends AppCompatActivity {
     private Button button_register; //회원가입 버튼
     private FirebaseUser user;
 
+    private GoogleSignInClient googleSignInClient;
+    private SignInButton btn_google; //구글 로그인 버튼
+    private FirebaseAuth auth; //Firebase 인증객체
+    private GoogleApiClient googleApiClient; //구글 API 클라이언트
+    private static final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { //구글 로그인 인증을 요청했을 때 결과값을 되돌려받는 곳
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if(requestCode == REQ_SIGN_GOOGLE) {
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if(result.isSuccess()) {
+                GoogleSignInAccount account = result.getSignInAccount(); //구글로그인 정보를 담고있는 객체 (닉네임, 프로필사진, 이메일주소 등)
+                resultLogIn(account); //로그인 결과값을 출력하라는 메소드
+            }
+        }
+    }
+
+    private void resultLogIn(GoogleSignInAccount account) {
+        AuthCredential credential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
+        auth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if(task.isSuccessful()) { //로그인 성공시
+                            Toast.makeText(LoginActivity.this, "LogIn Success", Toast.LENGTH_SHORT).show();
+                            Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+
+                            //사용자의 구글아이디 정보를 가져오는 코드
+                            intent.putExtra("nickName", String.valueOf(account.getDisplayName()));
+                            intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
+
+                            
+                            startActivity(intent);
+                        }
+                        else { //로그인 실패시
+                            Toast.makeText(LoginActivity.this, "LogIn Fail", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+                });
+
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +98,25 @@ public class LoginActivity extends AppCompatActivity {
         button_register = findViewById(R.id.login_button_register);
         user = FirebaseAuth.getInstance().getCurrentUser();
 
+        GoogleSignInOptions googleSignInOptions = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken("997586484780-qabp69u123fmvu564ti21js98c2d4i72.apps.googleusercontent.com")
+                .requestEmail()
+                .build();
+
+        googleSignInClient= GoogleSignIn.getClient(this,googleSignInOptions);
+
+        auth=FirebaseAuth.getInstance();//firebase 초기화
+
+        btn_google=findViewById(R.id.btn_google);
+        btn_google.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent=googleSignInClient.getSignInIntent();
+                startActivityForResult(intent,REQ_SIGN_GOOGLE);
+            }
+        });
+        
+        
 
         if(user != null){
             if(user.isEmailVerified()) {
@@ -106,5 +181,35 @@ public class LoginActivity extends AppCompatActivity {
                 Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
                 startActivity(intent);
             }
+
         }
+
+
+        private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
+            try {
+                GoogleSignInAccount acct = completedTask.getResult(ApiException.class);
+
+                if (acct != null) {
+                    String personName = acct.getDisplayName();
+                    String personGivenName = acct.getGivenName();
+                    String personFamilyName = acct.getFamilyName();
+                    String personEmail = acct.getEmail();
+                    String personId = acct.getId();
+                    Uri personPhoto = acct.getPhotoUrl();
+
+                    Log.d("TAG", "handleSignInResult:personName "+personName);
+                    Log.d("TAG", "handleSignInResult:personGivenName "+personGivenName);
+                    Log.d("TAG", "handleSignInResult:personEmail "+personEmail);
+                    Log.d("TAG", "handleSignInResult:personId "+personId);
+                    Log.d("TAG", "handleSignInResult:personFamilyName "+personFamilyName);
+                    Log.d("TAG", "handleSignInResult:personPhoto "+personPhoto);
+                }
+            } catch (ApiException e) {
+                // The ApiException status code indicates the detailed failure reason.
+                // Please refer to the GoogleSignInStatusCodes class reference for more information.
+                Log.e("TAG", "signInResult:failed code=" + e.getStatusCode());
+
+            }
+        }
+
     }

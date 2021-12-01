@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.DisplayMetrics;
 import android.view.MenuItem;
@@ -25,10 +26,13 @@ public class MainActivity extends AppCompatActivity {
     private CocktailInfoFragment cocktailInfoFragment = new CocktailInfoFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Intent intent = getIntent();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frameLayout, cocktailInfoFragment).commitAllowingStateLoss();
