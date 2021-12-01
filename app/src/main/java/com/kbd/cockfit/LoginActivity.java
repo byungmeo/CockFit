@@ -32,6 +32,11 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -46,6 +51,8 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth; //Firebase 인증객체
     private GoogleApiClient googleApiClient; //구글 API 클라이언트
     private static final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
+
+    private static boolean firstGoogleLogin = false; //구글 로그인을 처음으로 했는지 체크
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { //구글 로그인 인증을 요청했을 때 결과값을 되돌려받는 곳
@@ -74,6 +81,19 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("nickName", String.valueOf(account.getDisplayName()));
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
 
+                            if(firstGoogleLogin == false) { //구글 로그인을 처음으로 했을 시
+                                DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+                                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                                String uid = user.getUid();
+
+                                long now = System.currentTimeMillis();
+                                Date date = new Date(now);
+                                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                String userRegisterDate = dateFormat.format(date);
+
+                                mDatabase.child("user").child(uid).child("info").child("register_data").setValue(userRegisterDate); //실시간 파이어베이스에 가입일자 저장
+                                firstGoogleLogin = true;
+                            }
                             
                             startActivity(intent);
                         }
