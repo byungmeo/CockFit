@@ -9,6 +9,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraAccessException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
@@ -60,7 +62,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private ImageView imageView_addImage;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=1001;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA=100;
     private StorageReference mStorage;
     private Uri imageUrl;
     private boolean imageOn;
@@ -336,6 +338,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                     int permissionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
 
                     if(permissionCheck == PackageManager.PERMISSION_DENIED){
+                        Log.d("권한", "거부됐습니다");
                         ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
                     } else {
                         Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
@@ -359,4 +362,5 @@ public class MakeRecipeActivity extends AppCompatActivity {
         }
     }
 }
+
 
