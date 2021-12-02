@@ -281,16 +281,15 @@ public class MakeRecipeActivity extends AppCompatActivity {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        if (requestCode == PICK_FROM_ALBUM)
-            imageUrl = data.getData();
-
         if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_FROM_ALBUM)
+                imageUrl = data.getData();
             Glide.with(MakeRecipeActivity.this)
                     .load(imageUrl)
                     .into(imageView_addImage);
-
         }
     }
+
 
     @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
