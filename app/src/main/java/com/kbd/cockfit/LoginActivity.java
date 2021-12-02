@@ -32,6 +32,14 @@ import com.google.firebase.auth.FirebaseAuthInvalidCredentialsException;
 import com.google.firebase.auth.FirebaseAuthInvalidUserException;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
+import java.text.SimpleDateFormat;
+import java.util.Date;
 
 public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
@@ -74,7 +82,24 @@ public class LoginActivity extends AppCompatActivity {
                             intent.putExtra("nickName", String.valueOf(account.getDisplayName()));
                             intent.putExtra("photoUrl", String.valueOf(account.getPhotoUrl()));
 
-                            
+                            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                            String uid = user.getUid();
+
+                            mDatabase.child("user").child(uid).child("info").get().addOnCompleteListener(new OnCompleteListener<DataSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DataSnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        if(task.getResult().getValue() == null) {
+                                            long now = System.currentTimeMillis();
+                                            Date date = new Date(now);
+                                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                                            String userRegisterDate = dateFormat.format(date);
+                                            mDatabase.child("user").child(uid).child("info").child("register_data").setValue(userRegisterDate); //실시간 파이어베이스에 가입일자 저장
+                                        }
+                                    }
+                                }
+                            });
                             startActivity(intent);
                         }
                         else { //로그인 실패시
