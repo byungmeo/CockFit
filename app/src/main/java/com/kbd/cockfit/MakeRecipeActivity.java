@@ -62,7 +62,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private ImageView imageView_addImage;
     private static final int PICK_FROM_CAMERA = 0;
     private static final int PICK_FROM_ALBUM = 1;
-    private final int MY_PERMISSIONS_REQUEST_CAMERA=100;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA=2;
     private StorageReference mStorage;
     private Uri imageUrl;
     private boolean imageOn;
@@ -71,7 +71,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private DatabaseReference forSnapshot;
     private Context context;
     private String currentPhotoPath;
-
     private MyRecipe editRecipe;
     private String editRecipeId;
     private boolean isEdit;
@@ -257,16 +256,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         });
     }
 
-    private File createImageFile() throws IOException {
-        // bitmap -> jpg변환을 위한 임시 이미지 파일생성
-        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
-        String imageFileName = "JPEG_" + timeStamp + "_";
-        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
-        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
-        currentPhotoPath = image.getAbsolutePath();
-        return image;
-    }
-
 
     private void uploadImageToFirebase(Uri file){
         StorageReference fileRef = mStorage.child("Users/"+uid+"/CocktailImage/"+imageKey+".jpg");
@@ -276,6 +265,33 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 onBackPressed();
             }
         });
+    }
+
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    public void onCameraIntent(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.d("카메라 이미지 없음", "이미지 생성이 안됐네");
+        }
+        if (photoFile != null) {
+            imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
+            startActivityForResult(intent, PICK_FROM_CAMERA);
+            imageOn = true;
+        }
     }
 
 
@@ -300,21 +316,13 @@ public class MakeRecipeActivity extends AppCompatActivity {
             case MY_PERMISSIONS_REQUEST_CAMERA:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "카메라 사용이 승인되었습니다.", Toast.LENGTH_LONG).show();
-                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    File photoFile = null;
-                    try {
-                        photoFile = createImageFile();
-                    } catch (IOException ex) {
-                        Log.d("카메라 이미지 없음", "이미지 생성이 안됐네");
-                    }
-                    if (photoFile != null) {
-                        imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
-                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
-                        startActivityForResult(intent, PICK_FROM_CAMERA);
-                        imageOn = true;
-                    }
+                    onCameraIntent();
                 } else {
-                    Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
+                        if (ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)!=true){
+                        Toast.makeText(context, "앱 설정에서 카메라 권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
+                    } else {
+                            Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
+                        }
                 }
                 return;
         }
@@ -347,22 +355,12 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 public void onClick(DialogInterface dialog, int which) {
                     int permissionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
 
-                    if(permissionCheck == PackageManager.PERMISSION_DENIED){
+                    if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+                        onCameraIntent();
+                    }
+                    else{
                         Log.d("권한", "거부됐습니다");
                         ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
-                    } else {
-                        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                        File photoFile = null;
-                        try {
-                            photoFile = createImageFile();
-                        } catch (IOException ex) {
-                        }
-                        if (photoFile != null) {
-                            imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
-                            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
-                            startActivityForResult(intent, PICK_FROM_CAMERA);
-                            imageOn = true;
-                        }
                     }
                 }
             });
