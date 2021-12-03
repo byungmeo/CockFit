@@ -318,11 +318,12 @@ public class MakeRecipeActivity extends AppCompatActivity {
                     Toast.makeText(this, "카메라 사용이 승인되었습니다.", Toast.LENGTH_LONG).show();
                     onCameraIntent();
                 } else {
-                        if (ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)!=true){
-                        Toast.makeText(context, "앱 설정에서 카메라 권한을 허용해주세요.", Toast.LENGTH_SHORT).show();
-                    } else {
-                            Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
-                        }
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)){
+                        Toast.makeText(this, "권한 거부 시 직접 앱 설정을 해야합니다.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
+                    }
                 }
                 return;
         }

@@ -81,7 +81,6 @@ public class MyRecipeFragment extends Fragment {
         //adapter = new MyRecipeAdapter(myRecipeArrayList);
         //myRecipeRecyclerView.setAdapter(adapter);
 
-
         initMyRecipeList();
 
         return v;
@@ -92,6 +91,7 @@ public class MyRecipeFragment extends Fragment {
         super.onResume();
         if(adapter != null) {
             adapter.notifyDataSetChanged();
+            initMyRecipeList();
             progressBar.setVisibility(View.VISIBLE);
             myRecipeRecyclerView.setVisibility(View.INVISIBLE);
         }
