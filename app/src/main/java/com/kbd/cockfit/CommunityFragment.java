@@ -80,6 +80,7 @@ public class CommunityFragment extends Fragment {
         for(int i = 0; i < forumTypes.length; i++) {
             ForumType forumType = forumTypes[i];
             RecentForum recentForum = new RecentForum(forumType.name());
+            recentForumArrayList.add(recentForum);
 
             mDatabase.child("forum").child(forumType.name()).limitToLast(4).addValueEventListener(new ValueEventListener() {
                 @Override
@@ -95,7 +96,6 @@ public class CommunityFragment extends Fragment {
 
                     Collections.reverse(recentPostArrayList);
                     recentForum.setRecentPostArrayList(recentPostArrayList);
-                    recentForumArrayList.add(recentForum);
 
                     recentAdapter.notifyDataSetChanged();
                 }
@@ -154,6 +154,11 @@ public class CommunityFragment extends Fragment {
                     context.startActivity(moreIntent);
                 }
             });
+
+            for(int i = 0; i < 4; i++) {
+                holder.title_post[i].setText("");
+                holder.date_post[i].setText("");
+            }
 
             int maxIndex = 4;
             if(recentPostArrayList.size() < 4) {
