@@ -1,19 +1,8 @@
 package com.kbd.cockfit;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
-import androidx.cardview.widget.CardView;
-import androidx.core.content.ContextCompat;
-import androidx.recyclerview.widget.LinearLayoutManager;
-import androidx.recyclerview.widget.RecyclerView;
-
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
-import android.content.res.AssetManager;
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -24,6 +13,15 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.cardview.widget.CardView;
+import androidx.core.content.ContextCompat;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -32,12 +30,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-
-import java.io.IOException;
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
@@ -45,7 +37,7 @@ import java.util.Comparator;
 public class ListActivity extends AppCompatActivity {
     private RecyclerView recipeRecycler;
     private RecipeAdapter recipeAdapter;
-    private ArrayList<Recipe> recipeArrayList;
+    //private ArrayList<Recipe> recipeArrayList;
     private ArrayList<Recipe> sortRecipeList;
     private ProgressBar progressBar;
     private Toolbar toolbar;
@@ -88,51 +80,25 @@ public class ListActivity extends AppCompatActivity {
     }
 
     public void initRecipeRecycler() {
+        if(MainActivity.recipeArrayList == null) {
+            Toast.makeText(this, "리스트를 불러오는데 실패하였습니다.\n관리자에게 문의해주세요.", Toast.LENGTH_SHORT);
+            onBackPressed();
+            return;
+        }
+
         recipeRecycler = findViewById(R.id.list_recycler);
-        recipeArrayList = new ArrayList<>();
         sortRecipeList = new ArrayList<>();
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         recipeRecycler.setLayoutManager(linearLayoutManager);
 
-        loadCommonRecipeList();
-
         if(keyword.equals("every")) {
-            sortRecipeList = recipeArrayList;
+            sortRecipeList = MainActivity.recipeArrayList;
             recipeAdapter = new RecipeAdapter(this, sortRecipeList);
             recipeRecycler.setAdapter(recipeAdapter);
             progressBar.setVisibility(View.GONE);
         } else if(keyword.equals("favorite")) {
             loadFavoriteRecipeList();
-        }
-    }
-
-    public void loadCommonRecipeList() {
-        try {
-            String jsonData = UtilitySet.jsonToString(this, "jsons/basicRecipe.json");
-            JSONArray jsonArray = new JSONArray(jsonData);
-
-            for(int i = 0; i < jsonArray.length(); i++) {
-                JSONObject jo = jsonArray.getJSONObject(i);
-                int number = jo.getInt("number");
-                String name = jo.getString("name");
-                String proof = jo.getString("proof");
-                String base = jo.getString("base");
-                String[] ingredient = UtilitySet.jsonArrayToArray(jo.getJSONArray("ingredient"));
-                String[] equipment = UtilitySet.jsonArrayToArray(jo.getJSONArray("equipment"));
-                String description = jo.getString("description");
-                String[] tags = UtilitySet.jsonArrayToArray(jo.getJSONArray("tags"));
-
-
-                AssetManager assetManager = this.getResources().getAssets();
-                InputStream is = assetManager.open("image/recipe/" + name.replace(" ", "_") + ".png");
-                Bitmap bitmap = BitmapFactory.decodeStream(is);
-
-                recipeArrayList.add(new Recipe(number, bitmap, name, proof, base, ingredient, equipment, description, tags));
-            }
-
-        } catch (JSONException | IOException e) {
-            e.printStackTrace();
         }
     }
 
@@ -148,7 +114,7 @@ public class ListActivity extends AppCompatActivity {
                 favoriteRecipeList.clear();
                 for(DataSnapshot numberSnapshot : snapshot.getChildren()) {
                     int recipeNumber = numberSnapshot.getValue(int.class);
-                    for(Recipe recipe : recipeArrayList) {
+                    for(Recipe recipe : MainActivity.recipeArrayList) {
                         if(recipe.getNumber() == recipeNumber) {
                             favoriteRecipeList.add(recipe);
                             break;

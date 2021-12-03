@@ -1,5 +1,15 @@
 package com.kbd.cockfit;
 
+import android.content.DialogInterface;
+import android.content.res.AssetManager;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.os.Bundle;
+import android.util.DisplayMetrics;
+import android.view.MenuItem;
+import android.widget.FrameLayout;
+import android.widget.LinearLayout;
+
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,16 +17,16 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
-import android.content.DialogInterface;
-import android.content.Intent;
-import android.os.Bundle;
-import android.util.DisplayMetrics;
-import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
-
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.android.material.navigation.NavigationBarView;
+
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -25,14 +35,20 @@ public class MainActivity extends AppCompatActivity {
     private CommunityFragment communityFragment = new CommunityFragment();
     private CocktailInfoFragment cocktailInfoFragment = new CocktailInfoFragment();
     private ProfileFragment profileFragment = new ProfileFragment();
-
+    public static ArrayList<Recipe> recipeArrayList;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
+        //UI Thread를 방해하지 않도록 별도의 Thread에서 데이터를 로드랍니다.
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                loadData(); //몇몇 데이터는 미리 로그인 시 불러옵니다.
+            }
+        }).start();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
         transaction.replace(R.id.frameLayout, cocktailInfoFragment).commitAllowingStateLoss();
@@ -55,6 +71,41 @@ public class MainActivity extends AppCompatActivity {
         int frameHeight = realDeviceHeight - statusBarHeight - bottomNavigationView.getHeight() - bottomBarHeight;
         FrameLayout fl = findViewById(R.id.frameLayout);
         fl.setLayoutParams(new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, frameHeight));
+    }
+
+    public void loadData() {
+        try {
+            if(recipeArrayList != null) {
+                //이미 데이터를 불러왔으므로, 다시 불러오진 않습니다.
+                return;
+            }
+
+            recipeArrayList = new ArrayList<>();
+            String jsonData = UtilitySet.jsonToString(this, "jsons/basicRecipe.json");
+            JSONArray jsonArray = new JSONArray(jsonData);
+
+            for(int i = 0; i < jsonArray.length(); i++) {
+                JSONObject jo = jsonArray.getJSONObject(i);
+                int number = jo.getInt("number");
+                String name = jo.getString("name");
+                String proof = jo.getString("proof");
+                String base = jo.getString("base");
+                String[] ingredient = UtilitySet.jsonArrayToArray(jo.getJSONArray("ingredient"));
+                String[] equipment = UtilitySet.jsonArrayToArray(jo.getJSONArray("equipment"));
+                String description = jo.getString("description");
+                String[] tags = UtilitySet.jsonArrayToArray(jo.getJSONArray("tags"));
+
+
+                AssetManager assetManager = this.getResources().getAssets();
+                InputStream is = assetManager.open("image/recipe/" + name.replace(" ", "_") + ".png");
+                Bitmap bitmap = BitmapFactory.decodeStream(is);
+
+                recipeArrayList.add(new Recipe(number, bitmap, name, proof, base, ingredient, equipment, description, tags));
+            }
+
+        } catch (JSONException | IOException e) {
+            e.printStackTrace();
+        }
     }
 
     class ItemSelectedListener implements NavigationBarView.OnItemSelectedListener {
