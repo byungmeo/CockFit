@@ -33,6 +33,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
+import java.util.HashMap;
 import java.util.regex.Pattern;
 
 public class UserAdminActivity extends AppCompatActivity {
@@ -45,6 +46,10 @@ public class UserAdminActivity extends AppCompatActivity {
     private Button button_ok;
     private FirebaseUser user;
     private Toolbar userAdminToolbar;
+
+    private FirebaseAuth mAuth;
+    private DatabaseReference mDatabase;
+    private FirebaseStorage storage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -166,15 +171,51 @@ public class UserAdminActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-        } else if(view.getId() == R.id.user_button_leave) { //향후 개발 예정인 계정 탈퇴 시 데이터가 삭제되는 기능은 다음에 제대로 구현
-            //DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference(); //실시간 Firebase 경로
+        } else if(view.getId() == R.id.user_button_leave) { //탈퇴한 사용자가 작성했던 나만의 레시피 중 공유된 레시피만 남기는 방법을 강구중입니다
+
+
+            mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference(); //실시간 Firebase 경로
             user = FirebaseAuth.getInstance().getCurrentUser();
             String uId = user.getUid();
-            
-            //StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
-            //StorageReference photoReference = mStorage.child("Users/").child(uId + "/"); //Firebase Storage 경로
+            storage = FirebaseStorage.getInstance();
 
-            user.delete() //Firebase에서 계정 제거
+
+
+            //Storage에서 프로필 사진 삭제
+            storage.getReference().child("Users").child(uId).child("profileImage.jpg").delete().addOnSuccessListener(new OnSuccessListener<Object>() {
+                @Override
+                public void onSuccess(Object o) {
+                    Toast.makeText(view.getContext(), "프로필사진 삭제 완료", Toast.LENGTH_LONG).show();
+                }
+            });
+
+
+            //커뮤니티 게시글, 즐겨찾기한 공유레시피, 즐겨찾기한 기본레시피, 사용자정보(가입일자) 순서대로 삭제 후 DB삭제 완료 메시지 띄움
+            mDatabase.child("user").child(uId).child("community").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) {
+                    mDatabase.child("user").child(uId).child("bookmarkedPost").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                        @Override
+                        public void onSuccess(Void unused) {
+                            mDatabase.child("user").child(uId).child("favorite").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) {
+                                    mDatabase.child("user").child(uId).child("info").removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(view.getContext(), "DB삭제 완료", Toast.LENGTH_LONG).show();
+                                            //onBackPressed();
+                                        }
+                                    });
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+
+
+            //Firebase Authentication에서 계정 제거
+            user.delete()
                     .addOnCompleteListener(new OnCompleteListener<Void>() {
                         @Override
                         public void onComplete(@NonNull Task<Void> task) {
