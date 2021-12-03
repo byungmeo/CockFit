@@ -74,7 +74,7 @@ public class ListActivityTest {
         }
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.cock_listButton), withText("Ĭ���� ����Ʈ"),
+                allOf(withId(R.id.cock_listButton), withText("칵테일 리스트"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.frameLayout),
@@ -112,7 +112,7 @@ public class ListActivityTest {
         }
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.title), withText("���� ���� ��"),
+                allOf(withId(R.id.title), withText("도수 높은 순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
@@ -150,7 +150,7 @@ public class ListActivityTest {
         }
 
         ViewInteraction materialTextView2 = onView(
-                allOf(withId(R.id.title), withText("���� ���� ��"),
+                allOf(withId(R.id.title), withText("도수 낮은 순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
@@ -188,7 +188,7 @@ public class ListActivityTest {
         }
 
         ViewInteraction materialTextView3 = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 내림차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
@@ -226,7 +226,7 @@ public class ListActivityTest {
         }
 
         ViewInteraction materialTextView4 = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 오름차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),

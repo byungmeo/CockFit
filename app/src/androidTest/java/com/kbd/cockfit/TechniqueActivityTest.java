@@ -66,7 +66,7 @@ public class TechniqueActivityTest {
         }
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.cock_senseButton), withText("Ĭ���� �⺻���"),
+                allOf(withId(R.id.cock_senseButton), withText("칵테일 기본상식"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.frameLayout),
@@ -85,7 +85,7 @@ public class TechniqueActivityTest {
         }
 
         ViewInteraction materialButton2 = onView(
-                allOf(withId(R.id.commonsense_technique_button), withText("���"),
+                allOf(withId(R.id.commonsense_technique_button), withText("기법"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(android.R.id.content),
@@ -123,7 +123,7 @@ public class TechniqueActivityTest {
         }
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 내림차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
@@ -161,7 +161,7 @@ public class TechniqueActivityTest {
         }
 
         ViewInteraction materialTextView2 = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 오름차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),

@@ -66,7 +66,7 @@ public class IngredientListActivityTest {
         }
 
         ViewInteraction materialButton = onView(
-                allOf(withId(R.id.cock_ingrdButton), withText("Ĭ���� ���"),
+                allOf(withId(R.id.cock_ingrdButton), withText("칵테일 재료"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.frameLayout),
@@ -104,7 +104,7 @@ public class IngredientListActivityTest {
         }
 
         ViewInteraction materialTextView = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 내림차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
@@ -142,7 +142,7 @@ public class IngredientListActivityTest {
         }
 
         ViewInteraction materialTextView2 = onView(
-                allOf(withId(R.id.title), withText("�̸� ��������"),
+                allOf(withId(R.id.title), withText("이름 오름차순"),
                         childAtPosition(
                                 childAtPosition(
                                         withId(R.id.content),
