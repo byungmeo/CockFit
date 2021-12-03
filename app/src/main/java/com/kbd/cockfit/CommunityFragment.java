@@ -155,7 +155,12 @@ public class CommunityFragment extends Fragment {
                 }
             });
 
-            for(int i = 0; i < 4; i++) {
+            int maxIndex = 4;
+            if(recentPostArrayList.size() < 4) {
+                maxIndex = recentPostArrayList.size();
+            }
+
+            for(int i = 0; i < maxIndex; i++) {
                 Post recentPost = recentPostArrayList.get(i);
                 holder.title_post[i].setText(recentPost.getTitle());
                 holder.date_post[i].setText(recentPost.getDate());
