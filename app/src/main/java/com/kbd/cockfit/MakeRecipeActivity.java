@@ -301,8 +301,18 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     Toast.makeText(this, "카메라 사용이 승인되었습니다.", Toast.LENGTH_LONG).show();
                     Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-                    startActivityForResult(intent, PICK_FROM_CAMERA);
-                    imageOn = true;
+                    File photoFile = null;
+                    try {
+                        photoFile = createImageFile();
+                    } catch (IOException ex) {
+                        Log.d("카메라 이미지 없음", "이미지 생성이 안됐네");
+                    }
+                    if (photoFile != null) {
+                        imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
+                        intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
+                        startActivityForResult(intent, PICK_FROM_CAMERA);
+                        imageOn = true;
+                    }
                 } else {
                     Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
                 }
