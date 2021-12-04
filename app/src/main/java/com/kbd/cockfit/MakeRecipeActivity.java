@@ -1,10 +1,19 @@
 package com.kbd.cockfit;
 
+import android.Manifest;
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.content.ActivityNotFoundException;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
+import android.graphics.Camera;
+import android.hardware.camera2.CameraAccessException;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -18,6 +27,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+import androidx.core.content.FileProvider;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -33,6 +45,11 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.IOException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -43,7 +60,9 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private DatabaseReference mDatabase;
     private String uid;
     private ImageView imageView_addImage;
-    private static final int PICK_FROM_ALBUM =1;
+    private static final int PICK_FROM_CAMERA = 0;
+    private static final int PICK_FROM_ALBUM = 1;
+    private final int MY_PERMISSIONS_REQUEST_CAMERA=2;
     private StorageReference mStorage;
     private Uri imageUrl;
     private boolean imageOn;
@@ -51,7 +70,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private String imageKey;
     private DatabaseReference forSnapshot;
     private Context context;
-
+    private String currentPhotoPath;
     private MyRecipe editRecipe;
     private String editRecipeId;
     private boolean isEdit;
@@ -66,7 +85,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private ScrollView scrollView;
-
+    
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,6 +224,8 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     }
 
+
+
     public void storeRecipe(){
         String name = editText_name.getEditText().getText().toString();
         String proof = editText_proof.getEditText().getText().toString();
@@ -246,27 +267,109 @@ public class MakeRecipeActivity extends AppCompatActivity {
         });
     }
 
+
+    private File createImageFile() throws IOException {
+        String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(new Date());
+        String imageFileName = "JPEG_" + timeStamp + "_";
+        File storageDir = getExternalFilesDir(Environment.DIRECTORY_PICTURES);
+        File image = File.createTempFile(imageFileName, ".jpg", storageDir);
+        currentPhotoPath = image.getAbsolutePath();
+        return image;
+    }
+
+
+    public void onCameraIntent(){
+        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+        File photoFile = null;
+        try {
+            photoFile = createImageFile();
+        } catch (IOException ex) {
+            Log.d("카메라 이미지 없음", "이미지 생성이 안됐네");
+        }
+        if (photoFile != null) {
+            imageUrl= FileProvider.getUriForFile(MakeRecipeActivity.this, "com.kbd.cockfit", photoFile);
+            intent.putExtra(MediaStore.EXTRA_OUTPUT, imageUrl);
+            startActivityForResult(intent, PICK_FROM_CAMERA);
+            imageOn = true;
+        }
+    }
+
+
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(PICK_FROM_ALBUM == 1){
-            if(resultCode == Activity.RESULT_OK){
+
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == PICK_FROM_ALBUM)
                 imageUrl = data.getData();
-                Glide.with(MakeRecipeActivity.this)
-                        .load(imageUrl)
-                        .into(imageView_addImage);
-            }
+            Glide.with(MakeRecipeActivity.this)
+                    .load(imageUrl)
+                    .into(imageView_addImage);
         }
     }
 
-    public void clickButton(View view) {
 
-        if(view.getId() == R.id.make_imageView_addImage){
-            Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-            intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-            startActivityForResult(intent, PICK_FROM_ALBUM);
-            imageOn=true;
+    @Override public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+
+        switch (requestCode) {
+            case MY_PERMISSIONS_REQUEST_CAMERA:
+                if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    Toast.makeText(this, "카메라 사용이 승인되었습니다.", Toast.LENGTH_LONG).show();
+                    onCameraIntent();
+                } else {
+                    if(ActivityCompat.shouldShowRequestPermissionRationale(MakeRecipeActivity.this, Manifest.permission.CAMERA)){
+                        Toast.makeText(this, "권한 거부 시 직접 앱 설정을 해야합니다.", Toast.LENGTH_LONG).show();
+                    }
+                    else {
+                        Toast.makeText(this, "카메라 사용이 승인되지 않았습니다.", Toast.LENGTH_LONG).show();
+                    }
+                }
+                return;
+        }
+    }
+
+
+    public void clickButton(View view) {
+        if(view.getId() == R.id.make_imageView_addImage) {
+            AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
+
+            alertdialog.setNeutralButton("취소", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Toast.makeText(context, "취소하였습니다.", Toast.LENGTH_SHORT).show();
+                }
+            });
+
+            alertdialog.setNegativeButton("앨범선택", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                    startActivityForResult(intent, PICK_FROM_ALBUM);
+                    imageOn = true;
+                }
+            });
+
+            alertdialog.setPositiveButton("사진촬영", new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialog, int which) {
+                    int permissionCheck = ContextCompat.checkSelfPermission(MakeRecipeActivity.this,Manifest.permission.CAMERA);
+
+                    if(permissionCheck == PackageManager.PERMISSION_GRANTED){
+                        onCameraIntent();
+                    }
+                    else{
+                        Log.d("권한", "거부됐습니다");
+                        ActivityCompat.requestPermissions(MakeRecipeActivity.this, new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+                    }
+                }
+            });
+            AlertDialog alert = alertdialog.create();
+            alert.setMessage("사진 업로드 방식을 선택해주세요.");
+            alert.show();
         }
     }
 }
+
 
