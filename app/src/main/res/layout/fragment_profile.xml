@@ -13,14 +13,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
+
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/topAppBarFragment"
             style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
             android:backgroundTint="@color/white"
-            app:menu="@menu/top_app_bar_fragment">
+            android:theme="@style/ThemeOverlay.AppCompat.Light"
+            app:menu="@menu/top_app_bar_profile">
+
+
             <ImageView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

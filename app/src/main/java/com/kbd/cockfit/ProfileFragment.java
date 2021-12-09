@@ -10,6 +10,7 @@ import android.os.Bundle;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -23,6 +24,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 
 import com.bumptech.glide.Glide;
@@ -73,6 +75,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private ProgressBar progressBar;
 
+    private Button button_notification;
+    private Toolbar toolbar;
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -99,8 +104,25 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         button_myFavorite = v.findViewById(R.id.profile_button_bookmarkBasicRecipe);
         button_myCommunityActivity = v.findViewById(R.id.profile_button_communityActivity);
         button_bookmarkRecipePost = v.findViewById(R.id.profile_button_bookmarkSharePost);
-
         textView_userEmail.setText(user.getEmail());
+
+
+
+        toolbar = v.findViewById(R.id.topAppBarFragment);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.action_notify) {
+                    Context context = v.getContext();
+                    Intent intent = new Intent(context, NotificationActivity.class);
+                    context.startActivity(intent);
+                }
+                return false;
+            }
+        });
+
+
+
 
         mDatabase.child("user").child(uid).child("info").addValueEventListener(new ValueEventListener() {
             @Override
@@ -244,6 +266,11 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
             case R.id.profile_button_communityActivity: {
                 Intent intent = new Intent(context, ForumActivity.class);
                 intent.putExtra("forumType", "myPost");
+                context.startActivity(intent);
+                break;
+            }
+            case R.id.action_notify: {
+                Intent intent = new Intent(context, NotificationActivity.class);
                 context.startActivity(intent);
                 break;
             }
