@@ -425,39 +425,36 @@ public class RecipePostFragment extends Fragment {
                 commentViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
             }
 
-            if(!comment.isReply) {
-                ArrayList<Comment> replyArrayList = new ArrayList<>();
-                ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList);
-                ((CommentViewHolder) holder).recyclerView_reply.setAdapter(replyAdapter);
-                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
-                    @Override
-                    public boolean canScrollVertically() {
-                        return false;
-                    }
-                };
-                ((CommentViewHolder) holder).recyclerView_reply.setLayoutManager(linearLayoutManager);
+            ArrayList<Comment> replyArrayList = new ArrayList<>();
+            ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList);
+            ((CommentViewHolder) holder).recyclerView_reply.setAdapter(replyAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
+            ((CommentViewHolder) holder).recyclerView_reply.setLayoutManager(linearLayoutManager);
 
-                mDatabase.child("forum").child("share").child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        replyArrayList.clear();
+            mDatabase.child("forum").child("share").child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    replyArrayList.clear();
 
-                        for (DataSnapshot replySnapshot : snapshot.getChildren()) {
-                            Comment reply = replySnapshot.getValue(Comment.class);
-                            reply.isReply = true;
-                            reply.setCommentId(replySnapshot.getKey());
-                            replyArrayList.add(reply);
-                        }
-
-                        replyAdapter.notifyDataSetChanged();
+                    for (DataSnapshot replySnapshot : snapshot.getChildren()) {
+                        Comment reply = replySnapshot.getValue(Comment.class);
+                        reply.setCommentId(replySnapshot.getKey());
+                        replyArrayList.add(reply);
                     }
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
+                    replyAdapter.notifyDataSetChanged();
+                }
 
-                    }
-                });
-            }
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
 
             StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {

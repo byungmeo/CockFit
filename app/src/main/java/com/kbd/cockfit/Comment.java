@@ -13,8 +13,6 @@ public class Comment implements Parcelable {
     private HashMap<String, String> likeUidMap;
     private String commentId;
 
-    public Boolean isReply = false;
-
     public Comment() {
     }
 
