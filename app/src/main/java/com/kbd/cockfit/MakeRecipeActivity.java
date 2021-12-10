@@ -14,6 +14,7 @@ import android.hardware.camera2.CameraAccessException;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.MenuItem;
@@ -85,6 +86,8 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
     private ProgressBar progressBar;
     private ScrollView scrollView;
+
+    private Long mLastClickTime = 0L;
     
 
     @Override
@@ -166,44 +169,51 @@ public class MakeRecipeActivity extends AppCompatActivity {
         appBar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(isEdit) {
-                    String name = editText_name.getEditText().getText().toString();
-                    String proof = editText_proof.getEditText().getText().toString();
-                    String base = editText_base.getEditText().getText().toString();
-                    String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
-                    String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
-                    String[] tags = editText_tags.getEditText().getText().toString().split(", ");
-                    String description = editText_description.getEditText().getText().toString();
+                long currentClickTime = SystemClock.uptimeMillis();
+                long elapsedTime = currentClickTime - mLastClickTime;
+                mLastClickTime = currentClickTime;
 
-                    if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
+                if(elapsedTime > 600) {
+                    if(isEdit) {
+                        String name = editText_name.getEditText().getText().toString();
+                        String proof = editText_proof.getEditText().getText().toString();
+                        String base = editText_base.getEditText().getText().toString();
+                        String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
+                        String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
+                        String[] tags = editText_tags.getEditText().getText().toString().split(", ");
+                        String description = editText_description.getEditText().getText().toString();
 
-                        Toast.makeText(MakeRecipeActivity.this, "모든 텍스트를 입력해주세요.", Toast.LENGTH_SHORT).show();
-                        return false;
+                        if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
+
+                            Toast.makeText(MakeRecipeActivity.this, "모든 텍스트를 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            return false;
+                        }
+
+                        MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
+                        recipe.setUid(uid);
+
+                        Map<String, Object> childUpdates = new HashMap<>();
+                        childUpdates.put(editRecipeId, recipe);
+                        mDatabase.child("user").child(uid).child("MyRecipe").updateChildren(childUpdates);
+
+                        if(imageOn) {
+                            uploadImageToFirebase(imageUrl);
+                        } else {
+                            onBackPressed();
+                        }
                     }
-
-                    MyRecipe recipe = new MyRecipe(0, name,proof,base,ingredient,equipment,description,tags);
-                    recipe.setUid(uid);
-
-                    Map<String, Object> childUpdates = new HashMap<>();
-                    childUpdates.put(editRecipeId, recipe);
-                    mDatabase.child("user").child(uid).child("MyRecipe").updateChildren(childUpdates);
-
-                    if(imageOn) {
-                        uploadImageToFirebase(imageUrl);
-                    } else {
-                        onBackPressed();
+                    else {
+                        storeRecipe();
                     }
-                }
-                else {
-                    storeRecipe();
+                    return false;
                 }
                 return false;
             }
         });
 
-        appBar.setNavigationOnClickListener(new View.OnClickListener() {
+        appBar.setNavigationOnClickListener(new UtilitySet.OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 MakeRecipeActivity.this.onBackPressed();
             }
         });
