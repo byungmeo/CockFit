@@ -277,11 +277,90 @@ public class RecipePostFragment extends Fragment {
         }
     }
 
+    private class ReplyAdapter extends CommentAdapter {
+        ReplyAdapter(ArrayList<Comment> commentArrayList) {
+            super(commentArrayList);
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reply_item_layout, parent, false);
+            ReplyViewHolder replyViewHolder = new ReplyViewHolder(view);
+
+            return replyViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            ReplyViewHolder replyViewHolder = (ReplyViewHolder) holder;
+            Comment comment = commentArrayList.get(holder.getAdapterPosition());
+
+            if(!comment.getUid().equals(mAuth.getUid())) {
+                replyViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
+            }
+
+            StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+            mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //프로필 사진이 있는 댓글사용자
+
+                    Glide.with(getContext())
+                            .load(uri)
+                            .into(replyViewHolder.imageView_profile);
+
+                    if(holder.getAdapterPosition() == getItemCount() - 1) {
+                        progressBar.setVisibility(View.GONE);
+                        linearLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    //프로필 사진이 없는 댓글사용자
+                    progressBar.setVisibility(View.GONE);
+                    linearLayout.setVisibility(View.VISIBLE);
+                }
+            });
+
+            replyViewHolder.textView_nickname.setText(comment.getNickname());
+            replyViewHolder.textView_text.setText(comment.getText());
+            try {
+                replyViewHolder.textView_date.setText(UtilitySet.formatTimeString(comment.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if(comment.getLikeUidMap() != null) {
+                replyViewHolder.textView_likeCount.setText(comment.getLikeUidMap().size());
+            } else {
+                replyViewHolder.textView_likeCount.setText("0");
+            }
+        }
+
+        private class ReplyViewHolder extends CommentAdapter.CommentViewHolder {
+            public ReplyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                imageView_profile = itemView.findViewById(R.id.reply_imageView_profile);
+                textView_nickname = itemView.findViewById(R.id.reply_textView_nickname);
+                textView_nickname.setText("text");
+                textView_text = itemView.findViewById(R.id.reply_textView_text);
+                textView_date = itemView.findViewById(R.id.reply_textView_date);
+                textView_likeCount = itemView.findViewById(R.id.reply_textView_likeCount);
+                imageButton_reply = null;
+                imageButton_like = null;
+                imageButton_more = null;
+                recyclerView_reply = null;
+            }
+        }
+    }
+
     private class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private ArrayList<Comment> commentArrayList;
 
         CommentAdapter(ArrayList<Comment> commentArrayList) {
-            this.commentArrayList = commentArrayList;
+           this.commentArrayList = commentArrayList;
         }
 
         @NonNull
@@ -345,6 +424,41 @@ public class RecipePostFragment extends Fragment {
             if(!comment.getUid().equals(mAuth.getUid())) {
                 commentViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
             }
+
+            if(!comment.isReply) {
+                ArrayList<Comment> replyArrayList = new ArrayList<>();
+                ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList);
+                ((CommentViewHolder) holder).recyclerView_reply.setAdapter(replyAdapter);
+                LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+                    @Override
+                    public boolean canScrollVertically() {
+                        return false;
+                    }
+                };
+                ((CommentViewHolder) holder).recyclerView_reply.setLayoutManager(linearLayoutManager);
+
+                mDatabase.child("forum").child("share").child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        replyArrayList.clear();
+
+                        for (DataSnapshot replySnapshot : snapshot.getChildren()) {
+                            Comment reply = replySnapshot.getValue(Comment.class);
+                            reply.isReply = true;
+                            reply.setCommentId(replySnapshot.getKey());
+                            replyArrayList.add(reply);
+                        }
+
+                        replyAdapter.notifyDataSetChanged();
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+            }
+
             StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -390,14 +504,15 @@ public class RecipePostFragment extends Fragment {
         }
 
         private class CommentViewHolder extends RecyclerView.ViewHolder {
-            private ImageView imageView_profile;
-            private TextView textView_nickname;
-            private TextView textView_text;
-            private TextView textView_date;
-            private TextView textView_likeCount;
-            private ImageButton imageButton_reply;
-            private ImageButton imageButton_like;
-            private ImageButton imageButton_more;
+            protected ImageView imageView_profile;
+            protected TextView textView_nickname;
+            protected TextView textView_text;
+            protected TextView textView_date;
+            protected TextView textView_likeCount;
+            protected ImageButton imageButton_reply;
+            protected ImageButton imageButton_like;
+            protected ImageButton imageButton_more;
+            protected RecyclerView recyclerView_reply;
 
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -409,6 +524,7 @@ public class RecipePostFragment extends Fragment {
                 imageButton_reply = itemView.findViewById(R.id.comment_imageButton_reply);
                 imageButton_like = itemView.findViewById(R.id.comment_imageButton_like);
                 imageButton_more = itemView.findViewById(R.id.comment_imageButton_more);
+                recyclerView_reply = itemView.findViewById(R.id.comment_recycler_reply);
             }
         }
     }
