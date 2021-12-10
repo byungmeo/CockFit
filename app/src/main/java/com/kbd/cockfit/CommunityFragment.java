@@ -69,8 +69,8 @@ public class CommunityFragment extends Fragment {
     //또한 RecentAdapter상의 onBindViewHolder내에
     //switch구문도 적절하게 업데이트해주세요.
     enum ForumType {
-        qa,
         share,
+        qa,
         general
     }
 

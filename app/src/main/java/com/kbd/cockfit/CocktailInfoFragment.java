@@ -11,7 +11,7 @@ import androidx.appcompat.widget.AppCompatButton;
 import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.fragment.app.Fragment;
 
-public class CocktailInfoFragment extends Fragment implements View.OnClickListener {
+public class CocktailInfoFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -24,42 +24,40 @@ public class CocktailInfoFragment extends Fragment implements View.OnClickListen
         AppCompatButton equipButton = v.findViewById(R.id.cock_equipButton);
         AppCompatButton senseButton = v.findViewById(R.id.cock_senseButton);
 
-        listButton.setOnClickListener(this);
-        ingrdButton.setOnClickListener(this);
-        equipButton.setOnClickListener(this);
-        senseButton.setOnClickListener(this);
-
-        return v;
-    }
-
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.cock_listButton: {
+        listButton.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, ListActivity.class);
                 intent.putExtra("keyword", "every");
                 context.startActivity(intent);
-                break;
             }
-            case R.id.cock_ingrdButton: {
+        });
+        ingrdButton.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, IngredientListActivity.class);
                 context.startActivity(intent);
-                break;
             }
-            case R.id.cock_equipButton: {
+        });
+        equipButton.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, EquipmentListActivity.class);
                 context.startActivity(intent);
-                break;
             }
-            case R.id.cock_senseButton: {
+        });
+        senseButton.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View v) {
                 Context context = v.getContext();
                 Intent intent = new Intent(context, CommonSenseActivity.class);
                 context.startActivity(intent);
-                break;
             }
-        }
+        });
+
+        return v;
     }
 }
