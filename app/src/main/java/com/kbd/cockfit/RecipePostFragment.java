@@ -277,9 +277,18 @@ public class RecipePostFragment extends Fragment {
         }
     }
 
-    private class ReplyAdapter extends CommentAdapter {
-        ReplyAdapter(ArrayList<Comment> commentArrayList) {
-            super(commentArrayList);
+    private class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private ArrayList<Comment> replyArrayList;
+        private String parentCommentId;
+        ReplyAdapter(ArrayList<Comment> replyArrayList, String parentCommentId) {
+            this.replyArrayList = replyArrayList;
+            this.parentCommentId = parentCommentId;
+
+            Log.d("test", "?");
+            Log.d("test", String.valueOf(replyArrayList.size()));
+            for(Comment reply : replyArrayList) {
+                Log.d("test", reply.getCommentId());
+            }
         }
 
         @NonNull
@@ -288,13 +297,46 @@ public class RecipePostFragment extends Fragment {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reply_item_layout, parent, false);
             ReplyViewHolder replyViewHolder = new ReplyViewHolder(view);
 
+            replyViewHolder.imageButton_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    View dialogView = View.inflate(getContext(), R.layout.comment_dialog_layout, null);
+                    Button button_delete = dialogView.findViewById(R.id.commentDialog_button_delete);
+                    Button button_edit = dialogView.findViewById(R.id.commentDialog_button_edit);
+
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+
+                    button_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Comment comment = replyArrayList.get(replyViewHolder.getAdapterPosition());
+                            Log.d("test", comment.getCommentId());
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(parentCommentId).child("replys").child(comment.getCommentId()).removeValue();
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    button_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
+                }
+            });
+
             return replyViewHolder;
         }
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
             ReplyViewHolder replyViewHolder = (ReplyViewHolder) holder;
-            Comment comment = commentArrayList.get(holder.getAdapterPosition());
+            Comment comment = replyArrayList.get(holder.getAdapterPosition());
+            Log.d("test", "bindsize : " + replyArrayList.size());
 
             if(!comment.getUid().equals(mAuth.getUid())) {
                 replyViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
@@ -339,19 +381,30 @@ public class RecipePostFragment extends Fragment {
             }
         }
 
-        private class ReplyViewHolder extends CommentAdapter.CommentViewHolder {
+        @Override
+        public int getItemCount() {
+            return this.replyArrayList.size();
+        }
+
+        private class ReplyViewHolder extends RecyclerView.ViewHolder {
+            protected ImageView imageView_profile;
+            protected TextView textView_nickname;
+            protected TextView textView_text;
+            protected TextView textView_date;
+            protected TextView textView_likeCount;
+            //protected ImageButton imageButton_reply;
+            //protected ImageButton imageButton_like;
+            protected ImageButton imageButton_more;
+            //protected RecyclerView recyclerView_reply;
+
             public ReplyViewHolder(@NonNull View itemView) {
                 super(itemView);
                 imageView_profile = itemView.findViewById(R.id.reply_imageView_profile);
                 textView_nickname = itemView.findViewById(R.id.reply_textView_nickname);
-                textView_nickname.setText("text");
                 textView_text = itemView.findViewById(R.id.reply_textView_text);
                 textView_date = itemView.findViewById(R.id.reply_textView_date);
                 textView_likeCount = itemView.findViewById(R.id.reply_textView_likeCount);
-                imageButton_reply = null;
-                imageButton_like = null;
-                imageButton_more = null;
-                recyclerView_reply = null;
+                imageButton_more = itemView.findViewById(R.id.reply_imageButton_more);
             }
         }
     }
@@ -426,7 +479,7 @@ public class RecipePostFragment extends Fragment {
             }
 
             ArrayList<Comment> replyArrayList = new ArrayList<>();
-            ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList);
+            ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList, comment.getCommentId());
             ((CommentViewHolder) holder).recyclerView_reply.setAdapter(replyAdapter);
             LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
                 @Override
@@ -439,8 +492,6 @@ public class RecipePostFragment extends Fragment {
             mDatabase.child("forum").child("share").child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    replyArrayList.clear();
-
                     for (DataSnapshot replySnapshot : snapshot.getChildren()) {
                         Comment reply = replySnapshot.getValue(Comment.class);
                         reply.setCommentId(replySnapshot.getKey());
