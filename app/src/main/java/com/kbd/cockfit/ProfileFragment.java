@@ -51,6 +51,7 @@ import com.google.firebase.storage.UploadTask;
 public class ProfileFragment extends Fragment implements View.OnClickListener {
     private FirebaseAuth mAuth;
     private StorageReference mStorage;
+    private DatabaseReference mDatabase;
     private FirebaseUser user;
     private Uri deviceImageUri;
 
@@ -91,7 +92,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         progressBar.setVisibility(View.VISIBLE);
 
         mAuth = FirebaseAuth.getInstance();
-        DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+        mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         user = mAuth.getCurrentUser();
         uid = user.getUid();
 
@@ -111,6 +112,7 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
 
 
+
         toolbar = v.findViewById(R.id.topAppBarFragment);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -123,7 +125,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
-
 
 
 
@@ -159,6 +160,27 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         imageview_profileImage.setOnClickListener(this);
 
         return v;
+    }
+
+    @Override
+    public void onResume() {
+        super.onResume();
+
+        mDatabase.child("user").child(uid).child("notify").addValueEventListener(new ValueEventListener() {
+
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                if(snapshot.getChildrenCount() > 0) {
+                    toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_notification_important_24);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
     }
 
     private void updateProfilePhoto(Uri devicePhotoUri){

@@ -65,7 +65,7 @@
         android:visibility="visible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@android:drawable/ic_menu_delete"
+        app:srcCompat="@drawable/ic_baseline_delete_24"
         app:tint="@color/CockFitMainColor1" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

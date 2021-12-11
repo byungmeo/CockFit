@@ -101,7 +101,9 @@ public class NotificationActivity extends AppCompatActivity {
                     notify.setNotifyId(snapshot.getKey());
                     commentArrayList.add(notify);
                 }
+                Collections.reverse(commentArrayList);
                 adapter.notifyDataSetChanged();
+
 
             }
 
