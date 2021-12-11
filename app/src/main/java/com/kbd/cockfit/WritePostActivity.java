@@ -3,6 +3,8 @@ package com.kbd.cockfit;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.SystemClock;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.EditText;
@@ -37,6 +39,7 @@ public class WritePostActivity extends AppCompatActivity {
     private String editPostId;
     private String forumType;
     private Toolbar toolbar;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,44 +65,51 @@ public class WritePostActivity extends AppCompatActivity {
         forumType = intent.getStringExtra("forumType");
 
         toolbar = findViewById(R.id.write_materialToolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) { onBackPressed(); }
+        toolbar.setNavigationOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override public void onSingleClick(View v) { onBackPressed(); }
         });
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
-                if(item.getItemId() == R.id.write_menuItem_write) {
-                    if(editText_title.getEditText().getText().toString().equals("")) {
-                        Toast.makeText(context, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                long currentClickTime = SystemClock.uptimeMillis();
+                long elapsedTime = currentClickTime - mLastClickTime;
+                mLastClickTime = currentClickTime;
+
+                if(elapsedTime > 600) {
+                    if(item.getItemId() == R.id.write_menuItem_write) {
+                        if(editText_title.getEditText().getText().toString().equals("")) {
+                            Toast.makeText(context, "제목을 입력해주세요", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+
+                        if(editText_content.getEditText().getText().toString().equals("")) {
+                            Toast.makeText(context, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
+                            return true;
+                        }
+
+                        if(isEdit) {
+                            Map<String, Object> childUpdates = new HashMap<>();
+                            childUpdates.put("title", editText_title.getEditText().getText().toString());
+                            childUpdates.put("content", editText_content.getEditText().getText().toString());
+                            mDatabase.child("forum").child(forumType).child(editPostId).updateChildren(childUpdates);
+                        } else {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            String uid = user.getUid();
+                            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+                            Post post = new Post(editText_title.getEditText().getText().toString(), user.getDisplayName(), uid, date);
+                            post.setContent(editText_content.getEditText().getText().toString());
+
+                            String key = mDatabase.child("forum").child(forumType).push().getKey();
+                            HashMap<String, String> value = new HashMap<>();
+                            value.put("ForumType", forumType);
+                            mDatabase.child("forum").child(forumType).child(key).setValue(post);
+                            mDatabase.child("user").child(uid).child("community").child("posting").child(key).setValue(value);
+                        }
+                        onBackPressed();
+
                         return true;
                     }
-
-                    if(editText_content.getEditText().getText().toString().equals("")) {
-                        Toast.makeText(context, "내용을 입력해주세요", Toast.LENGTH_SHORT).show();
-                        return true;
-                    }
-
-                    if(isEdit) {
-                        Map<String, Object> childUpdates = new HashMap<>();
-                        childUpdates.put("title", editText_title.getEditText().getText().toString());
-                        childUpdates.put("content", editText_content.getEditText().getText().toString());
-                        mDatabase.child("forum").child(forumType).child(editPostId).updateChildren(childUpdates);
-                    } else {
-                        FirebaseUser user = mAuth.getCurrentUser();
-                        String uid = user.getUid();
-                        String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
-                        Post post = new Post(editText_title.getEditText().getText().toString(), user.getDisplayName(), uid, date);
-                        post.setContent(editText_content.getEditText().getText().toString());
-
-                        String key = mDatabase.child("forum").child(forumType).push().getKey();
-                        HashMap<String, String> value = new HashMap<>();
-                        value.put("ForumType", forumType);
-                        mDatabase.child("forum").child(forumType).child(key).setValue(post);
-                        mDatabase.child("user").child(uid).child("community").child("posting").child(key).setValue(value);
-                    }
-                    onBackPressed();
-
-                    return true;
+                    return false;
                 }
                 return false;
             }

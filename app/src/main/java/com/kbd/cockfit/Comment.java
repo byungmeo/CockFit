@@ -14,7 +14,6 @@ public class Comment implements Parcelable {
     private String commentId;
 
     public Comment() {
-
     }
 
     public Comment(String text, String nickname, String uid, String date) {

@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.provider.MediaStore;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -77,6 +78,8 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     private Button button_notification;
     private Toolbar toolbar;
+
+    private Long mLastClickTime = 0L;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -211,139 +214,145 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View v) {
-        Context context = v.getContext();
-        switch (v.getId()) {
-            case R.id.profile_imageButton_changeName: {
-                final EditText editText_changeNic = new EditText(context);
+        long currentClickTime = SystemClock.uptimeMillis();
+        long elapsedTime = currentClickTime - mLastClickTime;
+        mLastClickTime = currentClickTime;
 
-                FrameLayout container = new FrameLayout(context);
-                FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
-                params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
-                editText_changeNic.setLayoutParams(params);
-                container.addView(editText_changeNic);
+        if(elapsedTime > 600) {
+            Context context = v.getContext();
+            switch (v.getId()) {
+                case R.id.profile_imageButton_changeName: {
+                    final EditText editText_changeNic = new EditText(context);
 
-                AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
+                    FrameLayout container = new FrameLayout(context);
+                    FrameLayout.LayoutParams params = new  FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT, ViewGroup.LayoutParams.WRAP_CONTENT);
+                    params.leftMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                    params.rightMargin = getResources().getDimensionPixelSize(R.dimen.dialog_margin);
+                    editText_changeNic.setLayoutParams(params);
+                    container.addView(editText_changeNic);
 
-                alertBuilder.setTitle("닉네임을 변경해주세요");
-                alertBuilder.setView(container);
+                    AlertDialog.Builder alertBuilder = new AlertDialog.Builder(context);
 
-                alertBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        final FirebaseUser user = mAuth.getCurrentUser();
-                        String userChangeNic = editText_changeNic.getText().toString();
+                    alertBuilder.setTitle("닉네임을 변경해주세요");
+                    alertBuilder.setView(container);
 
-                        UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                .setDisplayName(userChangeNic)
-                                .build();
+                    alertBuilder.setPositiveButton("확인", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            final FirebaseUser user = mAuth.getCurrentUser();
+                            String userChangeNic = editText_changeNic.getText().toString();
 
-                        user.updateProfile(profileUpdates)
-                                .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                    @Override
-                                    public void onComplete(@NonNull Task<Void> task) {
-                                        if(task.isSuccessful()) {
-                                            Toast.makeText(context, "닉네임이 변경되었습니다", Toast.LENGTH_SHORT).show();
-                                            textView_nickname.setText(userChangeNic);
+                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                                    .setDisplayName(userChangeNic)
+                                    .build();
+
+                            user.updateProfile(profileUpdates)
+                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<Void> task) {
+                                            if(task.isSuccessful()) {
+                                                Toast.makeText(context, "닉네임이 변경되었습니다", Toast.LENGTH_SHORT).show();
+                                                textView_nickname.setText(userChangeNic);
+                                            }
                                         }
+                                    });
+                        }
+                    });
+
+                    alertBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int whichButton) {
+                            Toast.makeText(context, "닉네임이 변경되지 않았습니다", Toast.LENGTH_SHORT).show();
+                        }
+                    });
+
+                    AlertDialog alert = alertBuilder.create();
+                    alert.show();
+
+                    break;
+                }
+                case R.id.profile_button_communityActivity: {
+                    Intent intent = new Intent(context, ForumActivity.class);
+                    intent.putExtra("forumType", "myPost");
+                    context.startActivity(intent);
+                    break;
+                }
+                case R.id.action_notify: {
+                    Intent intent = new Intent(context, NotificationActivity.class);
+                    context.startActivity(intent);
+                    break;
+                }
+                case R.id.profile_button_bookmarkBasicRecipe: {
+                    Intent intent = new Intent(context, ListActivity.class);
+                    intent.putExtra("keyword", "favorite");
+                    context.startActivity(intent);
+                    break;
+                }
+                case R.id.profile_button_bookmarkSharePost: {
+                    Intent intent = new Intent(context, ForumActivity.class);
+                    intent.putExtra("forumType", "bookmarkSharePost");
+                    context.startActivity(intent);
+                    break;
+                }
+                case R.id.profile_imageButton_logout: {
+                    FirebaseAuth.getInstance().signOut();
+                    Intent intent = new Intent(context, LoginActivity.class);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
+                    getContext().startActivity(intent);
+                    break;
+                }
+                case R.id.profile_imageButton_userInfo: {
+                    //사용자 정보 변경 화면으로 넘어가기
+                    LayoutInflater inflater = getLayoutInflater();
+                    final View dialogView = inflater.inflate(R.layout.usercheck, null);
+
+                    editText_currentPw = dialogView.findViewById(R.id.userCheck_editText_currentPw);
+                    button_cancel = dialogView.findViewById(R.id.userCheck_button_cancel);
+                    button_ok = dialogView.findViewById(R.id.userCheck_button_ok);
+
+                    AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                    builder.setView(dialogView);
+                    userCheckDialog = builder.create();
+                    userCheckDialog.show();
+
+                    button_ok.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            String currentPw = editText_currentPw.getText().toString();
+                            user = FirebaseAuth.getInstance().getCurrentUser();
+                            AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPw);
+                            user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Intent intent = new Intent(context, UserAdminActivity.class);
+                                        context.startActivity(intent);
+                                        userCheckDialog.dismiss();
+                                    } else {
+                                        Toast.makeText(context, "비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show();
+                                        userCheckDialog.dismiss();
                                     }
-                                });
-                    }
-                });
-
-                alertBuilder.setNegativeButton("취소", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int whichButton) {
-                        Toast.makeText(context, "닉네임이 변경되지 않았습니다", Toast.LENGTH_SHORT).show();
-                    }
-                });
-
-                AlertDialog alert = alertBuilder.create();
-                alert.show();
-
-                break;
-            }
-            case R.id.profile_button_communityActivity: {
-                Intent intent = new Intent(context, ForumActivity.class);
-                intent.putExtra("forumType", "myPost");
-                context.startActivity(intent);
-                break;
-            }
-            case R.id.action_notify: {
-                Intent intent = new Intent(context, NotificationActivity.class);
-                context.startActivity(intent);
-                break;
-            }
-            case R.id.profile_button_bookmarkBasicRecipe: {
-                Intent intent = new Intent(context, ListActivity.class);
-                intent.putExtra("keyword", "favorite");
-                context.startActivity(intent);
-                break;
-            }
-            case R.id.profile_button_bookmarkSharePost: {
-                Intent intent = new Intent(context, ForumActivity.class);
-                intent.putExtra("forumType", "bookmarkSharePost");
-                context.startActivity(intent);
-                break;
-            }
-            case R.id.profile_imageButton_logout: {
-                FirebaseAuth.getInstance().signOut();
-                Intent intent = new Intent(context, LoginActivity.class);
-                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
-                getContext().startActivity(intent);
-                break;
-            }
-            case R.id.profile_imageButton_userInfo: {
-                //사용자 정보 변경 화면으로 넘어가기
-                LayoutInflater inflater = getLayoutInflater();
-                final View dialogView = inflater.inflate(R.layout.usercheck, null);
-
-                editText_currentPw = dialogView.findViewById(R.id.userCheck_editText_currentPw);
-                button_cancel = dialogView.findViewById(R.id.userCheck_button_cancel);
-                button_ok = dialogView.findViewById(R.id.userCheck_button_ok);
-
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setView(dialogView);
-                userCheckDialog = builder.create();
-                userCheckDialog.show();
-
-                button_ok.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        String currentPw = editText_currentPw.getText().toString();
-                        user = FirebaseAuth.getInstance().getCurrentUser();
-                        AuthCredential credential = EmailAuthProvider.getCredential(user.getEmail(), currentPw);
-                        user.reauthenticate(credential).addOnCompleteListener(new OnCompleteListener<Void>() {
-                            @Override
-                            public void onComplete(@NonNull Task<Void> task) {
-                                if(task.isSuccessful()) {
-                                    Intent intent = new Intent(context, UserAdminActivity.class);
-                                    context.startActivity(intent);
-                                    userCheckDialog.dismiss();
-                                } else {
-                                    Toast.makeText(context, "비밀번호가 잘못되었습니다", Toast.LENGTH_SHORT).show();
-                                    userCheckDialog.dismiss();
                                 }
-                            }
-                        });
-                    }
-                });
-                button_cancel.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        userCheckDialog.dismiss();
-                    }
-                });
-                break;
-            }
-            case R.id.profile_imageView_photo: {
-                //앨범으로 이동해서 Uri가져오기
-                Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
-                intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
-                startActivityForResult(intent, PICK_FROM_ALBUM);
-                break;
-            }
+                            });
+                        }
+                    });
+                    button_cancel.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View view) {
+                            userCheckDialog.dismiss();
+                        }
+                    });
+                    break;
+                }
+                case R.id.profile_imageView_photo: {
+                    //앨범으로 이동해서 Uri가져오기
+                    Intent intent = new Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
+                    intent.setType(MediaStore.Images.Media.CONTENT_TYPE);
+                    startActivityForResult(intent, PICK_FROM_ALBUM);
+                    break;
+                }
 
+            }
         }
     }
 }

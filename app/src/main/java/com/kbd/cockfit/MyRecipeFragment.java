@@ -182,16 +182,16 @@ public class MyRecipeFragment extends Fragment {
                 View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.myrecipeitem_layout, parent, false);
                 ItemViewHolder itemViewHolder = new ItemViewHolder(view);
 
-                itemViewHolder.cardViewCocktailInfo.setOnClickListener(new View.OnClickListener() {
+                itemViewHolder.cardViewCocktailInfo.setOnClickListener(new UtilitySet.OnSingleClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onSingleClick(View v) {
                         Intent intent = new Intent(context, RecipeActivity.class);
                         intent.putExtra("recipe", myRecipeArrayList.get(itemViewHolder.getAdapterPosition()));
                         context.startActivity(intent);
                     }
                 });
-                itemViewHolder.editRecipe.setOnClickListener(new View.OnClickListener() {
-                    public void onClick(View v) {
+                itemViewHolder.editRecipe.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+                    public void onSingleClick(View v) {
                         MyRecipe recipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
                         Context context = v.getContext();
 
@@ -203,9 +203,9 @@ public class MyRecipeFragment extends Fragment {
                         startActivity(intent);
                     }
                 });
-                itemViewHolder.deleteRecipe.setOnClickListener(new View.OnClickListener() {
+                itemViewHolder.deleteRecipe.setOnClickListener(new UtilitySet.OnSingleClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onSingleClick(View v) {
                         MyRecipe myRecipe = myRecipeArrayList.get(itemViewHolder.getAdapterPosition());
 
                         AlertDialog.Builder alertdialog = new AlertDialog.Builder(context);
@@ -262,9 +262,9 @@ public class MyRecipeFragment extends Fragment {
                         alert.show();
                     }
                 });
-                itemViewHolder.button_share.setOnClickListener(new View.OnClickListener() {
+                itemViewHolder.button_share.setOnClickListener(new UtilitySet.OnSingleClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onSingleClick(View v) {
                         AlertDialog.Builder builder = new AlertDialog.Builder(context);
                         builder.setPositiveButton("공유", new DialogInterface.OnClickListener() {
                             @Override
@@ -347,9 +347,9 @@ public class MyRecipeFragment extends Fragment {
                 });
             } else if(holder instanceof FooterViewHolder) {
                 FooterViewHolder footViewHolder = (FooterViewHolder) holder;
-                footViewHolder.addCardView.setOnClickListener(new View.OnClickListener() {
+                footViewHolder.addCardView.setOnClickListener(new UtilitySet.OnSingleClickListener() {
                     @Override
-                    public void onClick(View v) {
+                    public void onSingleClick(View v) {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, MakeRecipeActivity.class);
                         context.startActivity(intent);

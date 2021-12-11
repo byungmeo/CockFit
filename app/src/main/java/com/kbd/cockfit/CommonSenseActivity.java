@@ -3,6 +3,7 @@ package com.kbd.cockfit;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.View;
@@ -13,8 +14,8 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 public class CommonSenseActivity extends AppCompatActivity {
-
     private Toolbar commonsensetoolbar;
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,24 +29,27 @@ public class CommonSenseActivity extends AppCompatActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
-        commonsensetoolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        commonsensetoolbar.setNavigationOnClickListener(new UtilitySet.OnSingleClickListener() {
             @Override
-            public void onClick(View view) {
+            public void onSingleClick(View view) {
                 CommonSenseActivity.this.onBackPressed();
             }
         });
         return super.onCreateOptionsMenu(menu);
     }
     public void clickButton(View view) {
+        long currentClickTime = SystemClock.uptimeMillis();
+        long elapsedTime = currentClickTime - mLastClickTime;
+        mLastClickTime = currentClickTime;
 
-        if(view.getId() == R.id.commonsense_technique_button) {
-            Intent intent = new Intent(getApplicationContext(), TechniqueActivity.class);
-            startActivity(intent);
-        }
-        else if(view.getId() == R.id.commonsense_basespirit_button) {
-            Intent intent = new Intent(getApplicationContext(), BaseSpiritActivity.class);
-            startActivity(intent);
+        if(elapsedTime > 600) {
+            if (view.getId() == R.id.commonsense_technique_button) {
+                Intent intent = new Intent(getApplicationContext(), TechniqueActivity.class);
+                startActivity(intent);
+            } else if (view.getId() == R.id.commonsense_basespirit_button) {
+                Intent intent = new Intent(getApplicationContext(), BaseSpiritActivity.class);
+                startActivity(intent);
+            }
         }
     }
 }
