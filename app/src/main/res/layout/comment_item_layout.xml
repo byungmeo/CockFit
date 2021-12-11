@@ -79,7 +79,6 @@
                 android:layout_marginRight="10dp"
                 android:layout_weight="1"
                 android:background="@null"
-                android:visibility="invisible"
                 app:srcCompat="@drawable/ic_baseline_message_24" />
 
             <ImageButton

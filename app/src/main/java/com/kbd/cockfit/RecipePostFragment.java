@@ -15,11 +15,13 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -36,7 +38,10 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -425,6 +430,35 @@ public class RecipePostFragment extends Fragment {
             commentViewHolder.imageButton_reply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    View dialogView = View.inflate(getContext(), R.layout.reply_dialog_layout, null);
+                    Button button_write = dialogView.findViewById(R.id.reply_dialog_button_write);
+                    EditText editText_reply = dialogView.findViewById(R.id.reply_dialog_editText_reply);
+
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+
+                    button_write.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            String text = editText_reply.getText().toString();
+                            if(text.trim().equals("")) {
+                                Toast.makeText(getContext(), "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
+
+                            String nickname = mAuth.getCurrentUser().getDisplayName();
+                            String uid = mAuth.getUid();
+                            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+                            Comment reply = new Comment(text, nickname, uid, date);
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").push().setValue(reply);
+
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
                 }
             });
 
