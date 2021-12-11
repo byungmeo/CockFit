@@ -8,10 +8,12 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -33,7 +35,9 @@ import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 
 import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -171,6 +175,138 @@ public class GeneralPostFragment extends Fragment {
         }
     }
 
+    private class ReplyAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+        private ArrayList<Comment> replyArrayList;
+        private String parentCommentId;
+        ReplyAdapter(ArrayList<Comment> replyArrayList, String parentCommentId) {
+            this.replyArrayList = replyArrayList;
+            this.parentCommentId = parentCommentId;
+
+            Log.d("test", "?");
+            Log.d("test", String.valueOf(replyArrayList.size()));
+            for(Comment reply : replyArrayList) {
+                Log.d("test", reply.getCommentId());
+            }
+        }
+
+        @NonNull
+        @Override
+        public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.reply_item_layout, parent, false);
+            ReplyAdapter.ReplyViewHolder replyViewHolder = new ReplyAdapter.ReplyViewHolder(view);
+
+            replyViewHolder.imageButton_more.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    View dialogView = View.inflate(getContext(), R.layout.comment_dialog_layout, null);
+                    Button button_delete = dialogView.findViewById(R.id.commentDialog_button_delete);
+                    Button button_edit = dialogView.findViewById(R.id.commentDialog_button_edit);
+
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+
+                    button_delete.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            Comment comment = replyArrayList.get(replyViewHolder.getAdapterPosition());
+                            Log.d("test", comment.getCommentId());
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(parentCommentId).child("replys").child(comment.getCommentId()).removeValue();
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    button_edit.setOnClickListener(new View.OnClickListener() {
+                        @Override
+                        public void onClick(View v) {
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
+                }
+            });
+
+            return replyViewHolder;
+        }
+
+        @Override
+        public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+            ReplyAdapter.ReplyViewHolder replyViewHolder = (ReplyAdapter.ReplyViewHolder) holder;
+            Comment comment = replyArrayList.get(holder.getAdapterPosition());
+            Log.d("test", "bindsize : " + replyArrayList.size());
+
+            if(!comment.getUid().equals(mAuth.getUid())) {
+                replyViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
+            }
+
+            StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+            mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                @Override
+                public void onSuccess(Uri uri) {
+                    //프로필 사진이 있는 댓글사용자
+
+                    Glide.with(getContext())
+                            .load(uri)
+                            .into(replyViewHolder.imageView_profile);
+
+                    if(holder.getAdapterPosition() == getItemCount() - 1) {
+                        progressBar.setVisibility(View.GONE);
+                        constraintLayout.setVisibility(View.VISIBLE);
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    //프로필 사진이 없는 댓글사용자
+                    progressBar.setVisibility(View.GONE);
+                    constraintLayout.setVisibility(View.VISIBLE);
+                }
+            });
+
+            replyViewHolder.textView_nickname.setText(comment.getNickname());
+            replyViewHolder.textView_text.setText(comment.getText());
+            try {
+                replyViewHolder.textView_date.setText(UtilitySet.formatTimeString(comment.getDate()));
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+
+            if(comment.getLikeUidMap() != null) {
+                replyViewHolder.textView_likeCount.setText(comment.getLikeUidMap().size());
+            } else {
+                replyViewHolder.textView_likeCount.setText("0");
+            }
+        }
+
+        @Override
+        public int getItemCount() {
+            return this.replyArrayList.size();
+        }
+
+        private class ReplyViewHolder extends RecyclerView.ViewHolder {
+            protected ImageView imageView_profile;
+            protected TextView textView_nickname;
+            protected TextView textView_text;
+            protected TextView textView_date;
+            protected TextView textView_likeCount;
+            //protected ImageButton imageButton_reply;
+            //protected ImageButton imageButton_like;
+            protected ImageButton imageButton_more;
+            //protected RecyclerView recyclerView_reply;
+
+            public ReplyViewHolder(@NonNull View itemView) {
+                super(itemView);
+                imageView_profile = itemView.findViewById(R.id.reply_imageView_profile);
+                textView_nickname = itemView.findViewById(R.id.reply_textView_nickname);
+                textView_text = itemView.findViewById(R.id.reply_textView_text);
+                textView_date = itemView.findViewById(R.id.reply_textView_date);
+                textView_likeCount = itemView.findViewById(R.id.reply_textView_likeCount);
+                imageButton_more = itemView.findViewById(R.id.reply_imageButton_more);
+            }
+        }
+    }
+
     private class CommentAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
         private ArrayList<Comment> commentArrayList;
 
@@ -182,11 +318,40 @@ public class GeneralPostFragment extends Fragment {
         @Override
         public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.comment_item_layout, parent, false);
-            CommentViewHolder commentViewHolder = new CommentViewHolder(view);
+            CommentAdapter.CommentViewHolder commentViewHolder = new CommentAdapter.CommentViewHolder(view);
 
             commentViewHolder.imageButton_reply.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                    View dialogView = View.inflate(getContext(), R.layout.reply_dialog_layout, null);
+                    Button button_write = dialogView.findViewById(R.id.reply_dialog_button_write);
+                    EditText editText_reply = dialogView.findViewById(R.id.reply_dialog_editText_reply);
+
+                    dialogBuilder.setView(dialogView);
+                    AlertDialog alertDialog = dialogBuilder.create();
+
+                    button_write.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+                        @Override
+                        public void onSingleClick(View v) {
+                            String text = editText_reply.getText().toString();
+                            if(text.trim().equals("")) {
+                                Toast.makeText(getContext(), "내용을 입력해주세요.", Toast.LENGTH_SHORT).show();
+                            }
+
+                            Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
+
+                            String nickname = mAuth.getCurrentUser().getDisplayName();
+                            String uid = mAuth.getUid();
+                            String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
+                            Comment reply = new Comment(text, nickname, uid, date);
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").push().setValue(reply);
+
+                            alertDialog.dismiss();
+                        }
+                    });
+
+                    alertDialog.show();
                 }
             });
 
@@ -233,12 +398,42 @@ public class GeneralPostFragment extends Fragment {
 
         @Override
         public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
-            CommentViewHolder commentViewHolder = (CommentViewHolder) holder;
+            CommentAdapter.CommentViewHolder commentViewHolder = (CommentAdapter.CommentViewHolder) holder;
             Comment comment = commentArrayList.get(holder.getAdapterPosition());
 
             if(!comment.getUid().equals(mAuth.getUid())) {
                 commentViewHolder.imageButton_more.setVisibility(View.INVISIBLE);
             }
+
+            ArrayList<Comment> replyArrayList = new ArrayList<>();
+            ReplyAdapter replyAdapter = new ReplyAdapter(replyArrayList, comment.getCommentId());
+            ((CommentAdapter.CommentViewHolder) holder).recyclerView_reply.setAdapter(replyAdapter);
+            LinearLayoutManager linearLayoutManager = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false) {
+                @Override
+                public boolean canScrollVertically() {
+                    return false;
+                }
+            };
+            ((CommentAdapter.CommentViewHolder) holder).recyclerView_reply.setLayoutManager(linearLayoutManager);
+
+            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot replySnapshot : snapshot.getChildren()) {
+                        Comment reply = replySnapshot.getValue(Comment.class);
+                        reply.setCommentId(replySnapshot.getKey());
+                        replyArrayList.add(reply);
+                    }
+
+                    replyAdapter.notifyDataSetChanged();
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
             StorageReference mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
             mStorage.child("Users").child(comment.getUid()).child("profileImage.jpg").getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                 @Override
@@ -284,14 +479,15 @@ public class GeneralPostFragment extends Fragment {
         }
 
         private class CommentViewHolder extends RecyclerView.ViewHolder {
-            private ImageView imageView_profile;
-            private TextView textView_nickname;
-            private TextView textView_text;
-            private TextView textView_date;
-            private TextView textView_likeCount;
-            private ImageButton imageButton_reply;
-            private ImageButton imageButton_like;
-            private ImageButton imageButton_more;
+            protected ImageView imageView_profile;
+            protected TextView textView_nickname;
+            protected TextView textView_text;
+            protected TextView textView_date;
+            protected TextView textView_likeCount;
+            protected ImageButton imageButton_reply;
+            protected ImageButton imageButton_like;
+            protected ImageButton imageButton_more;
+            protected RecyclerView recyclerView_reply;
 
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
@@ -303,6 +499,7 @@ public class GeneralPostFragment extends Fragment {
                 imageButton_reply = itemView.findViewById(R.id.comment_imageButton_reply);
                 imageButton_like = itemView.findViewById(R.id.comment_imageButton_like);
                 imageButton_more = itemView.findViewById(R.id.comment_imageButton_more);
+                recyclerView_reply = itemView.findViewById(R.id.comment_recycler_reply);
             }
         }
     }

@@ -523,7 +523,7 @@ public class RecipePostFragment extends Fragment {
             };
             ((CommentViewHolder) holder).recyclerView_reply.setLayoutManager(linearLayoutManager);
 
-            mDatabase.child("forum").child("share").child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
+            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                     for (DataSnapshot replySnapshot : snapshot.getChildren()) {
