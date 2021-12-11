@@ -173,6 +173,9 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 if(snapshot.getChildrenCount() > 0) {
                     toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_notification_important_24);
                 }
+                else {
+                    toolbar.getMenu().getItem(0).setIcon(R.drawable.ic_baseline_notifications_24);
+                }
             }
 
             @Override

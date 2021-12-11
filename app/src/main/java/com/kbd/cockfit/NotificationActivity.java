@@ -1,6 +1,7 @@
 package com.kbd.cockfit;
 
 import android.app.Activity;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.drawable.Drawable;
@@ -75,11 +76,6 @@ public class NotificationActivity extends AppCompatActivity {
 
         toolbar = findViewById(R.id.notify_materialToolbar);
         setSupportActionBar(toolbar);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override public void onClick(View v) {
-                onBackPressed();
-            }
-        });
 
         ImageButton button_delete = findViewById(R.id.notify_imageButton_delete);
 
@@ -112,13 +108,21 @@ public class NotificationActivity extends AppCompatActivity {
                 Log.e("test", "에러발생");
             }
         });
-        
-
         adapter = new CommentAdapter(commentArrayList, this);
         notification_recyclerView.setAdapter(adapter);
 
-
     }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override public void onClick(View v) {
+                onBackPressed();
+            }
+        });
+    }
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         toolbar.setNavigationOnClickListener(new UtilitySet.OnSingleClickListener() {

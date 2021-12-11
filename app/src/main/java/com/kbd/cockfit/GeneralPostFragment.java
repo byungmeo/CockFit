@@ -340,6 +340,7 @@ public class GeneralPostFragment extends Fragment {
                             }
 
                             Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
+                            //comment.getUid()
 
                             String nickname = mAuth.getCurrentUser().getDisplayName();
                             String uid = mAuth.getUid();
