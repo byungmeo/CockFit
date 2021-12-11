@@ -57,6 +57,8 @@ public class GeneralPostFragment extends Fragment {
     private Drawable drawable_alreadyLike;
     private Drawable drawable_waitLike;
 
+    private Post post;
+
     private RecyclerView recycler_comments;
     private CommentAdapter commentAdapter;
     private ArrayList<Comment> commentArrayList;
@@ -80,6 +82,7 @@ public class GeneralPostFragment extends Fragment {
         Bundle bundle = getArguments();
         forumType = bundle.getString("forumType");
         postId = bundle.getString("postId");
+        post = bundle.getParcelable("post");
 
         //view initialize
         textView_contents = v.findViewById(R.id.general_textView_contents);
@@ -100,7 +103,6 @@ public class GeneralPostFragment extends Fragment {
         commentArrayList = new ArrayList<>();
         commentAdapter = new CommentAdapter(commentArrayList);
         recycler_comments.setAdapter(commentAdapter);
-        //
 
         mDatabase.child("forum").child(forumType).child(postId).child("content").addValueEventListener(new ValueEventListener() {
             @Override
@@ -340,12 +342,29 @@ public class GeneralPostFragment extends Fragment {
                             }
 
                             Comment comment = commentArrayList.get(commentViewHolder.getAdapterPosition());
-                            //comment.getUid()
 
                             String nickname = mAuth.getCurrentUser().getDisplayName();
                             String uid = mAuth.getUid();
                             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
                             Comment reply = new Comment(text, nickname, uid, date);
+
+                            String title = "대댓글";
+                            Notify notify = new Notify(title, text, nickname, date, uid);
+
+                            //대댓글을 남긴 댓글의 작성자의 DB에 대댓글 남겼음을 추가
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("uid").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String value = dataSnapshot.getValue(String.class);
+                                    mDatabase.child("user").child(value).child("notify").push().setValue(notify);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
+                                }
+                            });
+
                             mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").push().setValue(reply);
 
                             alertDialog.dismiss();

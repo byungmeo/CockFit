@@ -79,6 +79,9 @@ public class RecipePostFragment extends Fragment {
     private CommentAdapter commentAdapter;
     private ArrayList<Comment> commentArrayList;
 
+    private Post post;
+
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -95,6 +98,7 @@ public class RecipePostFragment extends Fragment {
         postId = bundle.getString("postId");
         recipeId = bundle.getString("recipeId");
         writerUid = bundle.getString("writerUid");
+        post = bundle.getParcelable("post");
 
         //view initialize
         imageView_picture = v.findViewById(R.id.share_imageView_picture);
@@ -452,6 +456,24 @@ public class RecipePostFragment extends Fragment {
                             String uid = mAuth.getUid();
                             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
                             Comment reply = new Comment(text, nickname, uid, date);
+
+                            String title = "대댓글";
+                            Notify notify = new Notify(title, text, nickname, date, uid);
+
+                            //대댓글을 남긴 댓글의 작성자의 DB에 대댓글 남겼음을 추가
+                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("uid").addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                    String value = dataSnapshot.getValue(String.class);
+                                    mDatabase.child("user").child(value).child("notify").push().setValue(notify);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                    //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
+                                }
+                            });
+
                             mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").push().setValue(reply);
 
                             alertDialog.dismiss();

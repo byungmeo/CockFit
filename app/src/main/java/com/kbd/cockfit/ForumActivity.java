@@ -295,6 +295,7 @@ public class ForumActivity extends AppCompatActivity {
                     } else {
                         intent.putExtra("postId", postIdMap.get(post));
                         intent.putExtra("forumType", forumType);
+                        intent.putExtra("post", post);
                     }
 
                     startActivity(intent);
