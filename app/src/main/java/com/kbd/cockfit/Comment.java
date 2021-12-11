@@ -26,6 +26,7 @@ public class Comment implements Parcelable {
         this.commentId = null;
     }
 
+
     protected Comment(Parcel in) {
         text = in.readString();
         nickname = in.readString();

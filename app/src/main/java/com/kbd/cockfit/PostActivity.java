@@ -241,8 +241,29 @@ public class PostActivity extends AppCompatActivity {
             String uid = mAuth.getUid();
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
 
+
             Comment comment = new Comment(commentText, nickname, uid, date);
+
+            String title = post.getTitle();
+            Notify notify = new Notify(title, commentText, nickname, date, uid);
+
+
+            //댓글을 남긴 글의 작성자의 DB에 댓글 남겼음을 추가
+            mDatabase.child("forum").child(forumType).child(postId).child("uid").addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                    String value = dataSnapshot.getValue(String.class);
+                    mDatabase.child("user").child(value).child("notify").push().setValue(notify);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError databaseError) {
+                    //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
+                }
+            });
+
             mDatabase.child("forum").child(forumType).child(postId).child("comments").push().setValue(comment);
+
 
             editText_comment.setText("");
         }
