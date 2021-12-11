@@ -73,7 +73,8 @@ public class NotificationActivity extends AppCompatActivity {
         user = mAuth.getCurrentUser();
         uid = user.getUid();
 
-        toolbar = findViewById(R.id.etc_list_materialToolbar);
+        toolbar = findViewById(R.id.notify_materialToolbar);
+        setSupportActionBar(toolbar);
         toolbar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override public void onClick(View v) {
                 onBackPressed();
@@ -116,8 +117,16 @@ public class NotificationActivity extends AppCompatActivity {
 
 
     }
-
-
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        toolbar.setNavigationOnClickListener(new UtilitySet.OnSingleClickListener() {
+            @Override
+            public void onSingleClick(View view) {
+                NotificationActivity.this.onBackPressed();
+            }
+        });
+        return super.onCreateOptionsMenu(menu);
+    }
 
     private class CommentAdapter extends RecyclerView.Adapter<CommentAdapter.CommentViewHolder> {
 
