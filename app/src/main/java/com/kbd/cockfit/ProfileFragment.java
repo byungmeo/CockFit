@@ -110,9 +110,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
         button_bookmarkRecipePost = v.findViewById(R.id.profile_button_bookmarkSharePost);
         textView_userEmail.setText(user.getEmail());
 
-
-
-
         toolbar = v.findViewById(R.id.topAppBarFragment);
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
@@ -125,8 +122,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                 return false;
             }
         });
-
-
 
         mDatabase.child("user").child(uid).child("info").addValueEventListener(new ValueEventListener() {
             @Override
@@ -376,7 +371,6 @@ public class ProfileFragment extends Fragment implements View.OnClickListener {
                     startActivityForResult(intent, PICK_FROM_ALBUM);
                     break;
                 }
-
             }
         }
     }
