@@ -64,6 +64,7 @@ public class RegisterActivity extends AppCompatActivity {
     private Long mLastClickTime = 0L;
 
     private TextInputLayout editText_email, editText_pwd, editText_checkPwd, editText_nickname;
+    private Button button_register;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -92,6 +93,14 @@ public class RegisterActivity extends AppCompatActivity {
             editText_checkPwd = (TextInputLayout) findViewById(R.id.register_editText_pw2);
             editText_nickname = (TextInputLayout) findViewById(R.id.register_editText_nic);
             profile_image = findViewById(R.id.register_imageview_profileimage);
+            button_register = findViewById(R.id.register_button_register);
+
+            button_register.setOnClickListener(new UtilitySet.OnSingleClickListener() {
+                @Override
+                public void onSingleClick(View v) {
+                    doRegister();
+                }
+            });
         } catch (Exception e1) {
             Toast.makeText(this, "onCreate : " + e1.getMessage(), Toast.LENGTH_SHORT).show();
         }
@@ -155,104 +164,108 @@ public class RegisterActivity extends AppCompatActivity {
 
         if(elapsedTime > 600) {
             if(item.getItemId() == R.id.register_icon) {
-                String e_mail = this.editText_email.getEditText().getText().toString();
-                String pwd = this.editText_pwd.getEditText().getText().toString();
-                String checkPwd = this.editText_checkPwd.getEditText().getText().toString();
-                String nickname = this.editText_nickname.getEditText().getText().toString();
-
-                String e_mailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$"; // 이메일 형식 패턴
-                if(!Pattern.matches(e_mailPattern , e_mail)){
-                    Toast.makeText(RegisterActivity.this , "이메일 형식을 확인해주세요" , Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                if(pwd.equals("") || checkPwd.equals("")) {
-                    Toast.makeText(RegisterActivity.this , "비밀번호를 입력해주세요" , Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                if(nickname.equals("")) {
-                    Toast.makeText(RegisterActivity.this , "닉네임을 입력해주세요" , Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                if(!pwd.equals(checkPwd)) {
-                    Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                if(pwd.length() < 6) {
-                    Toast.makeText(RegisterActivity.this , "비밀번호는 최소 6자리 이상으로 입력해주세요." , Toast.LENGTH_LONG).show();
-                    return false;
-                }
-
-                mAuth.createUserWithEmailAndPassword(e_mail, pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
-                            FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-                            uid = user.getUid();
-
-                            user.sendEmailVerification(); //인증 이메일을 전송합니다.
-
-                            Toast.makeText(RegisterActivity.this, "이메일 등록에 성공했습니다", Toast.LENGTH_SHORT).show();
-
-                            long now = System.currentTimeMillis();
-                            Date date = new Date(now);
-                            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                            String userRegisterDate = dateFormat.format(date);
-
-                            mDatabase.child("user").child(uid).child("info").child("register_data").setValue(userRegisterDate);
-
-                            //유저의 프로필 닉네임을 업데이트 합니다.
-                            UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
-                                    .setDisplayName(nickname)
-                                    .setPhotoUri(file)
-                                    .build();
-
-                            user.updateProfile(profileUpdates)
-                                    .addOnCompleteListener(new OnCompleteListener<Void>() {
-                                        @Override
-                                        public void onComplete(@NonNull Task<Void> task) {
-                                            if(task.isSuccessful()) {
-                                                Log.d("test", "유저 프로필 업데이트 완료");
-                                            }
-                                        }
-                                    });
-                            if(imageOn) {
-                                uploadImageToFirebase(file);
-                            }
-                            onBackPressed(); //로그인 화면으로 돌아갑니다.
-                        } else {
-                            try {
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
-
-                                switch (errorCode) {
-                                    case "ERROR_INVALID_EMAIL" :
-                                        Toast.makeText(RegisterActivity.this, "잘못된 형식의 이메일입니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "ERROR_EMAIL_ALREADY_IN_USE" :
-                                        Toast.makeText(RegisterActivity.this, "이미 사용중인 이메일입니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "ERROR_WEAK_PASSWORD" :
-                                        Toast.makeText(RegisterActivity.this, "취약한 비밀번호입니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    default :
-                                        Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
-                                        break;
-                                }
-                            } catch (Exception e){
-                                Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                            }
-
-                            HideKeyboard();
-                        }
-                    }
-                });
+                doRegister();
             }
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    public void doRegister() {
+        String e_mail = this.editText_email.getEditText().getText().toString();
+        String pwd = this.editText_pwd.getEditText().getText().toString();
+        String checkPwd = this.editText_checkPwd.getEditText().getText().toString();
+        String nickname = this.editText_nickname.getEditText().getText().toString();
+
+        String e_mailPattern = "^[a-zA-Z0-9]+@[a-zA-Z0-9.]+$"; // 이메일 형식 패턴
+        if(!Pattern.matches(e_mailPattern , e_mail)){
+            Toast.makeText(RegisterActivity.this , "이메일 형식을 확인해주세요" , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(pwd.equals("") || checkPwd.equals("")) {
+            Toast.makeText(RegisterActivity.this , "비밀번호를 입력해주세요" , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(nickname.equals("")) {
+            Toast.makeText(RegisterActivity.this , "닉네임을 입력해주세요" , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(!pwd.equals(checkPwd)) {
+            Toast.makeText(RegisterActivity.this , "비밀번호를 다시 확인해주세요" , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        if(pwd.length() < 6) {
+            Toast.makeText(RegisterActivity.this , "비밀번호는 최소 6자리 이상으로 입력해주세요." , Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        mAuth.createUserWithEmailAndPassword(e_mail, pwd).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+            @Override
+            public void onComplete(@NonNull Task<AuthResult> task) {
+                if (task.isSuccessful()) {
+                    DatabaseReference mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
+                    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                    uid = user.getUid();
+
+                    user.sendEmailVerification(); //인증 이메일을 전송합니다.
+
+                    Toast.makeText(RegisterActivity.this, "이메일 등록에 성공했습니다", Toast.LENGTH_SHORT).show();
+
+                    long now = System.currentTimeMillis();
+                    Date date = new Date(now);
+                    SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                    String userRegisterDate = dateFormat.format(date);
+
+                    mDatabase.child("user").child(uid).child("info").child("register_data").setValue(userRegisterDate);
+
+                    //유저의 프로필 닉네임을 업데이트 합니다.
+                    UserProfileChangeRequest profileUpdates = new UserProfileChangeRequest.Builder()
+                            .setDisplayName(nickname)
+                            .setPhotoUri(file)
+                            .build();
+
+                    user.updateProfile(profileUpdates)
+                            .addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()) {
+                                        Log.d("test", "유저 프로필 업데이트 완료");
+                                    }
+                                }
+                            });
+                    if(imageOn) {
+                        uploadImageToFirebase(file);
+                    }
+                    onBackPressed(); //로그인 화면으로 돌아갑니다.
+                } else {
+                    try {
+                        String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                        switch (errorCode) {
+                            case "ERROR_INVALID_EMAIL" :
+                                Toast.makeText(RegisterActivity.this, "잘못된 형식의 이메일입니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "ERROR_EMAIL_ALREADY_IN_USE" :
+                                Toast.makeText(RegisterActivity.this, "이미 사용중인 이메일입니다.", Toast.LENGTH_SHORT).show();
+                                break;
+                            case "ERROR_WEAK_PASSWORD" :
+                                Toast.makeText(RegisterActivity.this, "취약한 비밀번호입니다. 다시 입력해주세요.", Toast.LENGTH_SHORT).show();
+                                break;
+                            default :
+                                Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
+                                break;
+                        }
+                    } catch (Exception e){
+                        Toast.makeText(RegisterActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                    }
+
+                    HideKeyboard();
+                }
+            }
+        });
     }
 
 
