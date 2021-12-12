@@ -31,6 +31,7 @@ import java.util.ArrayList;
 public class MainActivity extends AppCompatActivity {
 
     private FragmentManager fragmentManager = getSupportFragmentManager();
+    private PanelFragment panelFragment = new PanelFragment();
     private MyRecipeFragment myRecipeFragment = new MyRecipeFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private CocktailInfoFragment cocktailInfoFragment = new CocktailInfoFragment();
@@ -114,6 +115,9 @@ public class MainActivity extends AppCompatActivity {
             FragmentTransaction transaction = fragmentManager.beginTransaction();
 
             switch (menuItem.getItemId()) {
+                case R.id.page_panel:
+                    transaction.replace(R.id.frameLayout, panelFragment).commitAllowingStateLoss();
+                    break;
                 case R.id.page_myRecipe:
                     transaction.replace(R.id.frameLayout, myRecipeFragment).commitAllowingStateLoss();
                     break;

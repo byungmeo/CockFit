@@ -3,6 +3,11 @@
     xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/page_panel"
+        android:enabled="true"
+        android:icon="@drawable/ic_baseline_newspaper_24"
+        android:title="패널" />
+    <item
         android:id="@+id/page_cocktailInfo"
         android:enabled="true"
         android:icon="@drawable/ic_baseline_wine_bar_24"
