@@ -3,6 +3,7 @@ package com.kbd.cockfit;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.SystemClock;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
@@ -50,6 +51,7 @@ public class LoginActivity extends AppCompatActivity {
     private FirebaseAuth auth; //Firebase 인증객체
     private GoogleApiClient googleApiClient; //구글 API 클라이언트
     private static final int REQ_SIGN_GOOGLE = 100; //구글 로그인 결과 코드
+    private Long mLastClickTime = 0L;
 
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) { //구글 로그인 인증을 요청했을 때 결과값을 되돌려받는 곳
@@ -128,10 +130,10 @@ public class LoginActivity extends AppCompatActivity {
 
         auth=FirebaseAuth.getInstance();//firebase 초기화
 
-        btn_google=findViewById(R.id.btn_google);
-        btn_google.setOnClickListener(new View.OnClickListener() {
+        btn_google=findViewById(R.id.login_button_google);
+        btn_google.setOnClickListener(new UtilitySet.OnSingleClickListener() {
             @Override
-            public void onClick(View v) {
+            public void onSingleClick(View v) {
                 Intent intent=googleSignInClient.getSignInIntent();
                 startActivityForResult(intent,REQ_SIGN_GOOGLE);
             }
@@ -150,59 +152,64 @@ public class LoginActivity extends AppCompatActivity {
     }
 
         public void clickButton (View view){
-            if (view.getId() == this.button_login.getId()) {
-                String email = this.editText_email.getEditText().getText().toString();
-                String password = this.editText_pwd.getEditText().getText().toString();
+            long currentClickTime = SystemClock.uptimeMillis();
+            long elapsedTime = currentClickTime - mLastClickTime;
+            mLastClickTime = currentClickTime;
 
-                //비어 있으면 다시 입력하라고 되돌림
-                if (email.equals("") || password.equals("")) {
-                    Toast.makeText(this, "아이디 비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
-                    return;
-                }
+            if(elapsedTime > 600) {
+                if (view.getId() == this.button_login.getId()) {
+                    String email = this.editText_email.getEditText().getText().toString();
+                    String password = this.editText_pwd.getEditText().getText().toString();
 
-                mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) { // 계정이 등록이 되어 있으면
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            if (user.isEmailVerified()) { // 그리고 그때 그 계정이 실제로 존재하는 계정인지
-                                Intent i = new Intent(LoginActivity.this, MainActivity.class);
-                                startActivity(i);
-                                finish();
-                            } else {
-                                Toast.makeText(LoginActivity.this, "인증이 되지 않은 이메일입니다. 해당 이메일 주소에 전송된 인증 링크를 확인하세요.", Toast.LENGTH_SHORT).show();
-                                mAuth.signOut();
-                                return;
-                            }
-                        } else {
-                            try {
-                                String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+                    //비어 있으면 다시 입력하라고 되돌림
+                    if (email.equals("") || password.equals("")) {
+                        Toast.makeText(this, "아이디 비밀번호를 입력해주세요", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
 
-                                switch (errorCode) {
-                                    case "ERROR_INVALID_EMAIL" :
-                                        Toast.makeText(LoginActivity.this, "이메일 입력이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "ERROR_USER_NOT_FOUND" :
-                                        Toast.makeText(LoginActivity.this, "사용자가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    case "ERROR_WRONG_PASSWORD" :
-                                        Toast.makeText(LoginActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
-                                        break;
-                                    default :
-                                        Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
-                                        break;
+                    mAuth.signInWithEmailAndPassword(email, password).addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                        @Override
+                        public void onComplete(@NonNull Task<AuthResult> task) {
+                            if (task.isSuccessful()) { // 계정이 등록이 되어 있으면
+                                FirebaseUser user = mAuth.getCurrentUser();
+                                if (user.isEmailVerified()) { // 그리고 그때 그 계정이 실제로 존재하는 계정인지
+                                    Intent i = new Intent(LoginActivity.this, MainActivity.class);
+                                    startActivity(i);
+                                    finish();
+                                } else {
+                                    Toast.makeText(LoginActivity.this, "인증이 되지 않은 이메일입니다. 해당 이메일 주소에 전송된 인증 링크를 확인하세요.", Toast.LENGTH_SHORT).show();
+                                    mAuth.signOut();
+                                    return;
                                 }
-                            } catch (Exception e) {
-                                Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                            } else {
+                                try {
+                                    String errorCode = ((FirebaseAuthException) task.getException()).getErrorCode();
+
+                                    switch (errorCode) {
+                                        case "ERROR_INVALID_EMAIL" :
+                                            Toast.makeText(LoginActivity.this, "이메일 입력이 잘못되었습니다.", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case "ERROR_USER_NOT_FOUND" :
+                                            Toast.makeText(LoginActivity.this, "사용자가 존재하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        case "ERROR_WRONG_PASSWORD" :
+                                            Toast.makeText(LoginActivity.this, "비밀번호가 일치하지 않습니다.", Toast.LENGTH_SHORT).show();
+                                            break;
+                                        default :
+                                            Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + errorCode, Toast.LENGTH_SHORT).show();
+                                            break;
+                                    }
+                                } catch (Exception e) {
+                                    Toast.makeText(LoginActivity.this, "관리자에게 문의해주세요.\n" + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                                }
                             }
                         }
-                    }
-                });
-            } else if(view.getId() == this.button_register.getId()) {
-                Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
-                startActivity(intent);
+                    });
+                } else if(view.getId() == this.button_register.getId()) {
+                    Intent intent = new Intent(LoginActivity.this, RegisterActivity.class);
+                    startActivity(intent);
+                }
             }
-
         }
 
 
