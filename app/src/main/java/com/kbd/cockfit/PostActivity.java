@@ -121,16 +121,15 @@ public class PostActivity extends AppCompatActivity {
         }
 
         //Intent로부터 전달받은 postId를 Firebase에서 탐색한 후 해당 Post객체를 받아옵니다.
-        mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("forum").child(forumType).child(postId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("test", "오류나는 onDataChange");
+            public void onSuccess(DataSnapshot dataSnapshot) {
                 if(forumType.equals("share")) {
-                    post = snapshot.getValue(RecipePost.class);
+                    post = dataSnapshot.getValue(RecipePost.class);
                 } else {
-                    post = snapshot.getValue(Post.class);
+                    post = dataSnapshot.getValue(Post.class);
                 }
-                
+
                 //postId에 해당하는 게시글이 있는 경우
                 if(post != null) {
                     toolbar.setTitle(post.getTitle());
@@ -174,15 +173,15 @@ public class PostActivity extends AppCompatActivity {
                     Log.d("Exception", "서버에서 해당하는 게시글을 찾을 수 없습니다.");
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.top_app_bar_post, menu);
+        menu.getItem(2).setVisible(false); //운영자용 삭제
+        menu.getItem(3).setVisible(false); //운영자용 삭제
+        
         if(forumType.equals("share")) {
             menu.getItem(0).setVisible(false);
         }
@@ -191,20 +190,39 @@ public class PostActivity extends AppCompatActivity {
             menu.getItem(0).setVisible(false);
             menu.getItem(1).setVisible(false);
         }
+
+        mDatabase.child("admin").get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
+            @Override
+            public void onSuccess(DataSnapshot dataSnapshot) {
+                for(DataSnapshot adminSnapshot : dataSnapshot.getChildren()) {
+                    String adminUid = adminSnapshot.getKey();
+                    if(adminUid.equals(mAuth.getUid())) {
+                        menu.getItem(2).setVisible(true);
+                        if(forumType.equals("share")) {
+                            menu.getItem(3).setVisible(true);
+                        }
+                        break;
+                    }
+                }
+            }
+        });
         return super.onCreateOptionsMenu(menu);
     }
 
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) {
-        if(item.getItemId() == R.id.post_menuItem_delete) {
+        if(item.getItemId() == R.id.post_menuItem_delete || item.getItemId() == R.id.post_menuItem_admin_delete) {
             //게시글 삭제
             mDatabase.child("forum").child(forumType).child(postId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) {
-                    mDatabase.child("user").child(mAuth.getUid()).child("community").child("posting").child(postId).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    mDatabase.child("user").child(post.getUid()).child("community").child("posting").child(postId).setValue(null).addOnSuccessListener(new OnSuccessListener<Void>() {
                         @Override
                         public void onSuccess(Void unused) {
-                            onBackPressed();
+                            mDatabase.child("panel").child("hotRecipe").child(postId).removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void unused) { onBackPressed(); }
+                            });
                         }
                     });
                 }
@@ -225,6 +243,15 @@ public class PostActivity extends AppCompatActivity {
             intent.putExtra("postId", postId);
             intent.putExtra("forumType", forumType);
             startActivity(intent);
+        } else if(item.getItemId() == R.id.post_menuItem_admin_hot) {
+            HashMap<String, String> value = new HashMap<>();
+            value.put("postId", postId);
+            value.put("recipeId", ((RecipePost)post).getRecipeId());
+            value.put("uid", post.getUid());
+            mDatabase.child("panel").child("hotRecipe").child(postId).setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+                @Override
+                public void onSuccess(Void unused) { onBackPressed(); }
+            });
         }
         return super.onOptionsItemSelected(item);
     }
