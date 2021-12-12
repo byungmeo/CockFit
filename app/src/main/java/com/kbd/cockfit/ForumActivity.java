@@ -11,10 +11,14 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.content.ContextCompat;
@@ -71,6 +75,22 @@ public class ForumActivity extends AppCompatActivity {
                     Intent intent = new Intent(context, WritePostActivity.class);
                     intent.putExtra("forumType", forumType);
                     startActivity(intent);
+                } else if(item.getItemId() == R.id.forum_menuItem_search) {
+                    SearchView searchView = (SearchView) item.getActionView();
+                    searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+                    searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                        @Override
+                        public boolean onQueryTextSubmit(String query) {
+                            return false;
+                        }
+
+                        @Override
+                        public boolean onQueryTextChange(String newText) {
+                            postAdapter.getFilter().filter(newText);
+                            return false;
+                        }
+                    });
                 }
                 return false;
             }
@@ -80,7 +100,7 @@ public class ForumActivity extends AppCompatActivity {
         switch (forumType) {
             case "share" : {
                 toolbar.setTitle("레시피 공유 게시판");
-                toolbar.getMenu().setGroupVisible(0, false);
+                toolbar.getMenu().getItem(1).setVisible(false);
                 break;
             }
             case "qa" : {
@@ -243,11 +263,13 @@ public class ForumActivity extends AppCompatActivity {
         });
     }
 
-    public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class PostAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
         private ArrayList<Post> postArrayList;
+        private ArrayList<Post> postArrayListFull;
 
         public PostAdapter(ArrayList<Post> postArrayList) {
             this.postArrayList = postArrayList;
+            this.postArrayListFull = new ArrayList<>(postArrayList);
         }
 
         @NonNull
@@ -308,7 +330,43 @@ public class ForumActivity extends AppCompatActivity {
             return postArrayList.size();
         }
 
-        public class PostViewHolder extends RecyclerView.ViewHolder {
+        @Override
+        public Filter getFilter() {
+            return postFilter;
+        }
+
+        private Filter postFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<Post> filteredList = new ArrayList<>();
+
+                if (constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(postArrayListFull);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+
+                    for (Post post : postArrayListFull) {
+                        if (post.getTitle().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(post);
+                        }
+                    }
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                postArrayList.clear();
+                postArrayList.addAll((ArrayList) results.values);
+                notifyDataSetChanged();
+            }
+        };
+
+            public class PostViewHolder extends RecyclerView.ViewHolder {
             private ConstraintLayout constraintLayout;
             private TextView title;
             private TextView writer;
