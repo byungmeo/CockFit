@@ -8,4 +8,10 @@
     <item
         android:id="@+id/post_menuItem_delete"
         android:title="글 삭제" />
+    <item
+        android:id="@+id/post_menuItem_admin_delete"
+        android:title="글 삭제(운영자)" />
+    <item
+        android:id="@+id/post_menuItem_admin_hot"
+        android:title="인기 레시피로(운영자)" />
 </menu>
