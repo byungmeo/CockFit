@@ -182,6 +182,24 @@ public class RecipeActivity extends AppCompatActivity {
             text_tags += tag + " ";
         }
         textView_tags.setText(text_tags);
+/*
+        String text_tags = "";
+        boolean first = true;
+        for (String tag : recipe.getTags()) {
+            if(!isMyRecipe) {
+                if (first) {
+                    text_tags += tag;
+                    first = false;
+                } else {
+                    text_tags += "  "+tag;
+                }
+            } else {
+                if (!first)
+                    text_tags += " #" + tag;
+                first = false;
+            }
+        }
+        textView_tags.setText(text_tags);*/
     }
 
     @Override

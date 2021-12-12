@@ -207,10 +207,10 @@
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_custom"
                     android:hint='태그 (띄어쓰기 구분)'
+                    android:text="#"
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     app:boxBackgroundColor="@color/white"
-                    android:text="#"
                     >
 
                     <com.google.android.material.textfield.TextInputEditText

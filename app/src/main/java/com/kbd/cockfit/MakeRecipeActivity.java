@@ -104,7 +104,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editText_proof = findViewById(R.id.make_editText_proof);
         editText_base = findViewById(R.id.make_editText_base);
         editText_tags = findViewById(R.id.make_editText_tags);
-        editText_tags = findViewById(R.id.make_editText_tags);
         editText_equipment = findViewById(R.id.make_editText_equipment);
         editText_ingredient = findViewById(R.id.make_editText_ingredient);
         editText_description = findViewById(R.id.make_editText_description);
@@ -125,18 +124,17 @@ public class MakeRecipeActivity extends AppCompatActivity {
                 if (count == 1) {
                     if (s.length() > 1) {
                         if (s.charAt(s.length() - 1) == ',') {
-                            editText_equipment.getEditText().removeTextChangedListener(this);
-                            editText_equipment.getEditText().append(" ");
-                            editText_equipment.getEditText().setSelection(s.length());
-                            editText_equipment.getEditText().addTextChangedListener(this);
+                            editText_ingredient.getEditText().removeTextChangedListener(this);
+                            editText_ingredient.getEditText().append(" ");
+                            editText_ingredient.getEditText().setSelection(s.length());
+                            editText_ingredient.getEditText().addTextChangedListener(this);
                         } else if (s.charAt(s.length() - 1) == ' ') {
-                            editText_equipment.getEditText().removeTextChangedListener(this);
-                            String strTemp = editText_equipment.getEditText().getText().toString();
-                            editText_equipment.getEditText().setText(strTemp.substring(0, strTemp.length() - 1));
-                            editText_equipment.getEditText().append(", ");
-                            editText_equipment.getEditText().setSelection(editText_equipment.getEditText().getText().length());
-                            editText_equipment.getEditText().addTextChangedListener(this);
-
+                            editText_ingredient.getEditText().removeTextChangedListener(this);
+                            String strTemp = editText_ingredient.getEditText().getText().toString();
+                            editText_ingredient.getEditText().setText(strTemp.substring(0, strTemp.length()-1));
+                            editText_ingredient.getEditText().append(", ");
+                            editText_ingredient.getEditText().setSelection(editText_ingredient.getEditText().getText().length());
+                            editText_ingredient.getEditText().addTextChangedListener(this);
                         }
                     }
                 }
@@ -169,7 +167,6 @@ public class MakeRecipeActivity extends AppCompatActivity {
                             editText_equipment.getEditText().append(", ");
                             editText_equipment.getEditText().setSelection(editText_equipment.getEditText().getText().length());
                             editText_equipment.getEditText().addTextChangedListener(this);
-
                         }
                     }
                 }
@@ -179,6 +176,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
             @Override
             public void afterTextChanged(Editable s) { }
         });
+
 
         editText_tags.getEditText().setOnClickListener(new View.OnClickListener() {
             @Override
@@ -247,9 +245,9 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
             String totalText = "";
             for (String tag : list) {
-                totalText += tag + " #";
+                totalText += tag;
             }
-            totalText = totalText.substring(0, totalText.length() - 2);
+
             editText_tags.getEditText().setText(totalText);
             editText_proof.getEditText().setText(editRecipe.getProof());
             editText_base.getEditText().setText(editRecipe.getBase());
