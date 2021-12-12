@@ -5,9 +5,10 @@
         android:id="@+id/list_button_search"
         android:contentDescription="Search recipes"
         android:icon="@drawable/ic_baseline_search_24"
-        android:title="search"
-        android:visible="false"
-        app:showAsAction="ifRoom" />
+        android:title="Search"
+        android:visible="true"
+        app:showAsAction="ifRoom|collapseActionView"
+        app:actionViewClass="androidx.appcompat.widget.SearchView"/>
 
     <item
         android:id="@+id/sortMenu_proof_desc"

@@ -10,6 +10,9 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.inputmethod.EditorInfo;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
@@ -17,6 +20,7 @@ import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.appcompat.widget.Toolbar;
 import androidx.cardview.widget.CardView;
 import androidx.core.content.ContextCompat;
@@ -33,6 +37,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.Locale;
 
 public class ListActivity extends AppCompatActivity {
     private RecyclerView recipeRecycler;
@@ -138,6 +143,22 @@ public class ListActivity extends AppCompatActivity {
     {
         switch(item.getItemId())
         {
+            case R.id.list_button_search:
+                SearchView searchView = (SearchView) item.getActionView();
+                searchView.setImeOptions(EditorInfo.IME_ACTION_DONE);
+
+                searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+                    @Override
+                    public boolean onQueryTextSubmit(String query) {
+                        return false;
+                    }
+
+                    @Override
+                    public boolean onQueryTextChange(String newText) {
+                        recipeAdapter.getFilter().filter(newText);
+                        return false;
+                    }
+                });
             case R.id.sortMenu_proof_desc:
                 Collections.sort(sortRecipeList, new Comparator<Recipe>() {
                     @Override
@@ -208,14 +229,16 @@ public class ListActivity extends AppCompatActivity {
     }
 
 
-    public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+    public class RecipeAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements Filterable {
 
         private Context context;
         private ArrayList<Recipe> recipeArrayList;
+        private ArrayList<Recipe> recipeArrayListFull;
 
         public RecipeAdapter(Context context, ArrayList<Recipe> recipeArrayList) {
             this.context = context;
             this.recipeArrayList = recipeArrayList;
+            this.recipeArrayListFull = new ArrayList<>(recipeArrayList);
         }
 
         @NonNull
@@ -262,6 +285,43 @@ public class ListActivity extends AppCompatActivity {
         public int getItemCount() {
             return recipeArrayList.size();
         }
+
+        @Override
+        public Filter getFilter() {
+            return recipeFilter;
+        }
+
+        private Filter recipeFilter = new Filter() {
+            @Override
+            protected FilterResults performFiltering(CharSequence constraint) {
+                ArrayList<Recipe> filteredList = new ArrayList<>();
+
+                if(constraint == null || constraint.length() == 0) {
+                    filteredList.addAll(recipeArrayListFull);
+                } else {
+                    String filterPattern = constraint.toString().toLowerCase().trim();
+
+                    for(Recipe recipe : recipeArrayListFull) {
+                        if(recipe.getName().toLowerCase().contains(filterPattern)) {
+                            filteredList.add(recipe);
+                        }
+                    }
+                }
+
+                FilterResults results = new FilterResults();
+                results.values = filteredList;
+
+                return results;
+            }
+
+            @Override
+            protected void publishResults(CharSequence constraint, FilterResults results) {
+                recipeArrayList.clear();
+                recipeArrayList.addAll((ArrayList) results.values);
+                sortRecipeList = recipeArrayList;
+                notifyDataSetChanged();
+            }
+        };
 
         public class RecipeViewHolder extends RecyclerView.ViewHolder {
             private CardView card;
