@@ -152,7 +152,7 @@
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_custom"
-                    android:hint="재료"
+                    android:hint="재료 (띄어쓰기 구분)"
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     app:boxBackgroundColor="@color/white"
@@ -179,7 +179,7 @@
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_custom"
-                    android:hint="장비"
+                    android:hint="장비 (띄어쓰기 구분)"
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     app:boxBackgroundColor="@color/white"
@@ -206,12 +206,12 @@
                     android:layout_width="380dp"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/font_custom"
-                    android:hint='태그 (", "구분)'
+                    android:hint='태그 (띄어쓰기 구분)'
                     android:inputType="textPersonName"
                     android:padding="5dp"
                     app:boxBackgroundColor="@color/white"
-                    app:startIconContentDescription="email"
-                    app:startIconDrawable="@drawable/ic_baseline_tag_24">
+                    android:text="#"
+                    >
 
                     <com.google.android.material.textfield.TextInputEditText
                         android:layout_width="match_parent"

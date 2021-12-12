@@ -16,6 +16,8 @@ import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.provider.MediaStore;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
@@ -45,6 +47,7 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
+import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -75,6 +78,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
     private MyRecipe editRecipe;
     private String editRecipeId;
     private boolean isEdit;
+    private HashTagHelper mTextHashTagHelper;
 
     private TextInputLayout editText_name;
     private TextInputLayout editText_proof;
@@ -100,6 +104,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         editText_proof = findViewById(R.id.make_editText_proof);
         editText_base = findViewById(R.id.make_editText_base);
         editText_tags = findViewById(R.id.make_editText_tags);
+        editText_tags = findViewById(R.id.make_editText_tags);
         editText_equipment = findViewById(R.id.make_editText_equipment);
         editText_ingredient = findViewById(R.id.make_editText_ingredient);
         editText_description = findViewById(R.id.make_editText_description);
@@ -111,6 +116,122 @@ public class MakeRecipeActivity extends AppCompatActivity {
         uid = user.getUid();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         mStorage = FirebaseStorage.getInstance().getReferenceFromUrl("gs://cock-fit-ebaa7.appspot.com");
+
+        editText_ingredient.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if (count == 1) {
+                    if (s.length() > 1) {
+                        if (s.charAt(s.length() - 1) == ',') {
+                            editText_equipment.getEditText().removeTextChangedListener(this);
+                            editText_equipment.getEditText().append(" ");
+                            editText_equipment.getEditText().setSelection(s.length());
+                            editText_equipment.getEditText().addTextChangedListener(this);
+                        } else if (s.charAt(s.length() - 1) == ' ') {
+                            editText_equipment.getEditText().removeTextChangedListener(this);
+                            String strTemp = editText_equipment.getEditText().getText().toString();
+                            editText_equipment.getEditText().setText(strTemp.substring(0, strTemp.length() - 1));
+                            editText_equipment.getEditText().append(", ");
+                            editText_equipment.getEditText().setSelection(editText_equipment.getEditText().getText().length());
+                            editText_equipment.getEditText().addTextChangedListener(this);
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+        });
+
+
+
+        editText_equipment.getEditText().addTextChangedListener(new TextWatcher() {
+
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(count == 1) {
+                    if (s.length() > 1) {
+                        if (s.charAt(s.length() - 1) == ',') {
+                            editText_equipment.getEditText().removeTextChangedListener(this);
+                            editText_equipment.getEditText().append(" ");
+                            editText_equipment.getEditText().setSelection(s.length());
+                            editText_equipment.getEditText().addTextChangedListener(this);
+                        } else if (s.charAt(s.length()-1) == ' '){
+                            editText_equipment.getEditText().removeTextChangedListener(this);
+                            String strTemp = editText_equipment.getEditText().getText().toString();
+                            editText_equipment.getEditText().setText(strTemp.substring(0,strTemp.length()-1));
+                            editText_equipment.getEditText().append(", ");
+                            editText_equipment.getEditText().setSelection(editText_equipment.getEditText().getText().length());
+                            editText_equipment.getEditText().addTextChangedListener(this);
+
+                        }
+                    }
+                }
+            }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) { }
+            @Override
+            public void afterTextChanged(Editable s) { }
+        });
+
+        editText_tags.getEditText().setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if(editText_tags.getEditText().getSelectionEnd() <= 1) {
+                    editText_tags.getEditText().setCursorVisible(false);
+                    editText_tags.getEditText().setSelection(1);
+                    editText_tags.getEditText().setCursorVisible(true);
+                }
+            }
+        });
+
+        editText_tags.getEditText().setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View v, boolean hasFocus) {
+                if(editText_tags.getEditText().getSelectionEnd() <= 1) {
+                    editText_tags.getEditText().setCursorVisible(false);
+                    editText_tags.getEditText().setSelection(1);
+                    editText_tags.getEditText().setCursorVisible(true);
+                }
+            }
+        });
+
+        editText_tags.getEditText().addTextChangedListener(new TextWatcher() {
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+                if(s.length() == 0) {
+                    editText_tags.getEditText().append("#");
+                }
+                if(count == 1) {
+                    if (s.length() > 0) {
+                        if (s.charAt(s.length() - 1) == ' ') {
+                            editText_tags.getEditText().append("#");
+                            editText_tags.getEditText().setSelection(s.length());
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) { }
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            }
+        });
+
+
+        // 태그 생성
+        mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.CockFitMainColor1), null, null);
+        mTextHashTagHelper.handle(editText_tags.getEditText());
+
 
         //getIntent
         editRecipeId = getIntent().getStringExtra("recipeId");
@@ -126,7 +247,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
             String totalText = "";
             for (String tag : list) {
-                totalText += tag + ", ";
+                totalText += tag + " #";
             }
             totalText = totalText.substring(0, totalText.length() - 2);
             editText_tags.getEditText().setText(totalText);

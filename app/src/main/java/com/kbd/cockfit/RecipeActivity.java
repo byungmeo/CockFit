@@ -31,6 +31,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.volokh.danylo.hashtaghelper.HashTagHelper;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -63,6 +64,7 @@ public class RecipeActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     private ArrayList<Recipe> favoriteRecipeList;
     private boolean isMyRecipe;
+    private HashTagHelper mTextHashTagHelper;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -87,6 +89,15 @@ public class RecipeActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference();
         uid = mAuth.getUid();
+
+        mTextHashTagHelper = HashTagHelper.Creator.create(getResources().getColor(R.color.CockFitMainColor1), new HashTagHelper.OnHashTagClickListener() {
+            @Override
+            public void onHashTagClicked(String hashTag) {
+
+            }
+        });
+        mTextHashTagHelper.handle(textView_tags);
+
 
         appBarRecipe.setNavigationOnClickListener(new View.OnClickListener() {
             @Override
