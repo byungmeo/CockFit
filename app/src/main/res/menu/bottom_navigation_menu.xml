@@ -23,10 +23,5 @@
         android:enabled="true"
         android:icon="@drawable/ic_baseline_message_24"
         android:title="커뮤니티" />
-    <item
-        android:id="@+id/page_profile"
-        android:enabled="true"
-        android:icon="@drawable/ic_baseline_person_24"
-        android:title="프로필" />
 
 </menu>

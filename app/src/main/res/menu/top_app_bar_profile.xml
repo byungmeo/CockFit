@@ -5,8 +5,6 @@
     <item
         android:id="@+id/action_notify"
         android:icon="@drawable/ic_baseline_notifications_24"
-        android:iconTint="@color/CockFitMainColor1"
-        android:iconTintMode="src_over"
         android:title="알림"
         app:showAsAction="ifRoom" />
 

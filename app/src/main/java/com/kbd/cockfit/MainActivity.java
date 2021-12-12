@@ -1,19 +1,17 @@
 package com.kbd.cockfit;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
-import android.util.DisplayMetrics;
 import android.view.MenuItem;
-import android.widget.FrameLayout;
-import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
@@ -35,8 +33,8 @@ public class MainActivity extends AppCompatActivity {
     private MyRecipeFragment myRecipeFragment = new MyRecipeFragment();
     private CommunityFragment communityFragment = new CommunityFragment();
     private CocktailInfoFragment cocktailInfoFragment = new CocktailInfoFragment();
-    private ProfileFragment profileFragment = new ProfileFragment();
     public static ArrayList<Recipe> recipeArrayList;
+    private Toolbar toolbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -52,26 +50,22 @@ public class MainActivity extends AppCompatActivity {
         }).start();
 
         FragmentTransaction transaction = fragmentManager.beginTransaction();
-        transaction.replace(R.id.frameLayout, cocktailInfoFragment).commitAllowingStateLoss();
+        transaction.replace(R.id.frameLayout, panelFragment).commitAllowingStateLoss();
 
         BottomNavigationView bottomNavigationView = findViewById(R.id.bottom_navigation);
         bottomNavigationView.setOnItemSelectedListener(new ItemSelectedListener());
 
-        DisplayMetrics displayMetrics = new DisplayMetrics();
-        getWindowManager().getDefaultDisplay().getRealMetrics(displayMetrics);
-        int realDeviceHeight = displayMetrics.heightPixels;
-
-        int statusBarHeight = 0;
-        int resourceId = getResources().getIdentifier("status_bar_height", "dimen", "android");
-        if (resourceId > 0) statusBarHeight = getResources().getDimensionPixelSize(resourceId);
-
-        int bottomBarHeight = 0;
-        int resourceIdBottom = getResources().getIdentifier("navigation_bar_height", "dimen", "android");
-        if (resourceIdBottom > 0) bottomBarHeight = getResources().getDimensionPixelSize(resourceIdBottom);
-
-        int frameHeight = realDeviceHeight - statusBarHeight - bottomNavigationView.getHeight() - bottomBarHeight;
-        FrameLayout fl = findViewById(R.id.frameLayout);
-        fl.setLayoutParams(new LinearLayout.LayoutParams(ConstraintLayout.LayoutParams.MATCH_PARENT, frameHeight));
+        toolbar = findViewById(R.id.topAppBarFragment);
+        toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() == R.id.main_menuItem_profile) {
+                    Intent intent = new Intent(MainActivity.this, ProfileActivity.class);
+                    startActivity(intent);
+                }
+                return false;
+            }
+        });
     }
 
     public void loadData() {
@@ -127,8 +121,6 @@ public class MainActivity extends AppCompatActivity {
                 case R.id.page_cocktailInfo:
                     transaction.replace(R.id.frameLayout, cocktailInfoFragment).commitAllowingStateLoss();
                     break;
-                case R.id.page_profile:
-                    transaction.replace(R.id.frameLayout, profileFragment).commitAllowingStateLoss();
             }
             return true;
         }

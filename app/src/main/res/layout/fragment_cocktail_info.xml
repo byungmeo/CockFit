@@ -13,39 +13,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:id="@+id/toolFragmentBarLayout"
-        >
+        />
 
-        <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/topAppBarFragment"
-            style="@style/Widget.MaterialComponents.Toolbar.Primary"
-            android:theme="@style/ThemeOverlay.AppCompat.Light"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            app:menu="@menu/top_app_bar_fragment"
-            android:backgroundTint="@color/white"
-            >
-
-        <ImageView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:src="@drawable/ic_cockfit_name"/>
-
-        </com.google.android.material.appbar.MaterialToolbar>
-    </com.google.android.material.appbar.AppBarLayout>
-
-
-    <TextView
-        android:id="@+id/textView2"
-        android:layout_width="413dp"
-        android:layout_height="60dp"
-        android:text="네비게이션바 영역"
-        android:textAlignment="center"
-        android:textColor="@color/design_default_color_error"
-        android:textSize="34sp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/cock_ingrdButton"
@@ -67,7 +36,7 @@
         app:layout_constraintEnd_toStartOf="@+id/cock_listButton"
         app:layout_constraintHorizontal_bias="0.509"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/cock_listButton"
@@ -88,7 +57,7 @@
         app:layout_constraintBottom_toTopOf="@+id/cock_senseButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cock_ingrdButton"
-        app:layout_constraintTop_toBottomOf="@+id/toolFragmentBarLayout" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <Button
         android:id="@+id/cock_equipButton"
@@ -106,7 +75,7 @@
         android:text="칵테일 장비"
         android:textColor="@color/black"
         android:textSize="18sp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@+id/cock_senseButton"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/cock_ingrdButton" />
@@ -127,7 +96,7 @@
         android:text="칵테일 기본상식"
         android:textColor="@color/black"
         android:textSize="18dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView2"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/cock_equipButton"
         app:layout_constraintTop_toBottomOf="@+id/cock_listButton" />
