@@ -3,7 +3,7 @@ package com.kbd.cockfit;
 public class Notify {
     private String title;
     private String text;
-    private String nickname;
+    private String type;
     private String date;
     private String uid;
     private String notifyId;
@@ -20,10 +20,10 @@ public class Notify {
         this.uid = uid;
     }
 
-    public Notify(String title, String text, String nickname, String date, String uid) {
+    public Notify(String title, String text, String type, String date, String uid) {
         this.title=title;
         this.text=text;
-        this.nickname=nickname;
+        this.type=type;
         this.date=date;
         this.uid = uid;
         this.notifyId = null;
@@ -45,12 +45,12 @@ public class Notify {
         this.text = text;
     }
 
-    public String getNickname() {
-        return nickname;
+    public String getType() {
+        return type;
     }
 
-    public void setNickname(String nickname) {
-        this.nickname = nickname;
+    public void setType(String type) {
+        this.type = type;
     }
 
     public String getDate() {

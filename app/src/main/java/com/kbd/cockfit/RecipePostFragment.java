@@ -55,6 +55,7 @@ public class RecipePostFragment extends Fragment {
     private String recipeId;
     private String writerUid;
     private HashMap<String, String> likeUidMap;
+    private String title;
 
     private ImageView imageView_picture;
     private TextView textView_recipeName;
@@ -457,22 +458,39 @@ public class RecipePostFragment extends Fragment {
                             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
                             Comment reply = new Comment(text, nickname, uid, date);
 
-                            String title = "대댓글";
-                            Notify notify = new Notify(title, text, nickname, date, uid);
+                            String type = "새로운 대댓글이 달렸습니다.";
 
-                            //대댓글을 남긴 댓글의 작성자의 DB에 대댓글 남겼음을 추가
-                            mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("uid").addValueEventListener(new ValueEventListener() {
+                            mDatabase.child("forum").child(forumType).child(postId).child("title").addValueEventListener(new ValueEventListener() {
+
                                 @Override
-                                public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                                    String value = dataSnapshot.getValue(String.class);
-                                    mDatabase.child("user").child(value).child("notify").push().setValue(notify);
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    String value = snapshot.getValue(String.class);
+                                    title = value;
+                                    Notify notify = new Notify(title, text, type, date, uid);
+
+                                    //대댓글을 남긴 댓글의 작성자의 DB에 대댓글 남겼음을 추가
+                                    mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("uid").addValueEventListener(new ValueEventListener() {
+                                        @Override
+                                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                                            String value = dataSnapshot.getValue(String.class);
+                                            mDatabase.child("user").child(value).child("notify").push().setValue(notify);
+                                        }
+
+                                        @Override
+                                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                                            //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
+                                        }
+                                    });
+
                                 }
 
                                 @Override
-                                public void onCancelled(@NonNull DatabaseError databaseError) {
+                                public void onCancelled(@NonNull DatabaseError error) {
                                     //Log.e("MainActivity", String.valueOf(databaseError.toException())); // 에러문 출력
                                 }
                             });
+
+
 
                             mDatabase.child("forum").child(forumType).child(postId).child("comments").child(comment.getCommentId()).child("replys").push().setValue(reply);
 

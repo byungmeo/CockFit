@@ -241,11 +241,12 @@ public class PostActivity extends AppCompatActivity {
             String uid = mAuth.getUid();
             String date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date(System.currentTimeMillis()));
 
+            String type = "새로운 댓글이 달렸습니다.";
 
             Comment comment = new Comment(commentText, nickname, uid, date);
 
             String title = post.getTitle();
-            Notify notify = new Notify(title, commentText, nickname, date, uid);
+            Notify notify = new Notify(title, commentText, type, date, uid);
 
 
             //댓글을 남긴 글의 작성자의 DB에 댓글 남겼음을 추가

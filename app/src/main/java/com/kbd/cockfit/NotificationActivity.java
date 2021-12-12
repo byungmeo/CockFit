@@ -179,7 +179,7 @@ public class NotificationActivity extends AppCompatActivity {
 
 
             commentViewHolder.textView_title.setText(notify.getTitle());
-            commentViewHolder.textView_nickname.setText(notify.getNickname());
+            commentViewHolder.textView_nickname.setText(notify.getType());
             commentViewHolder.textView_text.setText(notify.getText());
             try {
                 commentViewHolder.textView_date.setText(UtilitySet.formatTimeString(notify.getDate()));
@@ -210,8 +210,8 @@ public class NotificationActivity extends AppCompatActivity {
 
             public CommentViewHolder(@NonNull View itemView) {
                 super(itemView);
-                textView_title = itemView.findViewById(R.id.notify_textView_title);
-                textView_nickname = itemView.findViewById(R.id.notify_textView_nickname);
+                textView_title = itemView.findViewById(R.id.notify_textView_title2);
+                textView_nickname = itemView.findViewById(R.id.notify_textView_type);
                 textView_text = itemView.findViewById(R.id.notify_textView_text);
                 textView_date = itemView.findViewById(R.id.notify_textView_date);
                 imageButton_delete = itemView.findViewById(R.id.notify_imageButton_delete);

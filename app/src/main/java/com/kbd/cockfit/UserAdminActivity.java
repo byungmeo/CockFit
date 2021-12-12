@@ -171,7 +171,7 @@ public class UserAdminActivity extends AppCompatActivity {
                     dialog.dismiss();
                 }
             });
-        } else if(view.getId() == R.id.user_button_leave) { //탈퇴한 사용자가 작성했던 나만의 레시피 중 공유된 레시피만 남기는 방법을 강구중입니다
+        } else if(view.getId() == R.id.user_button_leave) {
 
 
             mDatabase = FirebaseDatabase.getInstance("https://cock-fit-ebaa7-default-rtdb.asia-southeast1.firebasedatabase.app").getReference(); //실시간 Firebase 경로
