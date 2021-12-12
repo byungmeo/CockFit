@@ -121,16 +121,15 @@ public class PostActivity extends AppCompatActivity {
         }
 
         //Intent로부터 전달받은 postId를 Firebase에서 탐색한 후 해당 Post객체를 받아옵니다.
-        mDatabase.child("forum").child(forumType).child(postId).addValueEventListener(new ValueEventListener() {
+        mDatabase.child("forum").child(forumType).child(postId).get().addOnSuccessListener(new OnSuccessListener<DataSnapshot>() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("test", "오류나는 onDataChange");
+            public void onSuccess(DataSnapshot dataSnapshot) {
                 if(forumType.equals("share")) {
-                    post = snapshot.getValue(RecipePost.class);
+                    post = dataSnapshot.getValue(RecipePost.class);
                 } else {
-                    post = snapshot.getValue(Post.class);
+                    post = dataSnapshot.getValue(Post.class);
                 }
-                
+
                 //postId에 해당하는 게시글이 있는 경우
                 if(post != null) {
                     toolbar.setTitle(post.getTitle());
@@ -174,9 +173,6 @@ public class PostActivity extends AppCompatActivity {
                     Log.d("Exception", "서버에서 해당하는 게시글을 찾을 수 없습니다.");
                 }
             }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) { }
         });
     }
 
@@ -252,7 +248,7 @@ public class PostActivity extends AppCompatActivity {
             value.put("postId", postId);
             value.put("recipeId", ((RecipePost)post).getRecipeId());
             value.put("uid", post.getUid());
-            mDatabase.child("panel").child("hotRecipe").push().setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
+            mDatabase.child("panel").child("hotRecipe").child(postId).setValue(value).addOnSuccessListener(new OnSuccessListener<Void>() {
                 @Override
                 public void onSuccess(Void unused) { onBackPressed(); }
             });
