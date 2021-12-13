@@ -53,6 +53,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -245,7 +246,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
 
             String totalText = "";
             for (String tag : list) {
-                totalText += tag;
+                totalText += tag + " ";
             }
 
             editText_tags.getEditText().setText(totalText);
@@ -299,7 +300,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
                         String base = editText_base.getEditText().getText().toString();
                         String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
                         String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
-                        String[] tags = editText_tags.getEditText().getText().toString().split(", ");
+                        String[] tags = editText_tags.getEditText().getText().toString().split(" ");
                         String description = editText_description.getEditText().getText().toString();
 
                         if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
@@ -361,7 +362,7 @@ public class MakeRecipeActivity extends AppCompatActivity {
         String base = editText_base.getEditText().getText().toString();
         String[] ingredient = editText_ingredient.getEditText().getText().toString().split(", ");
         String[] equipment = editText_equipment.getEditText().getText().toString().split(", ");
-        String[] tags = editText_tags.getEditText().getText().toString().split(", ");
+        String[] tags = editText_tags.getEditText().getText().toString().split(" ");
         String description = editText_description.getEditText().getText().toString();
 
         if(name.equals("") || proof.equals("") || base.equals("") || ingredient.equals("") || equipment.equals("") || description.equals("") || tags.equals("")) {
